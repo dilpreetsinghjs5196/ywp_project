@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - @yield('title', 'YWP')</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --primary-color: #044A80;
+            --secondary-color: #ffbf00;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f7f6;
+        }
+
+        .sidebar {
+            min-width: 250px;
+            max-width: 250px;
+            background: var(--primary-color);
+            min-height: 100vh;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            border-radius: 5px;
+            margin: 5px 15px;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            flex: 1;
+        }
+
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border-radius: 10px;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #033a66;
+        }
+    </style>
+    @stack('css')
+</head>
+
+<body>
+
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar d-flex flex-column">
+            <div class="p-4 text-center">
+                <h4 class="fw-bold">YWP Admin</h4>
+            </div>
+            <ul class="nav flex-column flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+                        href="{{ route('admin.dashboard') }}">
+                        <i class="bi bi-speedometer2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Site Content</div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('admin/pages/home*') ? 'active' : '' }}"
+                        href="{{ route('admin.pages.edit', 'home') }}">
+                        <i class="bi bi-house"></i> Home Page
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('admin/pages/about*') ? 'active' : '' }}"
+                        href="{{ route('admin.pages.edit', 'about') }}">
+                        <i class="bi bi-info-circle"></i> About Us
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Settings</div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.settings.branding') ? 'active' : '' }}"
+                        href="{{ route('admin.settings.branding') }}">
+                        <i class="bi bi-palette"></i> Branding & Colors
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.settings.contact') ? 'active' : '' }}"
+                        href="{{ route('admin.settings.contact') }}">
+                        <i class="bi bi-telephone"></i> Footer & Contact
+                    </a>
+                </li>
+            </ul>
+            <div class="p-4 border-top border-light">
+                <a href="#" class="nav-link p-0 text-white opacity-75"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
+                <form id="logout-form" action="#" method="POST" class="d-none">@csrf</form>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content d-flex flex-column">
+            <!-- Top Navbar -->
+            <nav class="navbar navbar-expand-lg px-4 py-3">
+                <div class="container-fluid">
+                    <span class="navbar-text fw-bold text-dark">
+                        @yield('page_title', 'Dashboard')
+                    </span>
+                    <div class="ms-auto d-flex align-items-center">
+                        <a href="{{ route('com.home') }}" target="_blank" class="btn btn-sm btn-outline-primary me-3">
+                            <i class="bi bi-eye"></i> View Site
+                        </a>
+                        <div class="dropdown">
+                            <a class="text-dark text-decoration-none dropdown-toggle" href="#" role="button"
+                                data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle fs-5 me-1"></i> Admin
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Content Area -->
+            <div class="container-fluid p-4">
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                @yield('content')
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @stack('js')
+</body>
+
+</html>

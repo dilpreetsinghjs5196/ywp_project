@@ -16,6 +16,17 @@
 
     <!-- Main CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+    <style>
+        :root {
+            --primary-color:
+                {{ $settings['primary_color'] ?? '#044A80' }}
+            ;
+            --secondary-color:
+                {{ $settings['secondary_color'] ?? '#ffbf00' }}
+            ;
+        }
+    </style>
 </head>
 
 <body>

@@ -19,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Share site settings with all views
+        if (!app()->runningInConsole() && \Illuminate\Support\Facades\Schema::hasTable('site_settings')) {
+            $settings = \App\Models\SiteSetting::all()->pluck('value', 'key');
+            view()->share('settings', $settings);
+        }
     }
 }

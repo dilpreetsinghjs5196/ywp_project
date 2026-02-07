@@ -16,9 +16,9 @@
                                     $displayKey = str_replace('_', ' ', ucfirst($setting->key));
                                     $roleLabel = '';
                                     if ($setting->key === 'site_logo') {
-                                        $roleLabel = 'Header logo';
-                                    } elseif ($setting->key === 'site_logo_black') {
                                         $roleLabel = 'Footer logo';
+                                    } elseif ($setting->key === 'site_logo_black') {
+                                        $roleLabel = 'Header logo';
                                     }
                                 @endphp
                                 <label class="form-label fw-bold">{{ $displayKey }} @if($roleLabel) <small class="text-muted">({{ $roleLabel }})</small> @endif</label>

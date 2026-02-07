@@ -76,7 +76,7 @@
     <!-- #hero end -->
 
      <!-- About Section -->
-    <section class=" section pb-5">
+    <section class=" section pb-5 my-5">
       <div class="b-container">
         <div
           class="row row-cols-1 row-cols-xl-2 g-5 align-items-center justify-content-center text-center text-xl-start">
@@ -199,7 +199,7 @@
           </div>
           <!-- Right content -->
           <div class="col-12 col-md-5 col-xl-2 d-flex flex-column gap-3 order-3 order-md-2 order-xl-3">
-            <div class="card bg-gradient-primary rounded-4 border-0" data-aos="fade-left" data-aos-easing="linear"
+            <div class="card bg-primary-color rounded-4 border-0" data-aos="fade-left" data-aos-easing="linear"
               data-aos-delay="500" data-aos-duration="1000">
               <div class="card-body text-center text-white p-3 font-1">
                 <div class="display-5"><i class="bi bi-emoji-smile-fill accent-secondary-color"></i></div>
@@ -207,7 +207,7 @@
                 <p class="mb-0">Satisfaction</p>
               </div>
             </div>
-            <div class="card bg-gradient-primary rounded-4 border-0" data-aos="fade-left" data-aos-easing="linear"
+            <div class="card bg-primary-color rounded-4 border-0" data-aos="fade-left" data-aos-easing="linear"
               data-aos-delay="750" data-aos-duration="1000">
               <div class="card-body text-center text-white p-3 font-1">
                 <div class="display-5"><i class="bi bi-hand-thumbs-up-fill accent-secondary-color"></i></div>
@@ -215,7 +215,7 @@
                 <p class="mb-0">Happy Patient</p>
               </div>
             </div>
-            <div class="card bg-gradient-primary rounded-4 border-0" data-aos="fade-left" data-aos-easing="linear"
+            <div class="card bg-primary-color rounded-4 border-0" data-aos="fade-left" data-aos-easing="linear"
               data-aos-delay="1000" data-aos-duration="1000">
               <div class="card-body text-center text-white p-3 font-1">
                 <div class="display-5"><i class="bi bi-person-plus-fill accent-secondary-color"></i></div>
@@ -234,7 +234,7 @@
       <div class="b-container text-center">
         <h6 class="text-primary-color fw-semibold mb-2">OUR SERVICES</h6>
         <h2 class="display-5 font-1 mb-5" style="font-weight: 800;">Breaking Stigmas, Building Strength</h2>
-        <div class="row g-4 my-5">
+        <div class="row g-4" style="margin-top: 3rem !important;">
           <!-- Card 1 -->
           <div class="col-12 col-md-6 col-xl-4">
             <div class="card border-0 rounded-5 overflow-hidden h-100 shadow-sm scale-hover" data-aos="fade-up"
@@ -304,7 +304,7 @@
     <!-- #services end -->
 
     <!-- Teams Section -->
-    <section class="section py-5 bg-half-gradient">
+    <section class="section py-5 bg-half-gradient mt-5">
       <div class="b-container" style="padding-top: 50px;">
         <div class="row text-center">
           <h6 class="text-primary-color fw-semibold mb-2">OUR SPECIALIST</h6>

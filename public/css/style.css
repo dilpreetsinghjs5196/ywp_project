@@ -568,19 +568,9 @@ img {
 }
 
 .bg-secondary-gradient {
-  background: linear-gradient(to right, white 0%, white 50%, #F8DAE0 50%, #F7D9DF 100%);
+  background: linear-gradient(to right, white 0%, white 50%, #c3d3f3 50%, #ffffff 100%);
 }
-/* .bg-secondary-gradient {
-  background: linear-gradient(
-    90deg,
-    rgba(4, 74, 128, 0.08) 0%,
-    #ffffff 55%
-  );
-} */
 
-.bg-quote-gradient {
-    background: linear-gradient(to right, white 0%, white 50%, #c3d3f3 50%, #ffffff 130%);
-}
 
 .form-control-lg {
     min-height: calc(1.5em + 1rem + calc(var(--bs-border-width) * 2));
@@ -991,7 +981,7 @@ img {
   }
 
   .bg-secondary-gradient {
-    background: linear-gradient(to top, white 0%, white 62%, #F8DAE0 62%, #F7D9DF 100%);
+    background: linear-gradient(to top, white 0%, white 62%, #c3d3f3 62%, #ffffff 100%);
   }
 
   .quotes-section {
@@ -1049,7 +1039,7 @@ img {
   }
 
   .bg-secondary-gradient {
-    background: linear-gradient(to top, white 0%, white 61%, #F8DAE0 61%, #F7D9DF 100%);
+    background: linear-gradient(to top, white 0%, white 61%, #c3d3f3 61%, #ffffff 100%);
   }
 
   .img-container {

@@ -561,7 +561,7 @@
         </div>
         <div class="row justify-content-center mt-5">
           <div class="col-12 col-xl-10">
-            <div class="card rounded-5 shadow-lg border-0 bg-quote-gradient">
+            <div class="card rounded-5 shadow-lg border-0 bg-secondary-gradient">
               <div class="card-body p-4 p-lg-5">
                 <div class="row g-5 align-items-strench">
                   <div class="col-lg-6 col-md-12 order-lg-1 order-2">

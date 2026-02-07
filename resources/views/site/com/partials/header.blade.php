@@ -44,17 +44,16 @@
                         <a class="nav-link" href="about-us.html">About Us</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                            Therapy Services
+                            <a class="nav-link" href="#">
+                            Our Therapists
                             </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="services.html">Our Therapists</a></li>
+                            {{-- <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="services.html">Our Therapists</a></li> --}}
                                 {{-- <li><a class="dropdown-item" href="service-detail.html">Service Detail</a></li>
                                 <li><a class="dropdown-item" href="appointment.html">Appointment</a></li> --}}
-                            </ul>
+                            {{-- </ul> --}}
                         </li>
-                        {{-- <li class="nav-item dropdown">
+                        <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
                             Corporate Well-Being
@@ -62,9 +61,9 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="services.html">Wellness Hub</a></li>
                                 <li><a class="dropdown-item" href="service-detail.html">Free Mental Health Tests</a></li>
-                                <li><a class="dropdown-item" href="appointment.html">Appointment</a></li>
+                                <li><a class="dropdown-item" href="appointment.html">Blog</a></li>
                             </ul>
-                        </li> --}}
+                        </li>
                         {{-- <li class="nav-item">
                         <a class="nav-link" href="">Blog</a>
                         </li> --}}
@@ -82,9 +81,9 @@
                                 <li><a class="dropdown-item" href="error-404.html">Error 404</a></li>
                             </ul>
                         </li> --}}
-                        {{-- <li class="nav-item">
+                        <li class="nav-item">
                         <a class="nav-link" href="">Wonder Store</a>
-                        </li> --}}
+                        </li>
                         <li class="nav-item">
                         <a class="nav-link" href="contact-us.html">Contact Us</a>
                         </li>

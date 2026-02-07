@@ -105,6 +105,10 @@ body {
     background: linear-gradient(to bottom,white 0%,white 60%,#F8DAE0 60%,#F7D9DF 100%);
 }
 
+.bg-half-gradient-about{
+  background: linear-gradient(to bottom,#ededed 0%,#ededed 60%,#F8DAE0 60%,#F7D9DF 100%);
+}
+
 .bg-grey-gradient {
     background: linear-gradient(to bottom, white 0%, white 60%, #b1aeaf54 60%, #f7d9df8f 100%);
 }

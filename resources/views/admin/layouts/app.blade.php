@@ -104,6 +104,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.services.*') ? 'active' : '' }}"
+                        href="{{ route('admin.services.index') }}">
+                        <i class="bi bi-grid"></i> Services
+                    </a>
+                </li>
+                <li class="nav-item">
                     <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Settings</div>
                 </li>
                 <li class="nav-item">

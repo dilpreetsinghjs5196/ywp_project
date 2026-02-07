@@ -42,6 +42,17 @@
     {{-- Footer --}}
     @include('site.com.partials.footer')
 
+    <!-- Vendor JS -->
+    <script src="{{ asset('js/vendor/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/aos.js') }}"></script>
+    <script src="{{ asset('js/vendor/swiper-bundle.min.js') }}"></script>
+
+    <script>
+        AOS.init();
+    </script>
+
+    @stack('js')
 </body>
 
 </html>

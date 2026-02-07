@@ -196,22 +196,26 @@
         <!-- Left content -->
         <div class="col-12 col-xl-5 order-1 order-md-3 order-xl-1 text-white mt-5 text-center text-xl-start">
           <p class="text-uppercase text-primary-color fs-5 fw-semibold mb-2">
-            {{ $contents['appointment']['small_heading'] ?? 'Why Choose Us ?' }}</p>
+            {{ $contents['appointment']['small_heading'] ?? 'Why Choose Us ?' }}
+          </p>
           <h2 class="font-1 display-5 mb-4" style="font-weight: 800;">
             {!! str_replace(['Hope', 'At A Time'], ['<span class="text-primary-color">Hope</span>', '<span class="text-primary-color">At A Time</span>'], $contents['appointment']['title'] ?? 'Restoring Hope, One Day At A Time') !!}
           </h2>
           <p class="mb-4" style="font-size: large;">
-            {{ $contents['appointment']['description'] ?? 'Through consistent care and compassionate guidance...' }}</p>
+            {{ $contents['appointment']['description'] ?? 'Through consistent care and compassionate guidance...' }}
+          </p>
           <ul class="list-unstyled font-1 text-center text-xl-start">
             <li class="d-flex flex-row justify-content-center justify-content-xl-start mb-3">
               <i class="bi bi-check-circle-fill text-primary-color fs-4 mb-2 mb-xl-0 me-2"></i>
               <h5 class="fw-bolder py-1">
-                {{ $contents['appointment']['list_item_1'] ?? 'Compassionate & Experienced Professionals' }}</h5>
+                {{ $contents['appointment']['list_item_1'] ?? 'Compassionate & Experienced Professionals' }}
+              </h5>
             </li>
             <li class="d-flex flex-row justify-content-center justify-content-xl-start mb-3">
               <i class="bi bi-check-circle-fill text-primary-color fs-4 mb-2 mb-xl-0 me-2"></i>
               <h5 class="fw-bolder py-1">
-                {{ $contents['appointment']['list_item_2'] ?? 'Holistic Approach To Well-Being' }}</h5>
+                {{ $contents['appointment']['list_item_2'] ?? 'Holistic Approach To Well-Being' }}
+              </h5>
             </li>
             <li class="d-flex flex-row justify-content-center justify-content-xl-start mb-3">
               <i class="bi bi-check-circle-fill text-primary-color fs-4 mb-2 mb-xl-0 me-2"></i>
@@ -268,69 +272,50 @@
   <!-- Services Section -->
   <section class="section py-5">
     <div class="b-container text-center">
-      <h6 class="text-primary-color fw-semibold mb-2">OUR SERVICES</h6>
-      <h2 class="display-5 font-1 mb-5" style="font-weight: 800;">Breaking Stigmas, Building Strength</h2>
-      <div class="row g-4" style="margin-top: 3rem !important;">
-        <!-- Card 1 -->
-        <div class="col-12 col-md-6 col-xl-4">
-          <div class="card border-0 rounded-5 overflow-hidden h-100 shadow-sm scale-hover" data-aos="fade-up"
-            data-aos-easing="linear" data-aos-delay="250" data-aos-duration="1000">
-            <img src="{{ asset('image/serv1.jpg')}}" class="w-100"
-              style="height: 250px; transform: scale(1.5); object-position: center;" alt="Individual Therapy">
-            <div class="bg-accent-color-2 text-start p-4 position-relative">
-              <div class="position-absolute top-0 start-0 translate-middle-y" style="margin-top: 0; margin-left: 20px;">
-                <img src="{{ asset('image/icon/Icon1.png')}}" alt="" width="100">
+      <h6 class="text-primary-color fw-semibold mb-2">{{ $contents['services']['small_heading'] ?? 'OUR SERVICES' }}</h6>
+      <h2 class="display-5 font-1 mb-5" style="font-weight: 800;">
+        {{ $contents['services']['title'] ?? 'Breaking Stigmas, Building Strength' }}
+      </h2>
+      <div class="swiper-container services-slider" style="margin-top: 3rem !important; overflow: hidden;">
+        <div class="swiper-wrapper">
+          @foreach($services as $service)
+            <!-- Dynamic Service Slide -->
+            <div class="swiper-slide mb-5">
+              <div class="card border-0 rounded-5 overflow-hidden h-100 shadow-sm scale-hover mx-2" data-aos="fade-up"
+                data-aos-easing="linear" data-aos-delay="{{ $loop->iteration * 100 }}" data-aos-duration="1000">
+                @php
+                  $servImg = $service->image ?? 'image/serv1.jpg';
+                  $servImgUrl = Str::startsWith($servImg, 'image/') ? asset($servImg) : asset('storage/' . $servImg);
+
+                  $iconImg = $service->icon_image;
+                  $iconImgUrl = $iconImg ? (Str::startsWith($iconImg, 'image/') ? asset($iconImg) : asset('storage/' . $iconImg)) : null;
+                @endphp
+                <img src="{{ $servImgUrl }}" class="w-100"
+                  style="height: 250px; transform: scale(1.5); object-position: center;" alt="{{ $service->title }}">
+                <div class="bg-accent-color-2 text-start p-4 position-relative">
+                  <div class="position-absolute top-0 start-0 translate-middle-y" style="margin-top: 0; margin-left: 20px;">
+                    @if($iconImgUrl)
+                      <img src="{{ $iconImgUrl }}" alt="{{ $service->title }} Icon" width="100">
+                    @else
+                      <div class="bg-primary-color rounded-circle d-flex align-items-center justify-content-center"
+                        style="width: 80px; height: 80px;">
+                        <i class="bi {{ $service->icon }} text-white fs-2"></i>
+                      </div>
+                    @endif
+                  </div>
+                  <a href="{{ route('com.home') }}"
+                    class="btn btn-dark btn-lg rounded-pill position-absolute top-0 end-0 me-3 fw-medium scale-hover"
+                    style="margin-top: -25px;">Read More</a>
+                  <h3 class="font-1 mt-5" style="font-weight: 800;">{{ $service->title }}</h3>
+                  <hr class="border-primary border-1 opacity-100 w-100 my-4">
+                  <p class="mb-3">{{ $service->description }}</p>
+                </div>
               </div>
-              <a href="service-detail.html"
-                class="btn btn-dark btn-lg rounded-pill position-absolute top-0 end-0 me-3 fw-medium scale-hover"
-                style="margin-top: -25px;">Read
-                More</a>
-              <h3 class="font-1 mt-5" style="font-weight: 800;">Individual Therapy</h3>
-              <hr class="border-primary border-1 opacity-100 w-100 my-4">
-              <p class="mb-3">Tailored guidance crafted to meet your unique needs and goals effectively.</p>
             </div>
-          </div>
+          @endforeach
         </div>
-        <!-- Card 2 -->
-        <div class="col-12 col-md-6 col-xl-4">
-          <div class="card border-0 rounded-5 overflow-hidden h-100 shadow-sm scale-hover" data-aos="fade-up"
-            data-aos-easing="linear" data-aos-delay="500" data-aos-duration="1000">
-            <img src="{{ asset('image/serv2.jpg')}}" class="w-100"
-              style="height: 250px; transform: scale(1.5); object-position: center;" alt="Group Counseling">
-            <div class="bg-accent-color-2 text-start p-4 position-relative">
-              <div class="position-absolute top-0 start-0 translate-middle-y" style="margin-top: 0; margin-left: 20px;">
-                <img src="{{ asset('image/icon/Icon2.png')}}" alt="" width="100">
-              </div>
-              <a href="service-detail.html"
-                class="btn btn-dark btn-lg rounded-pill position-absolute top-0 end-0 me-3 fw-medium scale-hover"
-                style="margin-top: -25px;">Read
-                More</a>
-              <h3 class="font-1 mt-5" style="font-weight: 800;">Group Counseling</h3>
-              <hr class="border-primary border-1 opacity-100 w-100 my-4">
-              <p class="mb-3">Professional support designed to guide emotional well-being every single day.</p>
-            </div>
-          </div>
-        </div>
-        <!-- Card 3 -->
-        <div class="col-12 col-xl-4">
-          <div class="card border-0 rounded-5 overflow-hidden h-100 shadow-sm scale-hover" data-aos="fade-up"
-            data-aos-easing="linear" data-aos-delay="750" data-aos-duration="1000">
-            <img src="{{ asset('image/serv3.jpg')}}" class="w-100"
-              style="height: 250px; transform: scale(1.5); object-position: center;" alt="Stress Management">
-            <div class="bg-accent-color-2 text-start p-4 position-relative">
-              <div class="position-absolute top-0 start-0 translate-middle-y" style="margin-top: 0; margin-left: 20px;">
-                <img src="{{ asset('image/icon/Icon3.png')}}" alt="" width="100">
-              </div>
-              <a href="service-detail.html"
-                class="btn btn-dark btn-lg rounded-pill position-absolute top-0 end-0 me-3 fw-medium scale-hover"
-                style="margin-top: -25px;">Read
-                More</a>
-              <h3 class="font-1 mt-5" style="font-weight: 800;">Stress Management</h3>
-              <hr class="border-primary border-1 opacity-100 w-100 my-4">
-              <p class="mb-3">Tailored guidance crafted to meet your unique needs and goals effectively.</p>
-            </div>
-          </div>
-        </div>
+        <!-- Pagination -->
+        <div class="swiper-pagination mt-4 position-relative"></div>
       </div>
     </div>
   </section>
@@ -736,3 +721,27 @@
   {{-- Features, About, Services, etc --}}
 
 @endsection
+
+@push('js')
+  <script>
+    $(document).ready(function () {
+      new Swiper('.services-slider', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: false,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        breakpoints: {
+          768: {
+            slidesPerView: 2,
+          },
+          1200: {
+            slidesPerView: 3,
+          }
+        }
+      });
+    });
+  </script>
+@endpush

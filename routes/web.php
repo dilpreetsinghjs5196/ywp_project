@@ -19,6 +19,9 @@ Route::prefix('admin')->group(function () {
     Route::get('/pages/{slug}', [\App\Http\Controllers\Admin\AdminPageController::class, 'edit'])->name('admin.pages.edit');
     Route::put('/pages/{slug}', [\App\Http\Controllers\Admin\AdminPageController::class, 'update'])->name('admin.pages.update');
 
+    // Services Management
+    Route::resource('services', \App\Http\Controllers\Admin\AdminServiceController::class, ['as' => 'admin']);
+
     // Global Settings
     Route::get('/settings/branding', [\App\Http\Controllers\Admin\AdminSettingController::class, 'branding'])->name('admin.settings.branding');
     Route::get('/settings/contact', [\App\Http\Controllers\Admin\AdminSettingController::class, 'contact'])->name('admin.settings.contact');

@@ -20,7 +20,9 @@ class HomeController extends Controller
                 return $section->pluck('value', 'key');
             });
 
-        return view('site.com.home', compact('settings', 'contents'));
+        $services = \App\Models\Service::where('is_active', true)->orderBy('sort_order')->get();
+
+        return view('site.com.home', compact('settings', 'contents', 'services'));
     }
 
     public function about()

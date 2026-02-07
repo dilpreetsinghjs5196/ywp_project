@@ -69,6 +69,13 @@ class AdminPanelSeeder extends Seeder
             ['page' => 'home', 'section' => 'appointment', 'key' => 'stat_2_text', 'value' => 'Happy Patient', 'type' => 'text'],
             ['page' => 'home', 'section' => 'appointment', 'key' => 'stat_3_number', 'value' => '10+', 'type' => 'text'],
             ['page' => 'home', 'section' => 'appointment', 'key' => 'stat_3_text', 'value' => 'Expert Therapist', 'type' => 'text'],
+
+            ['page' => 'home', 'section' => 'services', 'key' => 'small_heading', 'value' => 'OUR SERVICES', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'services', 'key' => 'title', 'value' => 'Breaking Stigmas, Building Strength', 'type' => 'text'],
+
+            // About Page Content
+            ['page' => 'about', 'section' => 'hero', 'key' => 'title', 'value' => 'About Our Mission', 'type' => 'text'],
+            ['page' => 'about', 'section' => 'hero', 'key' => 'description', 'value' => 'We are dedicated to providing the best mental health support.', 'type' => 'textarea'],
         ];
 
         foreach ($homeContent as $content) {
@@ -76,6 +83,50 @@ class AdminPanelSeeder extends Seeder
                 ['page' => $content['page'], 'section' => $content['section'], 'key' => $content['key']],
                 $content
             );
+        }
+
+        // Initial Services
+        $services = [
+            [
+                'title' => 'Individual Therapy',
+                'slug' => 'individual-therapy',
+                'icon' => 'bi-person-vcard-fill',
+                'icon_image' => 'image/icon/Icon1.png',
+                'description' => 'Tailored guidance crafted to meet your unique needs and goals effectively.',
+                'image' => 'image/serv1.jpg',
+                'sort_order' => 1
+            ],
+            [
+                'title' => 'Group Counseling',
+                'slug' => 'group-counseling',
+                'icon' => 'bi-people-fill',
+                'icon_image' => 'image/icon/Icon2.png',
+                'description' => 'Professional support designed to guide emotional well-being every single day.',
+                'image' => 'image/serv2.jpg',
+                'sort_order' => 2
+            ],
+            [
+                'title' => 'Stress Management',
+                'slug' => 'stress-management',
+                'icon' => 'bi-fire',
+                'icon_image' => 'image/icon/Icon3.png',
+                'description' => 'Tailored guidance crafted to meet your unique needs and goals effectively.',
+                'image' => 'image/serv3.jpg',
+                'sort_order' => 3
+            ],
+            [
+                'title' => 'Family Therapy',
+                'slug' => 'family-therapy',
+                'icon' => 'bi-house-heart-fill',
+                'icon_image' => 'image/icon/Icon1.png',
+                'description' => 'Professional support designed to guide emotional well-being for the whole family.',
+                'image' => 'image/about2.jpg',
+                'sort_order' => 4
+            ],
+        ];
+
+        foreach ($services as $service) {
+            \App\Models\Service::updateOrCreate(['slug' => $service['slug']], $service);
         }
     }
 }

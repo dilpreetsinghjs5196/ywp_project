@@ -37,9 +37,6 @@ class AdminPanelSeeder extends Seeder
             ['page' => 'home', 'section' => 'hero', 'key' => 'subtitle', 'value' => 'Discover clarity, confidence, and emotional wellness through guided support.', 'type' => 'textarea'],
             ['page' => 'home', 'section' => 'hero', 'key' => 'hero_image', 'value' => 'image/hero-img.png', 'type' => 'image'],
             ['page' => 'home', 'section' => 'hero', 'key' => 'hero_bg_image', 'value' => 'image/Homehero.png', 'type' => 'image'],
-            ['page' => 'home', 'section' => 'hero', 'key' => 'hero_overlay_color', 'value' => '#044A80', 'type' => 'color'],
-            ['page' => 'home', 'section' => 'hero', 'key' => 'hero_overlay_opacity', 'value' => '0.7', 'type' => 'text'],
-            ['page' => 'home', 'section' => 'hero', 'key' => 'hero_show_overlay', 'value' => 'yes', 'type' => 'text'],
 
             // About Section on Home
             ['page' => 'home', 'section' => 'about_us', 'key' => 'small_heading', 'value' => 'ABOUT US', 'type' => 'text'],

@@ -6,10 +6,6 @@
 
   <!-- Hero Section -->
   @php
-    $showOverlay = ($contents['hero']['hero_show_overlay'] ?? 'yes') === 'yes';
-    $overlayColor = $contents['hero']['hero_overlay_color'] ?? '#044A80';
-    $opacity = $contents['hero']['hero_overlay_opacity'] ?? '0.7';
-
     // Logic for background image path
     $bgImagePath = $contents['hero']['hero_bg_image'] ?? 'image/Homehero.png';
     $bgFullUrl = Str::startsWith($bgImagePath, 'image/') ? asset($bgImagePath) : asset('storage/' . $bgImagePath);
@@ -18,15 +14,7 @@
     $heroImagePath = $contents['hero']['hero_image'] ?? 'image/hero-img.png';
     $heroFullUrl = Str::startsWith($heroImagePath, 'image/') ? asset($heroImagePath) : asset('storage/' . $heroImagePath);
 
-    if ($showOverlay) {
-      if (Str::startsWith($overlayColor, '#')) {
-        list($r, $g, $b) = sscanf($overlayColor, "#%02x%02x%02x");
-        $overlayColor = "rgba($r, $g, $b, $opacity)";
-      }
-      $backgroundStyle = "background: linear-gradient($overlayColor, $overlayColor), url('$bgFullUrl');";
-    } else {
-      $backgroundStyle = "background: url('$bgFullUrl');";
-    }
+    $backgroundStyle = "background: url('$bgFullUrl');";
   @endphp
   <section class="section hero-section d-flex align-items-center pb-0"
     style="{{ $backgroundStyle }} background-size: cover; background-position: center;">
@@ -464,7 +452,7 @@
         <div class="col-12 col-xl-10">
           <div class="card rounded-5 shadow-lg border-0 bg-secondary-gradient">
             <div class="card-body p-4 p-lg-5">
-              <div class="row g-5 align-items-strench">
+              <div class="row g-5 align-items-stretch">
                 <div class="col-lg-6 col-md-12 order-lg-1 order-2">
                   <div
                     class="success_msg toast align-items-center w-100 shadow-none mb-3 border border-success rounded-pill my-4"
@@ -550,7 +538,7 @@
                   </form>
                 </div>
 
-                <div class="col-lg-6 col-md-12 order-lg-2 order-1 mb-4 mb-lg-0 p-lg-5">
+                <div class="col-lg-6 col-md-12 order-lg-2 order-1 mb-4 mb-lg-0">
                   <div class="row">
                     <h2 class="font-1" style="font-weight: 800;">
                       {{ $contents['get_in_touch']['title'] ?? 'Need Any Help ? Get In Touch With Us' }}
@@ -561,7 +549,7 @@
                   <div class="d-flex align-items-center gap-3 justify-content-start" data-aos="fade-left"
                     data-aos-easing="ease-out-cubic" data-aos-delay="250" data-aos-duration="1000">
                     <div
-                      class="d-flex align-items-center justify-content-center rounded-circle border-white bg-secondary-color"
+                      class="d-flex align-items-center justify-content-center rounded-circle border-white bg-secondary-color flex-shrink-0"
                       style="width: 65px; height: 65px; border: 2px solid white;">
                       <i class="bi bi-telephone-fill fs-2 text-white"></i>
                     </div>
@@ -573,7 +561,7 @@
                   <div class="d-flex align-items-center gap-3 justify-content-start mt-3" data-aos="fade-left"
                     data-aos-easing="ease-out-cubic" data-aos-delay="500" data-aos-duration="1000">
                     <div
-                      class="d-flex align-items-center justify-content-center rounded-circle border-2 border-white bg-secondary-color"
+                      class="d-flex align-items-center justify-content-center rounded-circle border-2 border-white bg-secondary-color flex-shrink-0"
                       style="width: 65px; height: 65px;border: 2px solid white;">
                       <i class="bi bi-envelope-fill fs-2 text-white"></i>
                     </div>
@@ -585,7 +573,7 @@
                   <div class="d-flex align-items-center gap-3 justify-content-start" data-aos="fade-left"
                     data-aos-easing="ease-out-cubic" data-aos-delay="750" data-aos-duration="1000">
                     <div
-                      class="d-flex align-items-center justify-content-center rounded-circle border-2 border-white bg-secondary-color"
+                      class="d-flex align-items-center justify-content-center rounded-circle border-2 border-white bg-secondary-color flex-shrink-0"
                       style="width: 65px; height: 65px;border: 2px solid white;">
                       <i class="bi bi-geo-alt-fill fs-2 text-white"></i>
                     </div>

@@ -50,21 +50,19 @@
           <div class="offcanvas-body">
             <ul class="navbar-nav mx-auto mb-2 mb-xl-0 gap-xl-2 justify-content-center flex-grow-1 pe-3">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{ route('com.home') }}">Home</a>
+                <a class="nav-link {{ request()->routeIs('com.home') ? 'active' : '' }}" 
+                  {{ request()->routeIs('com.home') ? 'aria-current="page"' : '' }} 
+                  href="{{ route('com.home') }}">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{ route('com.about') }}">About Us</a>
+                <a class="nav-link {{ request()->routeIs('com.about') ? 'active' : '' }}" 
+                  {{ request()->routeIs('com.about') ? 'aria-current="page"' : '' }} 
+                  href="{{ route('com.about') }}">About Us</a>
               </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link" href="#">
-                  Our Therapists
-                </a>
-                {{-- <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="services.html">Our Therapists</a></li> --}}
-                  {{-- <li><a class="dropdown-item" href="service-detail.html">Service Detail</a></li>
-                  <li><a class="dropdown-item" href="appointment.html">Appointment</a></li> --}}
-                  {{--
-                </ul> --}}
+              <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('com.team') ? 'active' : '' }}" 
+                  {{ request()->routeIs('com.team') ? 'aria-current="page"' : '' }} 
+                  href="{{ route('com.team') }}">Our Therapists</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">

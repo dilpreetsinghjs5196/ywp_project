@@ -13,10 +13,13 @@
           <h1 class="display-2 mb-0" style="font-weight: 900;">About Us</h1>
           <nav aria-label="breadcrumb" style="font-weight: 900;">
             <ol class="breadcrumb justify-content-center align-items-center">
-              <li class="breadcrumb-item font-1">
-                <a class="text-decoration-none text-primary-color" href="index.html">Homepage</a>
+              <li class="breadcrumb-item font-1 {{ request()->routeIs('com.home') ? 'active' : '' }}">
+                <a class="text-decoration-none {{ request()->routeIs('com.home') ? 'text-primary-color' : 'text-white' }}" 
+                  href="{{ route('com.home') }}"
+                  {{ request()->routeIs('com.home') ? 'aria-current="page"' : '' }}>Home</a>
               </li>
-              <li class="breadcrumb-item text-white active" aria-current="page">
+              <li class="breadcrumb-item {{ request()->routeIs('com.about') ? 'text-primary-color' : 'text-white' }}" 
+                {{ request()->routeIs('com.about') ? 'aria-current="page"' : '' }}>
                 About Us
               </li>
             </ol>

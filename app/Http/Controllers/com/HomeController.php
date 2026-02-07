@@ -39,4 +39,12 @@ class HomeController extends Controller
 
         return view('site.com.about', compact('settings', 'contents'));
     }
+
+    public function team()
+    {
+        $settings = SiteSetting::all()->pluck('value', 'key');
+        $teams = \App\Models\Team::where('is_active', true)->orderBy('sort_order')->get();
+
+        return view('site.com.team', compact('settings', 'teams'));
+    }
 }

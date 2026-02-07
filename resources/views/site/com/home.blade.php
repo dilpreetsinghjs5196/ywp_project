@@ -276,46 +276,52 @@
       <h2 class="display-5 font-1 mb-5" style="font-weight: 800;">
         {{ $contents['services']['title'] ?? 'Breaking Stigmas, Building Strength' }}
       </h2>
-      <div class="swiper-container services-slider" style="margin-top: 3rem !important; overflow: hidden;">
-        <div class="swiper-wrapper">
-          @foreach($services as $service)
-            <!-- Dynamic Service Slide -->
-            <div class="swiper-slide mb-5">
-              <div class="card border-0 rounded-5 overflow-hidden h-100 shadow-sm scale-hover mx-2" data-aos="fade-up"
-                data-aos-easing="linear" data-aos-delay="{{ $loop->iteration * 100 }}" data-aos-duration="1000">
-                @php
-                  $servImg = $service->image ?? 'image/serv1.jpg';
-                  $servImgUrl = Str::startsWith($servImg, 'image/') ? asset($servImg) : asset('storage/' . $servImg);
+      <div class="position-relative px-md-5">
+        <div class="swiper-container services-slider" style="margin-top: 3rem !important; overflow: hidden;">
+          <div class="swiper-wrapper">
+            @foreach($services as $service)
+              <!-- Dynamic Service Slide -->
+              <div class="swiper-slide mb-5">
+                <div class="card border-0 rounded-5 overflow-hidden h-100 shadow-sm scale-hover mx-2" data-aos="fade-up"
+                  data-aos-easing="linear" data-aos-delay="{{ $loop->iteration * 100 }}" data-aos-duration="1000">
+                  @php
+                    $servImg = $service->image ?? 'image/serv1.jpg';
+                    $servImgUrl = Str::startsWith($servImg, 'image/') ? asset($servImg) : asset('storage/' . $servImg);
 
-                  $iconImg = $service->icon_image;
-                  $iconImgUrl = $iconImg ? (Str::startsWith($iconImg, 'image/') ? asset($iconImg) : asset('storage/' . $iconImg)) : null;
-                @endphp
-                <img src="{{ $servImgUrl }}" class="w-100"
-                  style="height: 250px; transform: scale(1.5); object-position: center;" alt="{{ $service->title }}">
-                <div class="bg-accent-color-2 text-start p-4 position-relative">
-                  <div class="position-absolute top-0 start-0 translate-middle-y" style="margin-top: 0; margin-left: 20px;">
-                    @if($iconImgUrl)
-                      <img src="{{ $iconImgUrl }}" alt="{{ $service->title }} Icon" width="100">
-                    @else
-                      <div class="bg-primary-color rounded-circle d-flex align-items-center justify-content-center"
-                        style="width: 80px; height: 80px;">
-                        <i class="bi {{ $service->icon }} text-white fs-2"></i>
-                      </div>
-                    @endif
+                    $iconImg = $service->icon_image;
+                    $iconImgUrl = $iconImg ? (Str::startsWith($iconImg, 'image/') ? asset($iconImg) : asset('storage/' . $iconImg)) : null;
+                  @endphp
+                  <img src="{{ $servImgUrl }}" class="w-100"
+                    style="height: 250px; transform: scale(1.5); object-position: center;" alt="{{ $service->title }}">
+                  <div class="bg-accent-color-2 text-start p-4 position-relative">
+                    <div class="position-absolute top-0 start-0 translate-middle-y"
+                      style="margin-top: 0; margin-left: 20px;">
+                      @if($iconImgUrl)
+                        <img src="{{ $iconImgUrl }}" alt="{{ $service->title }} Icon" width="100">
+                      @else
+                        <div class="bg-primary-color rounded-circle d-flex align-items-center justify-content-center"
+                          style="width: 80px; height: 80px;">
+                          <i class="bi {{ $service->icon }} text-white fs-2"></i>
+                        </div>
+                      @endif
+                    </div>
+                    <a href="{{ route('com.home') }}"
+                      class="btn btn-dark btn-lg rounded-pill position-absolute top-0 end-0 me-3 fw-medium scale-hover"
+                      style="margin-top: -25px;">Read More</a>
+                    <h3 class="font-1 mt-5" style="font-weight: 800;">{{ $service->title }}</h3>
+                    <hr class="border-primary border-1 opacity-100 w-100 my-4">
+                    <p class="mb-3">{{ $service->description }}</p>
                   </div>
-                  <a href="{{ route('com.home') }}"
-                    class="btn btn-dark btn-lg rounded-pill position-absolute top-0 end-0 me-3 fw-medium scale-hover"
-                    style="margin-top: -25px;">Read More</a>
-                  <h3 class="font-1 mt-5" style="font-weight: 800;">{{ $service->title }}</h3>
-                  <hr class="border-primary border-1 opacity-100 w-100 my-4">
-                  <p class="mb-3">{{ $service->description }}</p>
                 </div>
               </div>
-            </div>
-          @endforeach
+            @endforeach
+          </div>
+          <!-- Pagination -->
+          <div class="swiper-pagination mt-4 position-relative"></div>
         </div>
-        <!-- Pagination -->
-        <div class="swiper-pagination mt-4 position-relative"></div>
+        <!-- Navigation Arrows -->
+        <div class="swiper-button-next text-primary-color"></div>
+        <div class="swiper-button-prev text-primary-color"></div>
       </div>
     </div>
   </section>
@@ -325,108 +331,60 @@
   <section class="section py-5 bg-half-gradient mt-5">
     <div class="b-container" style="padding-top: 50px;">
       <div class="row text-center">
-        <h6 class="text-primary-color fw-semibold mb-2">OUR SPECIALIST</h6>
-        <h2 class="font-1 mb-5" style="font-weight: 800;">Meet Our Senior<br>Therapist</h2>
+        <h6 class="text-primary-color fw-semibold mb-2">{{ $contents['teams']['small_heading'] ?? 'OUR SPECIALIST' }}</h6>
+        <h2 class="font-1 mb-5" style="font-weight: 800;">
+          {!! nl2br($contents['teams']['title'] ?? 'Meet Our Senior<br>Therapist') !!}
+        </h2>
       </div>
-      <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4 mb-5">
-        <!-- Card 1 -->
-        <div class="col" data-aos="fade-right" data-aos-easing="linear" data-aos-delay="500" data-aos-duration="1000">
-          <div class="position-relative rounded-5 transition-hover mx-auto img-container">
-            <div class="ratio-wrapper-419">
-              <img src="{{ asset('image/team1.jpg')}}" alt="Ubeid Una" class="rounded-5 w-100 h-100 position-absolute">
-            </div>
-            <div class="position-absolute w-75" style="margin-top: -9rem; margin-left: 12%;">
-              <div class="bg-primary-color d-flex flex-column text-white py-3 align-items-center text-center rounded-5">
-                <div class="mb-2">
-                  <h4 class="font-1 fw-bolder">Ubeid Una</h4>
-                  <p class="mb-0">Psychologist</p>
-                </div>
-                <div class="social-box justify-content-center mb-2">
-                  <a href="https://www.facebook.com" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
-                      class="bi bi-facebook text-white"></i></a>
-                  <a href="https://x.com" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
-                      class="bi bi-twitter-x text-white"></i></a>
-                  <a href="https://www.linkedin.com" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
-                      class="bi bi-linkedin text-white"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Card 2 -->
-        <div class="col" data-aos="fade-up" data-aos-easing="linear" data-aos-delay="500" data-aos-duration="1000">
-          <div class="position-relative rounded-5 transition-hover mx-auto  img-container">
-            <div class="ratio-wrapper-419">
-              <img src="{{ asset('image/team2.jpg')}}" alt="Hafsha Jasmine"
-                class="rounded-5 w-100 h-100 position-absolute">
-            </div>
-            <div class="position-absolute w-75" style="margin-top: -9rem; margin-left: 12%;">
-              <div class="bg-primary-color d-flex flex-column text-white py-3 align-items-center text-center rounded-5">
-                <div class="mb-2">
-                  <h4 class="font-1 fw-bolder">Hafsha Jasmine</h4>
-                  <p class="mb-0">Psychologist</p>
-                </div>
-                <div class="social-box justify-content-center mb-2">
-                  <a href="https://www.facebook.com" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
-                      class="bi bi-facebook text-white"></i></a>
-                  <a href="https://x.com" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
-                      class="bi bi-twitter-x text-white"></i></a>
-                  <a href="https://www.linkedin.com" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
-                      class="bi bi-linkedin text-white"></i></a>
+      <div class="position-relative px-md-5">
+        <div class="swiper-container teams-slider" style="overflow: hidden; padding-bottom: 50px;">
+          <div class="swiper-wrapper">
+            @foreach($teams as $member)
+              <div class="swiper-slide mb-5" data-aos="fade-up" data-aos-easing="linear"
+                data-aos-delay="{{ 100 * $loop->iteration }}" data-aos-duration="1000">
+                <div class="position-relative rounded-5 transition-hover mx-auto img-container" style="max-width: 350px;">
+                  <div class="ratio-wrapper-419">
+                    <img
+                      src="{{ Str::startsWith($member->image, 'image/') ? asset($member->image) : asset('storage/' . $member->image) }}"
+                      alt="{{ $member->name }}" class="rounded-5 w-100 h-100 position-absolute" style="object-fit: cover;">
+                  </div>
+                  <div class="position-absolute w-75" style="margin-top: -9rem; margin-left: 12.5%;">
+                    <div
+                      class="bg-primary-color d-flex flex-column text-white py-3 align-items-center text-center rounded-5">
+                      <div class="mb-2">
+                        <h4 class="font-1 fw-bolder">{{ $member->name }}</h4>
+                        <p class="mb-0">{{ $member->designation }}</p>
+                      </div>
+                      <div class="social-box justify-content-center mb-2">
+                        @if($member->facebook)
+                          <a href="{{ $member->facebook }}" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
+                              class="bi bi-facebook text-white"></i></a>
+                        @endif
+                        @if($member->twitter)
+                          <a href="{{ $member->twitter }}" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
+                              class="bi bi-twitter-x text-white"></i></a>
+                        @endif
+                        @if($member->instagram)
+                          <a href="{{ $member->instagram }}" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
+                              class="bi bi-instagram text-white"></i></a>
+                        @endif
+                        @if($member->linkedin)
+                          <a href="{{ $member->linkedin }}" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
+                              class="bi bi-linkedin text-white"></i></a>
+                        @endif
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            @endforeach
           </div>
+          <!-- Pagination -->
+          <div class="swiper-pagination mt-4 position-relative"></div>
         </div>
-        <!-- Card 3 -->
-        <div class="col" data-aos="fade-down" data-aos-easing="linear" data-aos-delay="500" data-aos-duration="1000">
-          <div class="position-relative rounded-5 transition-hover mx-auto img-container">
-            <div class="ratio-wrapper-419">
-              <img src="{{ asset('image/team3.jpg')}}" alt="Farina Amira" class="rounded-5 w-100 h-100 position-absolute">
-            </div>
-            <div class="position-absolute w-75" style="margin-top: -9rem; margin-left: 12%;">
-              <div class="bg-primary-color d-flex flex-column text-white py-3 align-items-center text-center rounded-5">
-                <div class="mb-2">
-                  <h4 class="font-1 fw-bolder">Farina Amira</h4>
-                  <p class="mb-0">Psychologist</p>
-                </div>
-                <div class="social-box justify-content-center mb-2">
-                  <a href="https://www.facebook.com" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
-                      class="bi bi-facebook text-white"></i></a>
-                  <a href="https://x.com" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
-                      class="bi bi-twitter-x text-white"></i></a>
-                  <a href="https://www.linkedin.com" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
-                      class="bi bi-linkedin text-white"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Card 4 -->
-        <div class="col" data-aos="fade-left" data-aos-easing="linear" data-aos-delay="500" data-aos-duration="1000">
-          <div class="position-relative rounded-5 transition-hover mx-auto img-container">
-            <div class="ratio-wrapper-419">
-              <img src="{{ asset('image/team4.jpg')}}" alt="Idayati Ilyas"
-                class="rounded-5 w-100 h-100 position-absolute">
-            </div>
-            <div class="position-absolute w-75" style="margin-top: -9rem; margin-left: 12%;">
-              <div class="bg-primary-color d-flex flex-column text-white py-3 align-items-center text-center rounded-5">
-                <div class="mb-2">
-                  <h4 class="font-1 fw-bolder">Idayati Ilyas</h4>
-                  <p class="mb-0">Psychologist</p>
-                </div>
-                <div class="social-box justify-content-center mb-2">
-                  <a href="https://www.facebook.com" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
-                      class="bi bi-facebook text-white"></i></a>
-                  <a href="https://x.com" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
-                      class="bi bi-twitter-x text-white"></i></a>
-                  <a href="https://www.linkedin.com" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
-                      class="bi bi-linkedin text-white"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- Navigation Arrows -->
+        <div class="swiper-button-next text-primary-color"></div>
+        <div class="swiper-button-prev text-primary-color"></div>
       </div>
     </div>
   </section>
@@ -437,121 +395,54 @@
     <div class="b-container" style="padding-top: 50px;">
       <div class="row justify-content-between">
         <div class="col-12 col-lg-7 text-center text-lg-start">
-          <h6 class="text-primary-color fw-semibold mb-2">CLIENT FEEDBACKS</h6>
+          <h6 class="text-primary-color fw-semibold mb-2">
+            {{ $contents['testimonials']['small_heading'] ?? 'CLIENT FEEDBACKS' }}
+          </h6>
           <h2 class="font-1" style="font-weight: 800;">
-            Healing Begins with a Conversation
+            {{ $contents['testimonials']['title'] ?? 'Healing Begins with a Conversation' }}
           </h2>
         </div>
         <div class="col-12 col-lg-5 text-center text-lg-start mt-4 mt-md-0">
-          <p class="my-4 text-muted-color" style="font-size: large;">"Healing isn’t rushed—it’s supported. Our team
-            walks beside you, offering understanding and tailored support to help you rebuild confidence and emotional
-            peace day by day.".</p>
+          <p class="my-4 text-muted-color" style="font-size: large;">
+            {{ $contents['testimonials']['description'] ?? '"Healing is support—not just a process. Our team walks with you every step of the way."' }}
+          </p>
         </div>
       </div>
 
-      <div class="swiper mySwiper mt-4">
-        <div class="swiper-wrapper">
-          <!-- Card 1 -->
-          <div class="swiper-slide">
-            <div class="card feedback-card">
-              <div class="d-flex align-content-center mb-3">
-                <div class="mb-2 text-warning">
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
+      <div class="position-relative px-md-5">
+        <div class="swiper testimonials-slider mt-4" style="overflow: hidden; padding-bottom: 50px;">
+          <div class="swiper-wrapper">
+            @foreach($testimonials as $item)
+              <div class="swiper-slide mt-4">
+                <div class="card feedback-card h-100">
+                  <div class="d-flex align-content-center mb-3">
+                    <div class="mb-2 text-warning">
+                      @for($i = 1; $i <= 5; $i++)
+                        <i class="bi bi-star{{ $i <= $item->rating ? '-fill' : '' }}"></i>
+                      @endfor
+                    </div>
+                  </div>
+                  <p class="fw-bold">"{{ $item->feedback }}"</p>
+                  <div class="d-flex align-items-center mt-auto pt-3">
+                    <img
+                      src="{{ $item->client_image ? (Str::startsWith($item->client_image, 'image/') ? asset($item->client_image) : asset('storage/' . $item->client_image)) : asset('image/default-user.jpg') }}"
+                      alt="{{ $item->client_name }}" class="rounded-circle me-3"
+                      style="width: 64px; height: 64px; object-fit: cover;">
+                    <div class="mt-2">
+                      <h5 class="font-1 fw-bold text-primary-color mb-0">{{ $item->client_name }}</h5>
+                      <p class="text-muted-color mb-0">{{ $item->designation }}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <p class="fw-bold">"Healing isn’t rushed—it’s supported. Our team
-                walks beside you, offering understanding and tailored support to help you rebuild confidence and emotional
-                peace day by day."</p>
-              <div class="d-flex align-items-center mt-2">
-                <img src="{{asset('image/client1.jpg')}}" alt="Client 1" class="rounded-circle me-3"
-                  style="width: 64px; height: 64px;">
-                <div class="mt-4">
-                  <h5 class="font-1 fw-bold text-primary-color">Jessica M</h5>
-                  <p class="text-muted-color">Digital Agency</p>
-                </div>
-              </div>
-            </div>
+            @endforeach
           </div>
-          <!-- Card 2 -->
-          <div class="swiper-slide">
-            <div class="card feedback-card">
-              <div class="d-flex align-content-center mb-3">
-                <div class="mb-2 text-warning">
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                </div>
-              </div>
-              <p class="fw-bold">"Healing isn’t rushed—it’s supported. Our team
-                walks beside you, offering understanding and tailored support to help you rebuild confidence and emotional
-                peace day by day."</p>
-              <div class="d-flex align-items-center mt-2">
-                <img src="{{asset('image/client2.jpg')}}" alt="Client 2" class="rounded-circle me-3"
-                  style="width: 64px; height: 64px;">
-                <div class="mt-4">
-                  <h5 class="font-1 fw-bold text-primary-color">David L.</h5>
-                  <p class="text-muted-color">Product Manager</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Card 3 -->
-          <div class="swiper-slide">
-            <div class="card feedback-card">
-              <div class="d-flex align-content-center mb-3">
-                <div class="mb-2 text-warning">
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                </div>
-              </div>
-              <p class="fw-bold">"Healing isn’t rushed—it’s supported. Our team
-                walks beside you, offering understanding and tailored support to help you rebuild confidence and emotional
-                peace day by day."</p>
-              <div class="d-flex align-items-center mt-2">
-                <img src="{{asset('image/client1.jpg')}}" alt="Client 3" class="rounded-circle me-3"
-                  style="width: 64px; height: 64px;">
-                <div class="mt-4">
-                  <h5 class="font-1 fw-bold text-primary-color">Emily R.</h5>
-                  <p class="text-muted-color">Content Creator</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Card 4 -->
-          <div class="swiper-slide">
-            <div class="card feedback-card">
-              <div class="d-flex align-content-center mb-3">
-                <div class="mb-2 text-warning">
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                </div>
-              </div>
-              <p class="fw-bold">"Healing isn’t rushed—it’s supported. Our team
-                walks beside you, offering understanding and tailored support to help you rebuild confidence and emotional
-                peace day by day."</p>
-              <div class="d-flex align-items-center mt-2">
-                <img src="{{asset('image/client2.jpg')}}" alt="Client 4" class="rounded-circle me-3"
-                  style="width: 64px; height: 64px;">
-                <div class="mt-4">
-                  <h5 class="font-1 fw-bold text-primary-color">Michael S.</h5>
-                  <p class="text-muted-color">Producer</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <!-- Pagination -->
+          <div class="swiper-pagination mt-4 position-relative"></div>
         </div>
+        <!-- Navigation Arrows -->
+        <div class="swiper-button-next text-primary-color"></div>
+        <div class="swiper-button-prev text-primary-color"></div>
       </div>
     </div>
   </section>
@@ -563,11 +454,9 @@
     <div class="container py-5 px-2 px-md-0">
       <div class="row justify-content-center text-center text-white">
         <div class="col-12 col-xl-10">
-          <h6 class="text-primary-color fw-semibold mb-2">GET A QUOTE</h6>
+          <h6 class="text-primary-color fw-semibold mb-2">{{ $contents['get_in_touch']['small_heading'] ?? 'GET A QUOTE' }}</h6>
           <h2 class="font-1 text-white" style="font-weight: 800;">
-            Take <span class="text-primary-color">The first step</span> toward a <span
-              class="text-primary-color">healthier</span> mind. Join us today and start
-            your journey to <span class="text-primary-color">well-being!</span>
+            {!! $contents['get_in_touch']['quote_title'] ?? 'Take <span class="text-primary-color">The first step</span> toward a <span class="text-primary-color">healthier</span> mind. Join us today and start your journey to <span class="text-primary-color">well-being!</span>' !!}
           </h2>
         </div>
       </div>
@@ -661,14 +550,12 @@
                   </form>
                 </div>
 
-                <div class="col-lg-6 col-md-12 order-lg-2 order-1 mb-4 mb-lg-0">
+                <div class="col-lg-6 col-md-12 order-lg-2 order-1 mb-4 mb-lg-0 p-lg-5">
                   <div class="row">
                     <h2 class="font-1" style="font-weight: 800;">
-                      Need Any Help ? Get In Touch With Us
+                      {{ $contents['get_in_touch']['title'] ?? 'Need Any Help ? Get In Touch With Us' }}
                     </h2>
-                    <p class="text-muted-color" style="font-size: large;">Every small step counts. We’re
-                      committed to walking with you through difficult moments, encouraging progress, and nurturing
-                      your journey toward lasting mental and emotional recovery.</p>
+                    <p class="text-muted-color" style="font-size: large;">{{ $contents['get_in_touch']['description'] ?? 'Every small step counts. We’re committed to walking with you through difficult moments, encouraging progress, and nurturing your journey toward lasting mental and emotional recovery.' }}</p>
                   </div>
 
                   <div class="d-flex align-items-center gap-3 justify-content-start" data-aos="fade-left"
@@ -680,7 +567,7 @@
                     </div>
                     <div class="ms-2 font-1 py-2">
                       <p class="fw-bold text-primary-color mb-0">Call us anytime</p>
-                      <h5 class="fw-bold">(555) 123-4567</h5>
+                      <h5 class="fw-bold">{{ $contents['get_in_touch']['phone'] ?? '(555) 123-4567' }}</h5>
                     </div>
                   </div>
                   <div class="d-flex align-items-center gap-3 justify-content-start mt-3" data-aos="fade-left"
@@ -692,7 +579,7 @@
                     </div>
                     <div class="ms-2 font-1 py-2">
                       <p class="fw-bold text-primary-color mb-0">Email us</p>
-                      <h5 class="fw-bold">Info@Yourmail.Com</h5>
+                      <h5 class="fw-bold">{{ $contents['get_in_touch']['email'] ?? 'Info@Yourmail.Com' }}</h5>
                     </div>
                   </div>
                   <div class="d-flex align-items-center gap-3 justify-content-start" data-aos="fade-left"
@@ -704,7 +591,7 @@
                     </div>
                     <div class="ms-2 font-1 py-2">
                       <p class="fw-bold text-primary-color mb-0">Our location</p>
-                      <h5 class="fw-bold">123 Serenity Lane, <br>Blissfield, CA 90210, US.</h5>
+                      <h5 class="fw-bold">{!! nl2br($contents['get_in_touch']['address'] ?? '123 Serenity Lane, <br>Blissfield, CA 90210, US.') !!}</h5>
                     </div>
                   </div>
                 </div>
@@ -730,8 +617,59 @@
         spaceBetween: 30,
         loop: false,
         pagination: {
-          el: '.swiper-pagination',
+          el: '.services-slider .swiper-pagination',
           clickable: true,
+        },
+        navigation: {
+          nextEl: '.services-slider + .swiper-button-next',
+          prevEl: '.services-slider + .swiper-button-prev',
+        },
+        breakpoints: {
+          768: {
+            slidesPerView: 2,
+          },
+          1200: {
+            slidesPerView: 3,
+          }
+        }
+      });
+
+      new Swiper('.teams-slider', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        pagination: {
+          el: '.teams-slider .swiper-pagination',
+          clickable: true,
+        },
+        navigation: {
+          nextEl: '.teams-slider + .swiper-button-next',
+          prevEl: '.teams-slider + .swiper-button-prev',
+        },
+        breakpoints: {
+          768: {
+            slidesPerView: 2,
+          },
+          1200: {
+            slidesPerView: 3,
+          }
+        }
+      });
+
+      new Swiper('.testimonials-slider', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
+        autoplay: {
+          delay: 3500,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: '.testimonials-slider .swiper-pagination',
+          clickable: true,
+        },
+        navigation: {
+          nextEl: '.testimonials-slider + .swiper-button-next',
+          prevEl: '.testimonials-slider + .swiper-button-prev',
         },
         breakpoints: {
           768: {

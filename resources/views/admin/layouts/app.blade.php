@@ -110,6 +110,18 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.teams.*') ? 'active' : '' }}"
+                        href="{{ route('admin.teams.index') }}">
+                        <i class="bi bi-people"></i> Our Team
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.testimonials.*') ? 'active' : '' }}"
+                        href="{{ route('admin.testimonials.index') }}">
+                        <i class="bi bi-chat-left-quote"></i> Testimonials
+                    </a>
+                </li>
+                <li class="nav-item">
                     <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Settings</div>
                 </li>
                 <li class="nav-item">

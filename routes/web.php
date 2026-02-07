@@ -22,6 +22,12 @@ Route::prefix('admin')->group(function () {
     // Services Management
     Route::resource('services', \App\Http\Controllers\Admin\AdminServiceController::class, ['as' => 'admin']);
 
+    // Team Management
+    Route::resource('teams', \App\Http\Controllers\Admin\AdminTeamController::class, ['as' => 'admin']);
+
+    // Testimonial Management
+    Route::resource('testimonials', \App\Http\Controllers\Admin\AdminTestimonialController::class, ['as' => 'admin']);
+
     // Global Settings
     Route::get('/settings/branding', [\App\Http\Controllers\Admin\AdminSettingController::class, 'branding'])->name('admin.settings.branding');
     Route::get('/settings/contact', [\App\Http\Controllers\Admin\AdminSettingController::class, 'contact'])->name('admin.settings.contact');

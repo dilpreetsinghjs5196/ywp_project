@@ -73,6 +73,23 @@ class AdminPanelSeeder extends Seeder
             ['page' => 'home', 'section' => 'services', 'key' => 'small_heading', 'value' => 'OUR SERVICES', 'type' => 'text'],
             ['page' => 'home', 'section' => 'services', 'key' => 'title', 'value' => 'Breaking Stigmas, Building Strength', 'type' => 'text'],
 
+            // Teams Section Meta
+            ['page' => 'home', 'section' => 'teams', 'key' => 'small_heading', 'value' => 'OUR SPECIALIST', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'teams', 'key' => 'title', 'value' => "Meet Our Senior\nTherapist", 'type' => 'text'],
+
+            // Testimonials Section Meta
+            ['page' => 'home', 'section' => 'testimonials', 'key' => 'small_heading', 'value' => 'CLIENT FEEDBACKS', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'testimonials', 'key' => 'title', 'value' => 'Healing Begins with a Conversation', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'testimonials', 'key' => 'description', 'value' => '"Healing is not rushed—it is supported. Our team walks beside you, offering understanding and tailored support to help you rebuild confidence and emotional peace day by day."', 'type' => 'textarea'],
+
+            // Get In Touch / Quotes Section
+            ['page' => 'home', 'section' => 'get_in_touch', 'key' => 'quote_title', 'value' => "Take The first step toward a healthier mind. Join us today and start your journey to well-being!", 'type' => 'textarea'],
+            ['page' => 'home', 'section' => 'get_in_touch', 'key' => 'title', 'value' => 'Need Any Help ? Get In Touch With Us', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'get_in_touch', 'key' => 'description', 'value' => 'Every small step counts. We’re committed to walking with you through difficult moments, encouraging progress, and nurturing your journey toward lasting mental and emotional recovery.', 'type' => 'textarea'],
+            ['page' => 'home', 'section' => 'get_in_touch', 'key' => 'phone', 'value' => '(555) 123-4567', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'get_in_touch', 'key' => 'email', 'value' => 'Info@Yourmail.Com', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'get_in_touch', 'key' => 'address', 'value' => '123 Serenity Lane, Blissfield, CA 90210, US.', 'type' => 'textarea'],
+
             // About Page Content
             ['page' => 'about', 'section' => 'hero', 'key' => 'title', 'value' => 'About Our Mission', 'type' => 'text'],
             ['page' => 'about', 'section' => 'hero', 'key' => 'description', 'value' => 'We are dedicated to providing the best mental health support.', 'type' => 'textarea'],
@@ -127,6 +144,82 @@ class AdminPanelSeeder extends Seeder
 
         foreach ($services as $service) {
             \App\Models\Service::updateOrCreate(['slug' => $service['slug']], $service);
+        }
+
+        // Initial Teams
+        $teams = [
+            [
+                'name' => 'Dr. Elizabeth Sarah',
+                'designation' => 'Senior Psychologist',
+                'image' => 'image/Team1.jpg',
+                'sort_order' => 1,
+                'facebook' => '#',
+                'twitter' => '#',
+                'instagram' => '#',
+            ],
+            [
+                'name' => 'Dr. Michael David',
+                'designation' => 'Clinical Counselor',
+                'image' => 'image/Team2.jpg',
+                'sort_order' => 2,
+                'facebook' => '#',
+                'twitter' => '#',
+                'instagram' => '#',
+            ],
+            [
+                'name' => 'Dr. Jennifer Mary',
+                'designation' => 'Family Therapist',
+                'image' => 'image/Team3.jpg',
+                'sort_order' => 3,
+                'facebook' => '#',
+                'twitter' => '#',
+                'instagram' => '#',
+            ],
+            [
+                'name' => 'Dr. Robert Wilson',
+                'designation' => 'Child Specialist',
+                'image' => 'image/team4.jpg',
+                'sort_order' => 4,
+                'facebook' => '#',
+                'twitter' => '#',
+                'instagram' => '#',
+            ],
+        ];
+
+        foreach ($teams as $member) {
+            \App\Models\Team::updateOrCreate(['name' => $member['name']], $member);
+        }
+
+        // Initial Testimonials
+        $testimonials = [
+            [
+                'client_name' => 'Jessica M',
+                'designation' => 'Digital Agency',
+                'client_image' => 'image/client1.jpg',
+                'feedback' => 'Healing is not rushed—it is supported. Our team walks beside you, offering understanding and tailored support to help you rebuild confidence and emotional peace day by day.',
+                'rating' => 5,
+                'sort_order' => 1,
+            ],
+            [
+                'client_name' => 'David L',
+                'designation' => 'Product Manager',
+                'client_image' => 'image/client1.jpg', // Using same for now
+                'feedback' => 'Their approach to therapy is truly transformative. I felt heard and supported through every step of my journey. Highly recommended!',
+                'rating' => 5,
+                'sort_order' => 2,
+            ],
+            [
+                'client_name' => 'Emily R',
+                'designation' => 'Content Creator',
+                'client_image' => 'image/client1.jpg',
+                'feedback' => 'The atmosphere is very calming, and the therapists are very professional. They help you find clarity and peace within yourself.',
+                'rating' => 4,
+                'sort_order' => 3,
+            ],
+        ];
+
+        foreach ($testimonials as $testimonial) {
+            \App\Models\Testimonial::updateOrCreate(['client_name' => $testimonial['client_name']], $testimonial);
         }
     }
 }

@@ -32,6 +32,16 @@
                         </div>
 
                         <div class="row mb-3">
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Description</label>
+                                <textarea name="description" class="form-control @error('description') is-invalid @enderror"
+                                    rows="4"
+                                    placeholder="Enter therapist description">{{ old('description', $team->description) }}</textarea>
+                                @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
                             <div class="col-md-6 text-center">
                                 <label class="form-label fw-bold d-block text-start">Current Image</label>
                                 @if($team->image)

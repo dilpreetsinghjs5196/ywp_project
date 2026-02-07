@@ -14,11 +14,11 @@
       <nav aria-label="breadcrumb" style="font-weight: 900;">
         <ol class="breadcrumb justify-content-center align-items-center">
           <li class="breadcrumb-item font-1 {{ request()->routeIs('com.home') ? 'active' : '' }}">
-            <a class="text-decoration-none {{ request()->routeIs('com.home') ? 'text-white' : 'text-primary-color' }}" 
+            <a class="text-decoration-none {{ request()->routeIs('com.home') ? 'text-primary-color' : 'text-white' }}" 
               href="{{ route('com.home') }}"
               {{ request()->routeIs('com.home') ? 'aria-current="page"' : '' }}>Homepage</a>
           </li>
-          <li class="breadcrumb-item {{ request()->routeIs('com.team') ? 'text-white active' : 'text-white' }}" 
+          <li class="breadcrumb-item {{ request()->routeIs('com.team') ? 'text-primary-color' : 'text-white' }}" 
             {{ request()->routeIs('com.team') ? 'aria-current="page"' : '' }}>
             Our Team
           </li>
@@ -51,15 +51,19 @@
           data-aos-delay="{{ 100 * $loop->iteration }}" data-aos-duration="1000">
           <div class="position-relative rounded-5 transition-hover mx-auto img-container h-100" style="max-width: 100%;">
             <div class="ratio-wrapper-419">
-              <img
-                src="{{ Str::startsWith($member->image, 'image/') ? asset($member->image) : asset('storage/' . $member->image) }}"
-                alt="{{ $member->name }}" class="rounded-5 w-100 h-100 position-absolute" style="object-fit: cover;">
+              <a href="{{ route('com.team.single', $member->id) }}">
+                <img
+                  src="{{ Str::startsWith($member->image, 'image/') ? asset($member->image) : asset('storage/' . $member->image) }}"
+                  alt="{{ $member->name }}" class="rounded-5 w-100 h-100 position-absolute" style="object-fit: cover;">
+              </a>
             </div>
             <div class="position-absolute start-50 translate-middle-x" style="width: 95%; bottom: -3rem;">
               <div
                 class="bg-primary-color d-flex flex-column text-white py-2 px-1 align-items-center text-center rounded-5 shadow-lg">
                 <div class="mb-1">
-                  <h5 class="font-1 fw-bolder mb-0" style="font-size: 1.1rem;">{{ $member->name }}</h5>
+                  <a href="{{ route('com.team.single', $member->id) }}" class="text-white text-decoration-none">
+                    <h5 class="font-1 fw-bolder mb-0" style="font-size: 1.1rem;">{{ $member->name }}</h5>
+                  </a>
                   <p class="mb-2 fw-semibold" style="font-size: 0.85rem;">{{ $member->designation }}</p>
                 </div>
                 <div class="social-box justify-content-center mb-1 d-flex gap-2">

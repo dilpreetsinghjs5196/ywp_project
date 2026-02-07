@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'home'])->name('com.home');
 Route::get('/about', [HomeController::class, 'about'])->name('com.about');
 Route::get('/team', [HomeController::class, 'team'])->name('com.team');
+Route::get('/team/{id}', [HomeController::class, 'teamSingle'])->name('com.team.single');
 
 // Admin Panel Routes
 Route::prefix('admin')->group(function () {

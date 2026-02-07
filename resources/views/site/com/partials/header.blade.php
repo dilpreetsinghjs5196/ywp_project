@@ -46,7 +46,7 @@
             <div class="offcanvas-body">
               <ul class="navbar-nav mx-auto mb-2 mb-xl-0 gap-xl-2 justify-content-center flex-grow-1 pe-3">
                         <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ url('/') }}">Home</a>
+                        <a class="nav-link active" aria-current="page" href="{{ url('/com') }}">Home</a>
                         </li>
                         <li class="nav-item">
                         <a class="nav-link" href="about-us.html">About Us</a>
@@ -61,13 +61,23 @@
                                 <li><a class="dropdown-item" href="appointment.html">Appointment</a></li> --}}
                             {{-- </ul> --}}
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                            Corporate Well-Being
+                            </a>
+                            <!--<ul class="dropdown-menu" style="padding: 20px 10px;">-->
+                            <!--    <li><a class="dropdown-item" href="services.html">Wellness Hub</a></li>-->
+                            <!--    <li><a class="dropdown-item" href="service-detail.html">Free Mental Health Tests</a></li>-->
+                            <!--    <li><a class="dropdown-item" href="appointment.html">Blog</a></li>-->
+                            <!--</ul>-->
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                            Corporate Well-Being
+                            Wellness Hub
                             </a>
                             <ul class="dropdown-menu" style="padding: 20px 10px;">
-                                <li><a class="dropdown-item" href="services.html">Wellness Hub</a></li>
+                                <!--<li><a class="dropdown-item" href="services.html">Wellness Hub</a></li>-->
                                 <li><a class="dropdown-item" href="service-detail.html">Free Mental Health Tests</a></li>
                                 <li><a class="dropdown-item" href="appointment.html">Blog</a></li>
                             </ul>
@@ -96,11 +106,11 @@
                         <a class="nav-link" href="contact-us.html">Contact Us</a>
                         </li>
                     </ul>
-              <div class="">
-                <a href="contact-us.html" class="btn btn-modify">
-                  <i class="bi bi-journal-bookmark-fill pe-2"></i>
-                  Get Quotes</a>
-              </div>
+              <!--<div class="">-->
+              <!--  <a href="contact-us.html" class="btn btn-modify">-->
+              <!--    <i class="bi bi-journal-bookmark-fill pe-2"></i>-->
+              <!--    Get Quotes</a>-->
+              <!--</div>-->
             </div>
           </div>
         </div>

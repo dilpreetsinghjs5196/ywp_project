@@ -12,7 +12,16 @@
                     <div class="row g-4">
                         @foreach($settings as $setting)
                             <div class="col-12 {{ $setting->type === 'image' ? 'col-md-12' : 'col-md-6' }}">
-                                <label class="form-label fw-bold">{{ str_replace('_', ' ', ucfirst($setting->key)) }}</label>
+                                @php
+                                    $displayKey = str_replace('_', ' ', ucfirst($setting->key));
+                                    $roleLabel = '';
+                                    if ($setting->key === 'site_logo') {
+                                        $roleLabel = 'Header logo';
+                                    } elseif ($setting->key === 'site_logo_black') {
+                                        $roleLabel = 'Footer logo';
+                                    }
+                                @endphp
+                                <label class="form-label fw-bold">{{ $displayKey }} @if($roleLabel) <small class="text-muted">({{ $roleLabel }})</small> @endif</label>
 
                                 @if($setting->type === 'color')
                                     <div class="d-flex align-items-center gap-3">

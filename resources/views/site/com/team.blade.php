@@ -94,86 +94,83 @@
 </section>
 <!-- #team end -->
 
-<!-- Why Choose Our Team Section -->
-<section class="section py-5 bg-accent-color-3">
-  <div class="b-container">
-    <div class="row text-center mb-5" data-aos="fade-up" data-aos-easing="linear" data-aos-delay="200" data-aos-duration="1000">
-      <div class="col-lg-8 mx-auto">
-        <h6 class="text-primary-color fw-semibold mb-2">WHY CHOOSE US</h6>
-        <h2 class="font-1" style="font-weight: 800;">
-          What Sets Our Team Apart
-        </h2>
+<section class="section py-5 text-white bg-gradient-secondary" style="margin-top: 3rem !important;">
+    <div class="b-container">
+      <div class="row align-items-center g-4 pt-5">
+        <!-- Left content -->
+        <div class="col-12 col-xl-5 order-1 order-md-3 order-xl-1 text-white mt-5 text-center text-xl-start">
+          <p class="text-uppercase text-primary-color fs-5 fw-semibold mb-2">
+            {{ $contents['appointment']['small_heading'] ?? 'Why Choose Us ?' }}
+          </p>
+          <h2 class="font-1 display-5 mb-4" style="font-weight: 800;">
+            {!! str_replace(['Hope', 'At A Time'], ['<span class="text-primary-color">Hope</span>', '<span class="text-primary-color">At A Time</span>'], $contents['appointment']['title'] ?? 'Restoring Hope, One Day At A Time') !!}
+          </h2>
+          <p class="mb-4" style="font-size: large;">
+            {{ $contents['appointment']['description'] ?? 'Through consistent care and compassionate guidance...' }}
+          </p>
+          <ul class="list-unstyled font-1 text-center text-xl-start">
+            <li class="d-flex flex-row justify-content-center justify-content-xl-start mb-3">
+              <i class="bi bi-check-circle-fill text-primary-color fs-4 mb-2 mb-xl-0 me-2"></i>
+              <h5 class="fw-bolder py-1">
+                {{ $contents['appointment']['list_item_1'] ?? 'Compassionate & Experienced Professionals' }}
+              </h5>
+            </li>
+            <li class="d-flex flex-row justify-content-center justify-content-xl-start mb-3">
+              <i class="bi bi-check-circle-fill text-primary-color fs-4 mb-2 mb-xl-0 me-2"></i>
+              <h5 class="fw-bolder py-1">
+                {{ $contents['appointment']['list_item_2'] ?? 'Holistic Approach To Well-Being' }}
+              </h5>
+            </li>
+            <li class="d-flex flex-row justify-content-center justify-content-xl-start mb-3">
+              <i class="bi bi-check-circle-fill text-primary-color fs-4 mb-2 mb-xl-0 me-2"></i>
+              <h5 class="fw-bolder py-1">{{ $contents['appointment']['list_item_3'] ?? 'Safe & Supportive Environment' }}
+              </h5>
+            </li>
+          </ul>
+          <a href="{{ route('com.home') }}" class="btn btn-primary-solid mb-5">Make An Appointment</a>
+        </div>
+
+        <!-- Middle content -->
+        <div class="col-12 col-md-7 col-xl-5 order-2 order-md-1">
+          <div class="ratio ratio-1x1">
+            @php
+              $chooseImagePath = $contents['appointment']['main_image'] ?? 'image/choose.jpg';
+              $chooseImageUrl = Str::startsWith($chooseImagePath, 'image/') ? asset($chooseImagePath) : asset('storage/' . $chooseImagePath);
+            @endphp
+            <img src="{{ $chooseImageUrl }}" class="w-100 h-100 object-fit-cover position-absolute rounded-5"
+              alt="Appointment" data-aos="fade-up" data-aos-easing="linear" data-aos-delay="750" data-aos-duration="1000">
+          </div>
+        </div>
+        <!-- Right content -->
+        <div class="col-12 col-md-5 col-xl-2 d-flex flex-column gap-3 order-3 order-md-2 order-xl-3">
+          <div class="card bg-primary-color rounded-4 border-0" data-aos="fade-left" data-aos-easing="linear"
+            data-aos-delay="500" data-aos-duration="1000">
+            <div class="card-body text-center text-white p-3 font-1">
+              <div class="display-5"><i class="bi bi-emoji-smile-fill accent-secondary-color"></i></div>
+              <div class="mb-0 fs-2 fw-bold text-white">{{ $contents['appointment']['stat_1_number'] ?? '100%' }}</div>
+              <p class="mb-0">{{ $contents['appointment']['stat_1_text'] ?? 'Satisfaction' }}</p>
+            </div>
+          </div>
+          <div class="card bg-primary-color rounded-4 border-0" data-aos="fade-left" data-aos-easing="linear"
+            data-aos-delay="750" data-aos-duration="1000">
+            <div class="card-body text-center text-white p-3 font-1">
+              <div class="display-5"><i class="bi bi-hand-thumbs-up-fill accent-secondary-color"></i></div>
+              <div class="mb-0 fs-2 fw-bold text-white">{{ $contents['appointment']['stat_2_number'] ?? '257+' }}</div>
+              <p class="mb-0">{{ $contents['appointment']['stat_2_text'] ?? 'Happy Patient' }}</p>
+            </div>
+          </div>
+          <div class="card bg-primary-color rounded-4 border-0" data-aos="fade-left" data-aos-easing="linear"
+            data-aos-delay="1000" data-aos-duration="1000">
+            <div class="card-body text-center text-white p-3 font-1">
+              <div class="display-5"><i class="bi bi-person-plus-fill accent-secondary-color"></i></div>
+              <div class="mb-0 fs-2 fw-bold text-white">{{ $contents['appointment']['stat_3_number'] ?? '10+' }}</div>
+              <p class="mb-0">{{ $contents['appointment']['stat_3_text'] ?? 'Expert Therapist' }}</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div class="row g-4">
-      <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-easing="linear" data-aos-delay="100" data-aos-duration="1000">
-        <div class="card border-0 rounded-4 h-100 shadow-sm">
-          <div class="card-body text-center p-4">
-            <div class="display-5 text-primary-color mb-3">
-              <i class="bi bi-mortarboard"></i>
-            </div>
-            <h5 class="font-1 fw-bold mb-2">Highly Qualified</h5>
-            <p class="text-muted-color">Licensed and certified mental health professionals with years of experience.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-easing="linear" data-aos-delay="200" data-aos-duration="1000">
-        <div class="card border-0 rounded-4 h-100 shadow-sm">
-          <div class="card-body text-center p-4">
-            <div class="display-5 text-primary-color mb-3">
-              <i class="bi bi-heart"></i>
-            </div>
-            <h5 class="font-1 fw-bold mb-2">Compassionate Care</h5>
-            <p class="text-muted-color">We listen, understand, and provide genuine support for your mental health journey.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-easing="linear" data-aos-delay="300" data-aos-duration="1000">
-        <div class="card border-0 rounded-4 h-100 shadow-sm">
-          <div class="card-body text-center p-4">
-            <div class="display-5 text-primary-color mb-3">
-              <i class="bi bi-person-check"></i>
-            </div>
-            <h5 class="font-1 fw-bold mb-2">Personalized Approach</h5>
-            <p class="text-muted-color">Each therapy plan is tailored to your unique needs and goals.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-easing="linear" data-aos-delay="400" data-aos-duration="1000">
-        <div class="card border-0 rounded-4 h-100 shadow-sm">
-          <div class="card-body text-center p-4">
-            <div class="display-5 text-primary-color mb-3">
-              <i class="bi bi-shield-lock"></i>
-            </div>
-            <h5 class="font-1 fw-bold mb-2">Confidential & Safe</h5>
-            <p class="text-muted-color">Your privacy is our priority. All sessions are completely confidential.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- #why-choose-us end -->
-
-<!-- CTA Section -->
-<section class="section py-5 bg-gradient-secondary text-white">
-  <div class="b-container">
-    <div class="row text-center" data-aos="fade-up" data-aos-easing="linear" data-aos-delay="200" data-aos-duration="1000">
-      <div class="col-lg-8 mx-auto">
-        <h2 class="font-1 mb-4" style="font-weight: 800;">
-          Ready to Start Your Wellness Journey?
-        </h2>
-        <p class="fs-5 mb-4">Connect with one of our therapists today and take the first step toward a healthier, happier you.</p>
-        <a href="{{ route('com.home') }}" class="btn btn-primary-solid btn-lg">Schedule Your Appointment</a>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- #cta end -->
+  </section>
 
 @endsection
 

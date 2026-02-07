@@ -28,8 +28,8 @@
             <li class="mb-2"><a href="index.html" class="links-secondary">Homepage</a></li>
             <li class="mb-2"><a href="services.html" class="links-secondary">Services</a></li>
             <li class="mb-2"><a href="appointment.html" class="links-secondary">Appointment</a></li>
-            <li class="mb-2"><a href="blogs.html" class="links-secondary">Blogs</a></li>
-            <li class="mb-2"><a href="faqs.html" class="links-secondary">FAQs</a></li>
+            <li class="mb-2"><a href="blogs.html" class="links-secondary">Privacy Policy</a></li>
+            <li class="mb-2"><a href="faqs.html" class="links-secondary">Terms & Conditions</a></li>
           </ul>
         </div>
         <div class="col-12 col-md-4 col-lg-3 mb-3 text-md-start text-center">

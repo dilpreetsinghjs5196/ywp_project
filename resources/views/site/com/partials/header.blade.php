@@ -46,10 +46,10 @@
             <div class="offcanvas-body">
               <ul class="navbar-nav mx-auto mb-2 mb-xl-0 gap-xl-2 justify-content-center flex-grow-1 pe-3">
                         <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ url('/com') }}">Home</a>
+                        <a class="nav-link active" aria-current="page" href="{{ route('com.home') }}">Home</a>
                         </li>
                         <li class="nav-item">
-                        <a class="nav-link" href="about-us.html">About Us</a>
+                        <a class="nav-link" href="{{ route('com.about') }}">About Us</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link" href="#">

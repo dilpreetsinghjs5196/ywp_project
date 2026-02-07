@@ -1,19 +1,12 @@
 <?php
 
+use App\Http\Controllers\com\HomeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::prefix('com')->group(function () {
-    Route::get('/', function () {
-        return view('site.com.home');
-    });
-});
-
-Route::prefix('in')->group(function () {
-    Route::get('/', function () {
-        return view('site.in.home');
-    });
-});
+//fronted code pages
+Route::get('/', [HomeController::class, 'home'])->name('com.home');
+Route::get('/about', [HomeController::class, 'about'])->name('com.about');

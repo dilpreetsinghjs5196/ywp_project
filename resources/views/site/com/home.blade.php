@@ -315,7 +315,7 @@
           <div class="col" data-aos="fade-right" data-aos-easing="linear" data-aos-delay="500" data-aos-duration="1000">
             <div class="position-relative rounded-5 transition-hover mx-auto img-container">
               <div class="ratio-wrapper-419">
-                <img src="{{ asset('image/Team1.jpg')}}" alt="Ubeid Una"
+                <img src="{{ asset('image/team1.jpg')}}" alt="Ubeid Una"
                   class="rounded-5 w-100 h-100 position-absolute">
               </div>
               <div class="position-absolute w-75" style="margin-top: -9rem; margin-left: 12%;">
@@ -341,7 +341,7 @@
           <div class="col" data-aos="fade-up" data-aos-easing="linear" data-aos-delay="500" data-aos-duration="1000">
             <div class="position-relative rounded-5 transition-hover mx-auto  img-container">
               <div class="ratio-wrapper-419">
-                <img src="{{ asset('image/Team2.jpg')}}" alt="Hafsha Jasmine"
+                <img src="{{ asset('image/team2.jpg')}}" alt="Hafsha Jasmine"
                   class="rounded-5 w-100 h-100 position-absolute">
               </div>
               <div class="position-absolute w-75" style="margin-top: -9rem; margin-left: 12%;">
@@ -367,7 +367,7 @@
           <div class="col" data-aos="fade-down" data-aos-easing="linear" data-aos-delay="500" data-aos-duration="1000">
             <div class="position-relative rounded-5 transition-hover mx-auto img-container">
               <div class="ratio-wrapper-419">
-                <img src="{{ asset('image/Team3.jpg')}}" alt="Farina Amira"
+                <img src="{{ asset('image/team3.jpg')}}" alt="Farina Amira"
                   class="rounded-5 w-100 h-100 position-absolute">
               </div>
               <div class="position-absolute w-75" style="margin-top: -9rem; margin-left: 12%;">
@@ -393,7 +393,7 @@
           <div class="col" data-aos="fade-left" data-aos-easing="linear" data-aos-delay="500" data-aos-duration="1000">
             <div class="position-relative rounded-5 transition-hover mx-auto img-container">
               <div class="ratio-wrapper-419">
-                <img src="{{ asset('image/Team4.jpg')}}" alt="Idayati Ilyas"
+                <img src="{{ asset('image/team4.jpg')}}" alt="Idayati Ilyas"
                   class="rounded-5 w-100 h-100 position-absolute">
               </div>
               <div class="position-absolute w-75" style="margin-top: -9rem; margin-left: 12%;">

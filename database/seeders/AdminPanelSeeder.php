@@ -42,10 +42,33 @@ class AdminPanelSeeder extends Seeder
             ['page' => 'home', 'section' => 'hero', 'key' => 'hero_show_overlay', 'value' => 'yes', 'type' => 'text'],
 
             // About Section on Home
+            ['page' => 'home', 'section' => 'about_us', 'key' => 'small_heading', 'value' => 'ABOUT US', 'type' => 'text'],
             ['page' => 'home', 'section' => 'about_us', 'key' => 'title', 'value' => 'Your Journey To Mental Wellness Starts Here', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'about_us', 'key' => 'description', 'value' => 'Every small step toward better mental health is a significant achievement in our lives. With the right support, each individual can find the strength to face challenges, manage stress, and build positive habits. We believe that everyone deserves the opportunity to grow, thrive, and experience inner peace. Through an empathetic and professional approach, we are here to help you discover the best solutions for lasting mental and emotional well-being.', 'type' => 'textarea'],
+            ['page' => 'home', 'section' => 'about_us', 'key' => 'list_item_1', 'value' => 'Free Consultation', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'about_us', 'key' => 'list_item_2', 'value' => 'Emergency Service', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'about_us', 'key' => 'list_item_3', 'value' => 'Mental Satisfaction', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'about_us', 'key' => 'list_item_4', 'value' => 'Psychologists Services', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'about_us', 'key' => 'quote', 'value' => 'Healing doesn’t mean the damage never existed; it means the strength to rise is greater than the pain', 'type' => 'textarea'],
             ['page' => 'home', 'section' => 'about_us', 'key' => 'experience_years', 'value' => '10+', 'type' => 'text'],
             ['page' => 'home', 'section' => 'about_us', 'key' => 'about_image_1', 'value' => 'image/about2.jpg', 'type' => 'image'],
             ['page' => 'home', 'section' => 'about_us', 'key' => 'about_image_2', 'value' => 'image/about1.jpg', 'type' => 'image'],
+            ['page' => 'home', 'section' => 'about_us', 'key' => 'signature_image', 'value' => 'image/Signature.png', 'type' => 'image'],
+
+            // Appointment / Why Choose Us Section
+            ['page' => 'home', 'section' => 'appointment', 'key' => 'small_heading', 'value' => 'Why Choose Us ?', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'appointment', 'key' => 'title', 'value' => 'Restoring Hope, One Day At A Time', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'appointment', 'key' => 'description', 'value' => 'Through consistent care and compassionate guidance, we help individuals rediscover strength, build resilience, and move forward toward a brighter, healthier future at their own pace.', 'type' => 'textarea'],
+            ['page' => 'home', 'section' => 'appointment', 'key' => 'list_item_1', 'value' => 'Compassionate & Experienced Professionals', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'appointment', 'key' => 'list_item_2', 'value' => 'Holistic Approach To Well-Being', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'appointment', 'key' => 'list_item_3', 'value' => 'Safe & Supportive Environment', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'appointment', 'key' => 'main_image', 'value' => 'image/choose.jpg', 'type' => 'image'],
+            ['page' => 'home', 'section' => 'appointment', 'key' => 'stat_1_number', 'value' => '100%', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'appointment', 'key' => 'stat_1_text', 'value' => 'Satisfaction', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'appointment', 'key' => 'stat_2_number', 'value' => '257+', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'appointment', 'key' => 'stat_2_text', 'value' => 'Happy Patient', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'appointment', 'key' => 'stat_3_number', 'value' => '10+', 'type' => 'text'],
+            ['page' => 'home', 'section' => 'appointment', 'key' => 'stat_3_text', 'value' => 'Expert Therapist', 'type' => 'text'],
         ];
 
         foreach ($homeContent as $content) {

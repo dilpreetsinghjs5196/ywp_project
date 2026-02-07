@@ -136,16 +136,12 @@
         </div>
         <!-- Right Content Side -->
         <div class="col">
-          <h6 class="text-primary-color fw-semibold mb-2">ABOUT US</h6>
+          <h6 class="text-primary-color fw-semibold mb-2">{{ $contents['about_us']['small_heading'] ?? 'ABOUT US' }}</h6>
           <h2 class="font-1 mb-4" style="font-weight: 800;">
             {{ $contents['about_us']['title'] ?? 'Your Journey To Mental Wellness Starts Here' }}
           </h2>
           <p class="text-secondary" style="font-size: large;">
-            Every small step toward better mental health is a significant achievement in our lives. With the right
-            support, each individual can find the strength to face challenges, manage stress, and build positive
-            habits. We believe that everyone deserves the opportunity to grow, thrive, and experience inner peace.
-            Through an empathetic and professional approach, we are here to help you discover the best solutions for
-            lasting mental and emotional well-being.
+            {{ $contents['about_us']['description'] ?? 'Every small step toward better mental health is a significant achievement in our lives.' }}
           </p>
 
           <div class="row d-flex flex-column flex-md-row my-4">
@@ -153,11 +149,11 @@
               <ul class="list-unstyled font-1">
                 <li class="d-flex align-items-start fw-bolder mb-2">
                   <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2"></i>
-                  <h5 class="fw-bolder py-1">Free Consultation</h5>
+                  <h5 class="fw-bolder py-1">{{ $contents['about_us']['list_item_1'] ?? 'Free Consultation' }}</h5>
                 </li>
                 <li class="d-flex align-items-start fw-bolder mb-2">
                   <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2"></i>
-                  <h5 class="fw-bolder py-1">Emergency Service</h5>
+                  <h5 class="fw-bolder py-1">{{ $contents['about_us']['list_item_2'] ?? 'Emergency Service' }}</h5>
                 </li>
               </ul>
             </div>
@@ -165,23 +161,27 @@
               <ul class="list-unstyled font-1">
                 <li class="d-flex align-items-start fw-bolder mb-2">
                   <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2"></i>
-                  <h5 class="fw-bolder py-1">Mental Satisfaction</h5>
+                  <h5 class="fw-bolder py-1">{{ $contents['about_us']['list_item_3'] ?? 'Mental Satisfaction' }}</h5>
                 </li>
                 <li class="d-flex align-items-start fw-bolder mb-2">
                   <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2"></i>
-                  <h5 class="fw-bolder py-1">Psychologists Services</h5>
+                  <h5 class="fw-bolder py-1">{{ $contents['about_us']['list_item_4'] ?? 'Psychologists Services' }}</h5>
                 </li>
               </ul>
             </div>
           </div>
 
-          <p class="fst-italic fw-bold mb-4" style="font-size: large;">Healing doesn’t mean the damage never
-            existed; it means the
-            strength to rise is greater than the pain</p>
+          <p class="fst-italic fw-bold mb-4" style="font-size: large;">
+            {{ $contents['about_us']['quote'] ?? 'Healing doesn’t mean the damage never existed; it means the strength to rise is greater than the pain' }}
+          </p>
 
           <div class="d-flex align-items-center justify-content-center justify-content-xl-start gap-3">
-            <img src="image/Signature.png" alt="Signature" style="height: 100px;">
-            <a href="about-us.html" class="btn btn-primary-solid">Read More</a>
+            @php
+              $signaturePath = $contents['about_us']['signature_image'] ?? 'image/Signature.png';
+              $signatureUrl = Str::startsWith($signaturePath, 'image/') ? asset($signaturePath) : asset('storage/' . $signaturePath);
+            @endphp
+            <img src="{{ $signatureUrl }}" alt="Signature" style="height: 100px;">
+            <a href="{{ route('com.about') }}" class="btn btn-primary-solid">Read More</a>
           </div>
         </div>
       </div>
@@ -195,35 +195,41 @@
       <div class="row align-items-center g-4 pt-5">
         <!-- Left content -->
         <div class="col-12 col-xl-5 order-1 order-md-3 order-xl-1 text-white mt-5 text-center text-xl-start">
-          <p class="text-uppercase text-primary-color fs-5 fw-semibold mb-2">Why Choose Us ?</p>
+          <p class="text-uppercase text-primary-color fs-5 fw-semibold mb-2">
+            {{ $contents['appointment']['small_heading'] ?? 'Why Choose Us ?' }}</p>
           <h2 class="font-1 display-5 mb-4" style="font-weight: 800;">
-            Restoring <span class="text-primary-color">Hope</span>, One<br>
-            Day <span class="text-primary-color">At A Time</span>
+            {!! str_replace(['Hope', 'At A Time'], ['<span class="text-primary-color">Hope</span>', '<span class="text-primary-color">At A Time</span>'], $contents['appointment']['title'] ?? 'Restoring Hope, One Day At A Time') !!}
           </h2>
-          <p class="mb-4" style="font-size: large;">Through consistent care and compassionate guidance, we help
-            individuals rediscover strength, build resilience, and move forward toward a brighter, healthier future at
-            their own pace.</p>
+          <p class="mb-4" style="font-size: large;">
+            {{ $contents['appointment']['description'] ?? 'Through consistent care and compassionate guidance...' }}</p>
           <ul class="list-unstyled font-1 text-center text-xl-start">
             <li class="d-flex flex-row justify-content-center justify-content-xl-start mb-3">
               <i class="bi bi-check-circle-fill text-primary-color fs-4 mb-2 mb-xl-0 me-2"></i>
-              <h5 class="fw-bolder py-1">Compassionate & Experienced Professionals</h5>
+              <h5 class="fw-bolder py-1">
+                {{ $contents['appointment']['list_item_1'] ?? 'Compassionate & Experienced Professionals' }}</h5>
             </li>
             <li class="d-flex flex-row justify-content-center justify-content-xl-start mb-3">
               <i class="bi bi-check-circle-fill text-primary-color fs-4 mb-2 mb-xl-0 me-2"></i>
-              <h5 class="fw-bolder py-1">Holistic Approach To Well-Being</h5>
+              <h5 class="fw-bolder py-1">
+                {{ $contents['appointment']['list_item_2'] ?? 'Holistic Approach To Well-Being' }}</h5>
             </li>
             <li class="d-flex flex-row justify-content-center justify-content-xl-start mb-3">
               <i class="bi bi-check-circle-fill text-primary-color fs-4 mb-2 mb-xl-0 me-2"></i>
-              <h5 class="fw-bolder py-1">Safe & Supportive Environment</h5>
+              <h5 class="fw-bolder py-1">{{ $contents['appointment']['list_item_3'] ?? 'Safe & Supportive Environment' }}
+              </h5>
             </li>
           </ul>
-          <a href="appointment.html" class="btn btn-primary-solid mb-5">Make An Appointment</a>
+          <a href="{{ route('com.home') }}" class="btn btn-primary-solid mb-5">Make An Appointment</a>
         </div>
 
         <!-- Middle content -->
         <div class="col-12 col-md-7 col-xl-5 order-2 order-md-1">
           <div class="ratio ratio-1x1">
-            <img src="{{ asset('image/choose.jpg')}}" class="w-100 h-100 object-fit-cover position-absolute rounded-5"
+            @php
+              $chooseImagePath = $contents['appointment']['main_image'] ?? 'image/choose.jpg';
+              $chooseImageUrl = Str::startsWith($chooseImagePath, 'image/') ? asset($chooseImagePath) : asset('storage/' . $chooseImagePath);
+            @endphp
+            <img src="{{ $chooseImageUrl }}" class="w-100 h-100 object-fit-cover position-absolute rounded-5"
               alt="Appointment" data-aos="fade-up" data-aos-easing="linear" data-aos-delay="750" data-aos-duration="1000">
           </div>
         </div>
@@ -233,24 +239,24 @@
             data-aos-delay="500" data-aos-duration="1000">
             <div class="card-body text-center text-white p-3 font-1">
               <div class="display-5"><i class="bi bi-emoji-smile-fill accent-secondary-color"></i></div>
-              <div class="mb-0 fs-2 fw-bold">100%</div>
-              <p class="mb-0">Satisfaction</p>
+              <div class="mb-0 fs-2 fw-bold text-white">{{ $contents['appointment']['stat_1_number'] ?? '100%' }}</div>
+              <p class="mb-0">{{ $contents['appointment']['stat_1_text'] ?? 'Satisfaction' }}</p>
             </div>
           </div>
           <div class="card bg-primary-color rounded-4 border-0" data-aos="fade-left" data-aos-easing="linear"
             data-aos-delay="750" data-aos-duration="1000">
             <div class="card-body text-center text-white p-3 font-1">
               <div class="display-5"><i class="bi bi-hand-thumbs-up-fill accent-secondary-color"></i></div>
-              <div class="mb-0 fs-2 fw-bold">257+</div>
-              <p class="mb-0">Happy Patient</p>
+              <div class="mb-0 fs-2 fw-bold text-white">{{ $contents['appointment']['stat_2_number'] ?? '257+' }}</div>
+              <p class="mb-0">{{ $contents['appointment']['stat_2_text'] ?? 'Happy Patient' }}</p>
             </div>
           </div>
           <div class="card bg-primary-color rounded-4 border-0" data-aos="fade-left" data-aos-easing="linear"
             data-aos-delay="1000" data-aos-duration="1000">
             <div class="card-body text-center text-white p-3 font-1">
               <div class="display-5"><i class="bi bi-person-plus-fill accent-secondary-color"></i></div>
-              <div class="mb-0 fs-2 fw-bold">10+</div>
-              <p class="mb-0">Expert Therapist</p>
+              <div class="mb-0 fs-2 fw-bold text-white">{{ $contents['appointment']['stat_3_number'] ?? '10+' }}</div>
+              <p class="mb-0">{{ $contents['appointment']['stat_3_text'] ?? 'Expert Therapist' }}</p>
             </div>
           </div>
         </div>

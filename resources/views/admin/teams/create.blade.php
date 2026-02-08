@@ -31,6 +31,15 @@
                         </div>
 
                         <div class="row mb-3">
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Description</label>
+                                <textarea name="description" class="form-control @error('description') is-invalid @enderror"
+                                    rows="4" placeholder="Enter therapist description">{{ old('description') }}</textarea>
+                                @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Profile Image</label>
                                 <input type="file" name="image" class="form-control @error('image') is-invalid @enderror">

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Route;
 // Front-end routes
 Route::get('/', [HomeController::class, 'home'])->name('com.home');
 Route::get('/about', [HomeController::class, 'about'])->name('com.about');
+Route::get('/team', [HomeController::class, 'team'])->name('com.team');
+Route::get('/team/{id}', [HomeController::class, 'teamSingle'])->name('com.team.single');
 
 // Admin Panel Routes
 Route::prefix('admin')->group(function () {

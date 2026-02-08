@@ -10,6 +10,7 @@ class Team extends Model
         'name',
         'designation',
         'image',
+        'description',
         'facebook',
         'twitter',
         'instagram',

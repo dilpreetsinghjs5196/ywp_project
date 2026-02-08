@@ -37,6 +37,8 @@ class HomeController extends Controller
                 return $section->pluck('value', 'key');
             });
 
-        return view('site.com.about', compact('settings', 'contents'));
+        $teams = \App\Models\Team::where('is_active', true)->orderBy('sort_order')->get();
+
+        return view('site.com.about', compact('settings', 'contents', 'teams'));
     }
 }

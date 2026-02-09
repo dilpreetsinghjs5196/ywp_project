@@ -10,8 +10,9 @@ use Illuminate\Support\Facades\Route;
 // Front-end routes
 Route::get('/', [HomeController::class, 'home'])->name('com.home');
 Route::get('/about', [HomeController::class, 'about'])->name('com.about');
-Route::get('/team', [HomeController::class, 'team'])->name('com.team');
-Route::get('/team/{id}', [HomeController::class, 'teamSingle'])->name('com.team.single');
+Route::get('/team', [\App\Http\Controllers\com\HomeController::class, 'team'])->name('com.team');
+Route::get('/team/{id}', [\App\Http\Controllers\com\HomeController::class, 'teamSingle'])->name('com.team_single');
+Route::get('/wonder-store', [\App\Http\Controllers\com\WonderStoreController::class, 'index'])->name('com.store');
 
 // Admin Panel Routes
 Route::prefix('admin')->group(function () {

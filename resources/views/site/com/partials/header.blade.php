@@ -103,7 +103,9 @@
                 </ul>
               </li> --}}
               <li class="nav-item">
-                <a class="nav-link" href="">Wonder Store</a>
+                <a class="nav-link {{ request()->routeIs('com.store') ? 'active' : '' }}" 
+                  {{ request()->routeIs('com.store') ? 'aria-current="page"' : '' }} 
+                  href="{{ route('com.store') }}">Wonder Store</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="contact-us.html">Contact Us</a>

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'home'])->name('com.home');
 Route::get('/about', [HomeController::class, 'about'])->name('com.about');
 Route::get('/team', [\App\Http\Controllers\com\HomeController::class, 'team'])->name('com.team');
-Route::get('/team/{id}', [\App\Http\Controllers\com\HomeController::class, 'teamSingle'])->name('com.team_single');
+Route::get('/team/{id}', [\App\Http\Controllers\com\HomeController::class, 'teamSingle'])->name('com.team.single');
 Route::get('/wonder-store', [\App\Http\Controllers\com\WonderStoreController::class, 'index'])->name('com.store');
 
 // Admin Panel Routes

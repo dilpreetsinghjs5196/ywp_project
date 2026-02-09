@@ -137,6 +137,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->is('admin/pages/wonder_store') ? 'active' : '' }}"
+                        href="{{ route('admin.pages.edit', 'wonder_store') }}">
+                        <i class="bi bi-layout-text-window"></i> Banner & Title
+                    </a>
+                </li>
+                <li class="nav-item">
                     <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Settings</div>
                 </li>
                 <li class="nav-item">

@@ -14,14 +14,15 @@
         <div class="b-container h-100 position-relative pt-4 text-white" style="z-index: 2;">
             <div
                 class="col-10 d-flex flex-column w-100 h-100 justify-content-center align-items-center text-center text-white gap-3 font-1">
-                <h1 class="display-2 mb-0" style="font-weight: 900;">Wonder Store</h1>
+                <h1 class="display-2 mb-0" style="font-weight: 900;">
+                    {{ $contents['banner']['banner_title'] ?? 'Wonder Store' }}</h1>
                 <nav aria-label="breadcrumb" style="font-weight: 900;">
                     <ol class="breadcrumb justify-content-center align-items-center">
                         <li class="breadcrumb-item font-1">
                             <a class="text-decoration-none text-white" href="{{ route('com.home') }}">Home</a>
                         </li>
                         <li class="breadcrumb-item text-primary-color" aria-current="page">
-                            Wonder Store
+                            {{ $contents['banner']['banner_title'] ?? 'Wonder Store' }}
                         </li>
                     </ol>
                 </nav>
@@ -67,10 +68,10 @@
                         </div>
 
                         <!-- <div class="mt-5 p-4 bg-primary-color rounded-4 text-white text-center">
-                                <h6 class="mb-2">Special Offer</h6>
-                                <h4 class="font-1 fw-bold mb-3">20% Off</h4>
-                                <p class="small mb-0 opacity-75">On all wellness journals this month!</p>
-                            </div> -->
+                                    <h6 class="mb-2">Special Offer</h6>
+                                    <h4 class="font-1 fw-bold mb-3">20% Off</h4>
+                                    <p class="small mb-0 opacity-75">On all wellness journals this month!</p>
+                                </div> -->
                     </div>
                 </div>
 

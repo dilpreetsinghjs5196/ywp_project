@@ -14,7 +14,12 @@ class WonderStoreController extends Controller
     public function index(Request $request)
     {
         $settings = SiteSetting::all()->pluck('value', 'key');
-        $contents = PageContent::where('page', 'wonder_store')->get()->pluck('value', 'key');
+        $contents = PageContent::where('page', 'wonder_store')
+            ->get()
+            ->groupBy('section')
+            ->map(function ($section) {
+                return $section->pluck('value', 'key');
+            });
 
         $query = WonderStoreProduct::with('category')->where('is_active', true);
 

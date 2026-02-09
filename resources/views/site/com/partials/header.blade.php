@@ -108,6 +108,33 @@
               <li class="nav-item">
                 <a class="nav-link" href="contact-us.html">Contact Us</a>
               </li>
+              
+              <li class="nav-item d-flex align-items-center ms-xl-4">
+                @auth
+                  <div class="dropdown">
+                    <button class="btn btn-primary-solid rounded-pill px-4 dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="bi bi-person-circle"></i> {{ Auth::user()->name }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end rounded-4 shadow-sm border-0 p-2">
+                      <li><a class="dropdown-item rounded-3" href="#"><i class="bi bi-person me-2"></i> Profile</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li>
+                        <form action="{{ route('logout') }}" method="POST">
+                          @csrf
+                          <button type="submit" class="dropdown-item rounded-3 text-danger">
+                            <i class="bi bi-box-arrow-right me-2"></i> Logout
+                          </button>
+                        </form>
+                      </li>
+                    </ul>
+                  </div>
+                @else
+                  <!-- <div class="d-flex gap-2">
+                    <a href="{{ route('login') }}" class="btn btn-outline-primary-color rounded-pill px-4">Login</a>
+                    <a href="{{ route('register') }}" class="btn btn-primary-solid rounded-pill px-4">Sign Up</a>
+                  </div> -->
+                @endauth
+              </li>
             </ul>
             <!--<div class="">-->
             <!--  <a href="contact-us.html" class="btn btn-modify">-->

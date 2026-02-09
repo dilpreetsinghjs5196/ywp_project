@@ -13,6 +13,15 @@ Route::get('/about', [HomeController::class, 'about'])->name('com.about');
 Route::get('/team', [HomeController::class, 'team'])->name('com.team');
 Route::get('/team/{id}', [HomeController::class, 'teamSingle'])->name('com.team.single');
 
+// Authentication Routes
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [\App\Http\Controllers\com\AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [\App\Http\Controllers\com\AuthController::class, 'login']);
+    Route::get('/register', [\App\Http\Controllers\com\AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [\App\Http\Controllers\com\AuthController::class, 'register']);
+});
+Route::post('/logout', [\App\Http\Controllers\com\AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
 // Admin Panel Routes
 Route::prefix('admin')->group(function () {
     Route::get('/', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('admin.dashboard');

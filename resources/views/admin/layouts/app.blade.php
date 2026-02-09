@@ -104,6 +104,18 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->is('admin/pages/corporate*') ? 'active' : '' }}"
+                        href="{{ route('admin.pages.edit', 'corporate') }}">
+                        <i class="bi bi-building"></i> Corporate Page
+                    </a>
+                </li>
+                <li class="nav-item ps-3">
+                    <a class="nav-link {{ request()->routeIs('admin.brands.*') ? 'active' : '' }}"
+                        href="{{ route('admin.brands.index') }}">
+                        <i class="bi bi-award"></i> Brand Partners
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.services.*') ? 'active' : '' }}"
                         href="{{ route('admin.services.index') }}">
                         <i class="bi bi-grid"></i> Services

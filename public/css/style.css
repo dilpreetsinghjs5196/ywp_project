@@ -117,6 +117,10 @@ body {
   color: var(--primary-color);
 }
 
+.text-secondary-color {
+  color: var(--secondary-color);
+}
+
 .text-black-color-2 {
   color: var(--text-color);
 }

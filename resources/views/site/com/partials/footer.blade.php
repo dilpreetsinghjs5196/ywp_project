@@ -31,6 +31,7 @@
         <h4 class="text-secondary-color-2 mb-4">Quick Links</h4>
         <ul class="d-flex flex-column p-0">
           <li class="mb-2"><a href="{{ route('com.home') }}" class="links-secondary">Homepage</a></li>
+          <li class="mb-2"><a href="{{ route('com.corporate') }}" class="links-secondary">Corporate Well-Being</a></li>
           <li class="mb-2"><a href="#" class="links-secondary">Services</a></li>
           <li class="mb-2"><a href="#" class="links-secondary">Appointment</a></li>
           <li class="mb-2"><a href="blogs.html" class="links-secondary">Privacy Policy</a></li>

@@ -65,9 +65,9 @@
                   href="{{ route('com.team') }}">Our Therapists</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  Corporate Well-Being
-                </a>
+                <a class="nav-link {{ request()->routeIs('com.corporate') ? 'active' : '' }}" 
+                  {{ request()->routeIs('com.corporate') ? 'aria-current="page"' : '' }} 
+                  href="{{ route('com.corporate') }}">Corporate Well-Being</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="wellnessDropdown" role="button" data-bs-toggle="dropdown"

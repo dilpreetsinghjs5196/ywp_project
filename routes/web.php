@@ -27,6 +27,9 @@ Route::prefix('admin')->group(function () {
     // Team Management
     Route::resource('teams', \App\Http\Controllers\Admin\AdminTeamController::class, ['as' => 'admin']);
 
+    // Wonder Store Management
+    Route::resource('wonder-store-categories', \App\Http\Controllers\Admin\AdminWonderStoreCategoryController::class, ['as' => 'admin']);
+
     // Testimonial Management
     Route::resource('testimonials', \App\Http\Controllers\Admin\AdminTestimonialController::class, ['as' => 'admin']);
 

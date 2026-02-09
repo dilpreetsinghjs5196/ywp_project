@@ -122,6 +122,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Wonder Store</div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.wonder-store-categories.*') ? 'active' : '' }}"
+                        href="{{ route('admin.wonder-store-categories.index') }}">
+                        <i class="bi bi-tags"></i> Categories
+                    </a>
+                </li>
+                <li class="nav-item">
                     <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Settings</div>
                 </li>
                 <li class="nav-item">

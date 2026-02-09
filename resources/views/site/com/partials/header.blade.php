@@ -68,40 +68,17 @@
                 <a class="nav-link" href="#">
                   Corporate Well-Being
                 </a>
-                <!--<ul class="dropdown-menu" style="padding: 20px 10px;">-->
-                <!--    <li><a class="dropdown-item" href="services.html">Wellness Hub</a></li>-->
-                <!--    <li><a class="dropdown-item" href="service-detail.html">Free Mental Health Tests</a></li>-->
-                <!--    <li><a class="dropdown-item" href="appointment.html">Blog</a></li>-->
-                <!--</ul>-->
               </li>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                  aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="wellnessDropdown" role="button" data-bs-toggle="dropdown"
+                  data-bs-display="static" aria-expanded="false" data-bs-auto-close="outside">
                   Wellness Hub
                 </a>
-                <ul class="dropdown-menu" style="padding: 20px 10px;">
-                  <!--<li><a class="dropdown-item" href="services.html">Wellness Hub</a></li>-->
+                <ul class="dropdown-menu shadow-sm" aria-labelledby="wellnessDropdown">
                   <li><a class="dropdown-item" href="service-detail.html">Free Mental Health Tests</a></li>
                   <li><a class="dropdown-item" href="appointment.html">Blog</a></li>
                 </ul>
               </li>
-              {{-- <li class="nav-item">
-                <a class="nav-link" href="">Blog</a>
-              </li> --}}
-              {{-- <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                  aria-expanded="false">
-                  Pages
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="pricing.html">Pricing</a></li>
-                  <li><a class="dropdown-item" href="team.html">Team</a></li>
-                  <li><a class="dropdown-item" href="blogs.html">Blogs</a></li>
-                  <li><a class="dropdown-item" href="blog-detail.html">Blog Detail</a></li>
-                  <li><a class="dropdown-item" href="faqs.html">FAQs</a></li>
-                  <li><a class="dropdown-item" href="error-404.html">Error 404</a></li>
-                </ul>
-              </li> --}}
               <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('com.store') ? 'active' : '' }}" 
                   {{ request()->routeIs('com.store') ? 'aria-current="page"' : '' }} 
@@ -111,11 +88,6 @@
                 <a class="nav-link" href="contact-us.html">Contact Us</a>
               </li>
             </ul>
-            <!--<div class="">-->
-            <!--  <a href="contact-us.html" class="btn btn-modify">-->
-            <!--    <i class="bi bi-journal-bookmark-fill pe-2"></i>-->
-            <!--    Get Quotes</a>-->
-            <!--</div>-->
           </div>
         </div>
       </div>
@@ -123,3 +95,30 @@
     <!-- #navbar end -->
   </div>
 </header>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Mobile dropdown toggle fix for offcanvas
+    const dropdownToggles = document.querySelectorAll('.offcanvas-body .dropdown-toggle');
+    dropdownToggles.forEach(toggle => {
+      toggle.addEventListener('click', function(e) {
+        if (window.innerWidth < 992) {
+          e.preventDefault();
+          e.stopPropagation();
+          const menu = this.nextElementSibling;
+          if (menu && menu.classList.contains('dropdown-menu')) {
+            const isShown = menu.classList.contains('show');
+            // Close all other dropdowns in offcanvas
+            document.querySelectorAll('.offcanvas-body .dropdown-menu.show').forEach(m => m.classList.remove('show'));
+            document.querySelectorAll('.offcanvas-body .dropdown-toggle.show').forEach(t => t.classList.remove('show'));
+            
+            if (!isShown) {
+              menu.classList.add('show');
+              this.classList.add('show');
+            }
+          }
+        }
+      });
+    });
+  });
+</script>

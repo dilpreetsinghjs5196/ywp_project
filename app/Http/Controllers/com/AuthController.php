@@ -33,7 +33,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->has('remember'))) {
             $request->session()->regenerate();
-            CartItem::syncSessionCart(Auth::id());
+            CartItem::syncSessionCart(Auth::id(), $request->cookie('guest_cart_id'));
             return redirect()->intended(route('com.profile'));
         }
 
@@ -71,7 +71,7 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        CartItem::syncSessionCart($user->id);
+        CartItem::syncSessionCart($user->id, $request->cookie('guest_cart_id'));
 
         return redirect()->route('com.profile')->with('success', 'Account created successfully!');
     }

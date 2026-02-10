@@ -20,24 +20,28 @@ class CartController extends Controller
 {
     public function index()
     {
+        $guestId = request()->cookie('guest_cart_id');
+
         if (Auth::check()) {
-            CartItem::syncSessionCart(Auth::id());
+            CartItem::syncSessionCart(Auth::id(), $guestId);
             $cartItems = CartItem::where('user_id', Auth::id())->with('product.category')->get();
-            $cart = [];
-            foreach ($cartItems as $item) {
-                $cart[$item->product_id] = [
-                    "id" => $item->product_id,
-                    "name" => $item->product->category->category_name . " Item",
-                    "quantity" => $item->quantity,
-                    "price" => $item->product->product_price,
-                    "image" => $item->product->product_image,
-                    "category" => $item->product->category->category_name
-                ];
-            }
-            session()->put('cart', $cart); // Keep session in sync for easy access
         } else {
-            $cart = session()->get('cart', []);
+            CartItem::syncSessionCart(null, $guestId); // Sync session to DB guest record
+            $cartItems = CartItem::where('guest_id', $guestId)->with('product.category')->get();
         }
+
+        $cart = [];
+        foreach ($cartItems as $item) {
+            $cart[$item->product_id] = [
+                "id" => $item->product_id,
+                "name" => $item->product->category->category_name . " Item",
+                "quantity" => $item->quantity,
+                "price" => $item->product->product_price,
+                "image" => $item->product->product_image,
+                "category" => $item->product->category->category_name
+            ];
+        }
+        session()->put('cart', $cart);
 
         $settings = SiteSetting::all()->pluck('value', 'key');
         $contents = PageContent::where('page', 'wonder_store')
@@ -59,7 +63,7 @@ class CartController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            CartItem::syncSessionCart(Auth::id()); // Restore cart from DB immediately
+            CartItem::syncSessionCart(Auth::id(), $request->cookie('guest_cart_id')); // Restore cart from DB immediately
             return response()->json(['success' => true]);
         }
 
@@ -124,7 +128,7 @@ class CartController extends Controller
                     'password' => Hash::make($request->password),
                 ]);
                 Auth::login($user);
-                CartItem::syncSessionCart($user->id);
+                CartItem::syncSessionCart($user->id, $request->cookie('guest_cart_id'));
                 $user_id = $user->id;
             } elseif (Auth::check()) {
                 // Update existing user profile if fields are empty
@@ -189,6 +193,8 @@ class CartController extends Controller
 
             if (Auth::check()) {
                 CartItem::where('user_id', Auth::id())->delete();
+            } else {
+                CartItem::where('guest_id', $request->cookie('guest_cart_id'))->delete();
             }
 
             session()->forget('cart');
@@ -245,7 +251,12 @@ class CartController extends Controller
         if (Auth::check()) {
             CartItem::updateOrCreate(
                 ['user_id' => Auth::id(), 'product_id' => $id],
-                ['quantity' => $cart[$id]['quantity']]
+                ['quantity' => $cart[$id]['quantity'], 'guest_id' => null]
+            );
+        } else {
+            CartItem::updateOrCreate(
+                ['guest_id' => $request->cookie('guest_cart_id'), 'product_id' => $id],
+                ['quantity' => $cart[$id]['quantity'], 'user_id' => null]
             );
         }
 
@@ -271,6 +282,10 @@ class CartController extends Controller
                 CartItem::where('user_id', Auth::id())
                     ->where('product_id', $request->id)
                     ->update(['quantity' => $request->quantity]);
+            } else {
+                CartItem::where('guest_id', $request->cookie('guest_cart_id'))
+                    ->where('product_id', $request->id)
+                    ->update(['quantity' => $request->quantity]);
             }
 
             session()->flash('success', 'Cart updated successfully');
@@ -289,6 +304,10 @@ class CartController extends Controller
                     CartItem::where('user_id', Auth::id())
                         ->where('product_id', $request->id)
                         ->delete();
+                } else {
+                    CartItem::where('guest_id', $request->cookie('guest_cart_id'))
+                        ->where('product_id', $request->id)
+                        ->delete();
                 }
             }
             session()->flash('success', 'Product removed successfully');
@@ -299,21 +318,37 @@ class CartController extends Controller
     {
         if (Auth::check()) {
             $count = CartItem::where('user_id', Auth::id())->count();
-            // Optional: You could also sync here if needed, but count is the main goal
-            return response()->json(['count' => $count]);
+        } else {
+            $count = CartItem::where('guest_id', request()->cookie('guest_cart_id'))->count();
         }
 
-        $cart = session()->get('cart', []);
-        return response()->json(['count' => count($cart)]);
+        return response()->json(['count' => $count]);
     }
 
     public function checkout()
     {
+        $guestId = request()->cookie('guest_cart_id');
+
         if (Auth::check()) {
-            CartItem::syncSessionCart(Auth::id());
+            CartItem::syncSessionCart(Auth::id(), $guestId);
+            $cartItems = CartItem::where('user_id', Auth::id())->with('product.category')->get();
+        } else {
+            CartItem::syncSessionCart(null, $guestId);
+            $cartItems = CartItem::where('guest_id', $guestId)->with('product.category')->get();
         }
 
-        $cart = session()->get('cart', []);
+        $cart = [];
+        foreach ($cartItems as $item) {
+            $cart[$item->product_id] = [
+                "id" => $item->product_id,
+                "name" => $item->product->category->category_name . " Item",
+                "quantity" => $item->quantity,
+                "price" => $item->product->product_price,
+                "image" => $item->product->product_image,
+                "category" => $item->product->category->category_name
+            ];
+        }
+        session()->put('cart', $cart);
 
         if (empty($cart)) {
             return redirect()->route('com.cart')->with('error', 'Your cart appears to be empty on our server. Please try adding items again.');

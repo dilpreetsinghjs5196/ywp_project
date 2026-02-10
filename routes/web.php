@@ -21,6 +21,10 @@ Route::post('/cart/add/{id}', [\App\Http\Controllers\com\CartController::class, 
 Route::patch('/cart/update', [\App\Http\Controllers\com\CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/remove', [\App\Http\Controllers\com\CartController::class, 'remove'])->name('cart.remove');
 Route::get('/cart/count', [\App\Http\Controllers\com\CartController::class, 'getCartCount'])->name('cart.count');
+Route::get('/checkout', [\App\Http\Controllers\com\CartController::class, 'checkout'])->name('com.checkout');
+Route::post('/checkout/process', [\App\Http\Controllers\com\CartController::class, 'processCheckout'])->name('com.checkout.process');
+Route::post('/login/ajax', [\App\Http\Controllers\com\CartController::class, 'loginAjax'])->name('login.ajax');
+Route::get('/order-success/{id}', [\App\Http\Controllers\com\CartController::class, 'orderSuccess'])->name('com.order.success');
 
 // Admin Panel Routes
 Route::prefix('admin')->group(function () {

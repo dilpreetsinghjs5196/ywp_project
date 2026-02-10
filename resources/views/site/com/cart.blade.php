@@ -3,11 +3,30 @@
 @section('title', 'Your Shopping Cart')
 
 @section('content')
+    @php
+        $bgImagePath = $contents['banner']['banner_bg_image'] ?? 'image/footer-img.jpg';
+        $bgFullUrl = Str::startsWith($bgImagePath, 'image/') ? asset($bgImagePath) : asset('storage/' . $bgImagePath);
+    @endphp
     <!-- Hero Section -->
-    <section class="section position-relative py-5 bg-light">
-        <div class="b-container pt-4 text-center">
-            <h1 class="display-4 font-1 fw-bold">Shopping Cart</h1>
-            <p class="text-muted">Review your wellness journey essentials</p>
+    <section class="section position-relative"
+        style="background: url('{{ $bgFullUrl }}'); background-size: cover; background-position: center; height: 40vh;">
+        <div class="bg-overlay-secondary"></div>
+        <div class="b-container h-100 position-relative pt-4 text-white" style="z-index: 2;">
+            <div
+                class="col-10 d-flex flex-column w-100 h-100 justify-content-center align-items-center text-center text-white gap-3 font-1">
+                <h1 class="display-2 mb-0" style="font-weight: 900;">
+                    Shopping Cart</h1>
+                <nav aria-label="breadcrumb" style="font-weight: 900;">
+                    <ol class="breadcrumb justify-content-center align-items-center">
+                        <li class="breadcrumb-item font-1">
+                            <a class="text-decoration-none text-white" href="{{ route('com.home') }}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item text-primary-color" aria-current="page">
+                            Shopping Cart
+                        </li>
+                    </ol>
+                </nav>
+            </div>
         </div>
     </section>
 
@@ -111,9 +130,9 @@
                                 <span class="fs-4 font-1 fw-bold text-primary-color">Rs.{{ number_format($total, 2) }}</span>
                             </div>
 
-                            <button class="btn btn-primary-solid w-100 rounded-pill py-3 shadow">
+                            <a href="{{ route('com.checkout') }}" class="btn btn-primary-solid w-100 rounded-pill py-3 shadow">
                                 Proceed to Checkout <i class="bi bi-arrow-right ms-2"></i>
-                            </button>
+                            </a>
 
                             <div class="mt-4 text-center">
                                 <p class="small text-muted">

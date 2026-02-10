@@ -36,6 +36,10 @@ class WonderStoreController extends Controller
         $products = $query->latest()->paginate(12)->withQueryString();
         $categories = WonderStoreCategory::where('is_active', true)->get();
 
+        if ($request->ajax()) {
+            return view('site.com.partials._product_list', compact('products'))->render();
+        }
+
         return view('site.com.wonder-store', compact('products', 'categories', 'settings', 'contents'));
     }
 }

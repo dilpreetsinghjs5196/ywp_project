@@ -15,7 +15,8 @@
             <div
                 class="col-10 d-flex flex-column w-100 h-100 justify-content-center align-items-center text-center text-white gap-3 font-1">
                 <h1 class="display-2 mb-0" style="font-weight: 900;">
-                    {{ $contents['banner']['banner_title'] ?? 'Wonder Store' }}</h1>
+                    {{ $contents['banner']['banner_title'] ?? 'Wonder Store' }}
+                </h1>
                 <nav aria-label="breadcrumb" style="font-weight: 900;">
                     <ol class="breadcrumb justify-content-center align-items-center">
                         <li class="breadcrumb-item font-1">
@@ -40,12 +41,12 @@
                         <h5 class="font-1 fw-bold mb-4">Categories</h5>
                         <div class="list-group list-group-flush shadow-none">
                             <a href="{{ route('com.store') }}"
-                                class="list-group-item list-group-item-action border-0 rounded-3 mb-2 px-3 {{ !request('category') ? 'bg-primary-color text-white' : 'text-secondary' }}">
+                                class="list-group-item list-group-item-action border-0 rounded-3 mb-2 px-3 category-link {{ !request('category') ? 'bg-primary-color text-white' : 'text-secondary' }}">
                                 <i class="bi bi-grid-fill me-2"></i> All Products
                             </a>
                             @foreach($categories as $cat)
                                 <a href="{{ route('com.store', ['category' => $cat->category_name]) }}"
-                                    class="list-group-item list-group-item-action border-0 rounded-3 mb-2 px-3 {{ request('category') == $cat->category_name ? 'bg-primary-color text-white' : 'text-secondary' }}">
+                                    class="list-group-item list-group-item-action border-0 rounded-3 mb-2 px-3 category-link {{ request('category') == $cat->category_name ? 'bg-primary-color text-white' : 'text-secondary' }}">
                                     <i class="bi bi-tag-fill me-2"></i> {{ $cat->category_name }}
                                 </a>
                             @endforeach
@@ -68,87 +69,103 @@
                         </div>
 
                         <!-- <div class="mt-5 p-4 bg-primary-color rounded-4 text-white text-center">
-                                    <h6 class="mb-2">Special Offer</h6>
-                                    <h4 class="font-1 fw-bold mb-3">20% Off</h4>
-                                    <p class="small mb-0 opacity-75">On all wellness journals this month!</p>
-                                </div> -->
+                                                            <h6 class="mb-2">Special Offer</h6>
+                                                            <h4 class="font-1 fw-bold mb-3">20% Off</h4>
+                                                            <p class="small mb-0 opacity-75">On all wellness journals this month!</p>
+                                                        </div> -->
                     </div>
                 </div>
 
                 <!-- Products Grid -->
-                <div class="col-lg-9">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <p class="text-muted mb-0">Showing
-                            {{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }} of {{ $products->total() }}
-                            results
-                        </p>
-                        <div class="dropdown">
-                            <button class="btn btn-light border rounded-pill dropdown-toggle px-4" type="button"
-                                data-bs-toggle="dropdown">
-                                Sort By: Latest
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Latest</a></li>
-                                <li><a class="dropdown-item" href="#">Price: Low to High</a></li>
-                                <li><a class="dropdown-item" href="#">Price: High to Low</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
-                        @forelse($products as $product)
-                            <div class="col" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden product-card scale-hover">
-                                    <div class="position-relative overflow-hidden" style="height: 250px;">
-                                        <img src="{{ asset('storage/' . $product->product_image) }}"
-                                            class="w-100 h-100 object-fit-cover transition-all" alt="Product">
-                                        <div class="position-absolute top-0 end-0 m-3">
-                                            <span
-                                                class="badge bg-white text-primary-color rounded-pill px-3 py-2 shadow-sm fw-bold">
-                                                {{ $product->category->category_name }}
-                                            </span>
-                                        </div>
-                                        <div
-                                            class="product-overlay position-absolute bottom-0 start-0 w-100 p-3 opacity-0 transition-all">
-                                            <button class="btn btn-primary-solid w-100 rounded-pill shadow">
-                                                <i class="bi bi-cart-plus me-2"></i> Add to Cart
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="card-body p-4 text-center">
-                                        <h5 class="font-1 fw-bold mb-2">{{ $product->category->category_name }} Item</h5>
-                                        <p class="text-muted small mb-3 text-truncate-2">
-                                            {{ $product->product_description ?? 'High-quality wellness product designed to support your journey.' }}
-                                        </p>
-                                        <div class="fs-4 fw-bold text-primary-color font-1">
-                                            ${{ number_format($product->product_price, 2) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="col-12 py-5 text-center">
-                                <div class="display-1 text-muted opacity-25 mb-4">
-                                    <i class="bi bi-shop"></i>
-                                </div>
-                                <h3 class="font-1 fw-bold">No products found</h3>
-                                <p class="text-muted">We couldn't find any products matching your current filters.</p>
-                                <a href="{{ route('com.store') }}" class="btn btn-primary-solid rounded-pill px-5 mt-3">View All
-                                    Products</a>
-                            </div>
-                        @endforelse
-                    </div>
-
-                    <!-- Pagination -->
-                    @if($products->hasPages())
-                        <div class="d-flex justify-content-center mt-5">
-                            {{ $products->links('pagination::bootstrap-5') }}
-                        </div>
-                    @endif
+                <div class="col-lg-9" id="product-list-container">
+                    @include('site.com.partials._product_list')
                 </div>
             </div>
         </div>
     </section>
+
+    @push('js')
+        <script>
+            $(document).ready(function () {
+                const productContainer = $('#product-list-container');
+                const searchInput = $('input[name="search"]');
+                const categoryLinks = $('.category-link');
+
+                let searchTimer;
+
+                // Search with debounce
+                searchInput.on('keyup', function () {
+                    clearTimeout(searchTimer);
+                    searchTimer = setTimeout(() => {
+                        fetchProducts();
+                    }, 500);
+                });
+
+                // Prevent form submit
+                searchInput.closest('form').on('submit', function (e) {
+                    e.preventDefault();
+                    fetchProducts();
+                });
+
+                // Category filter
+                $(document).on('click', '.category-link', function (e) {
+                    e.preventDefault();
+                    const url = new URL($(this).attr('href'));
+                    const category = url.searchParams.get('category');
+
+                    // Update active state
+                    categoryLinks.removeClass('bg-primary-color text-white').addClass('text-secondary');
+                    $(this).addClass('bg-primary-color text-white').removeClass('text-secondary');
+
+                    // Update hidden input if exists or use URL
+                    fetchProducts(category);
+
+                    // Update browser URL without reload
+                    window.history.pushState({}, '', url);
+                });
+
+                // Handle pagination clicks
+                $(document).on('click', '.pagination a', function (e) {
+                    e.preventDefault();
+                    const url = $(this).attr('href');
+                    fetchProducts(null, url);
+                    window.history.pushState({}, '', url);
+                });
+
+                function fetchProducts(category = null, customUrl = null) {
+                    const search = searchInput.val();
+                    const currentUrl = new URL(window.location.href);
+                    const activeCategory = category || currentUrl.searchParams.get('category') || '';
+
+                    const url = customUrl || "{{ route('com.store') }}";
+
+                    productContainer.css('opacity', '0.5');
+
+                    $.ajax({
+                        url: url,
+                        type: "GET",
+                        data: {
+                            search: search,
+                            category: activeCategory
+                        },
+                        success: function (data) {
+                            productContainer.html(data);
+                            productContainer.css('opacity', '1');
+
+                            // Re-initialize AOS if used
+                            if (typeof AOS !== 'undefined') {
+                                AOS.refresh();
+                            }
+                        },
+                        error: function () {
+                            productContainer.css('opacity', '1');
+                            console.error('Failed to fetch products');
+                        }
+                    });
+                }
+            });
+        </script>
+    @endpush
 
     <style>
         .product-card:hover .object-fit-cover {
@@ -172,9 +189,41 @@
             overflow: hidden;
         }
 
-        .list-group-item-action:hover {
-            background-color: rgba(4, 74, 128, 0.05) !important;
-            color: var(--primary-color) !important;
+        /* Sidebar Styling */
+        .category-link {
+            transition: all 0.25s ease;
+            font-weight: 500;
+            border: 1px solid transparent !important;
+            margin-bottom: 5px !important;
+        }
+
+        /* Inactive State */
+        .category-link.text-secondary {
+            color: #555 !important;
+            background-color: transparent !important;
+        }
+
+        /* Active State */
+        .category-link.bg-primary-color {
+            background-color: #044A80 !important;
+            /* Explicit primary color */
+            color: #ffffff !important;
+            box-shadow: 0 4px 8px rgba(4, 74, 128, 0.15);
+        }
+
+        /* Hover State for Inactive Items */
+        .category-link:hover:not(.bg-primary-color) {
+            background-color: #eef4f9 !important;
+            /* Solid light blue, won't mix with white */
+            color: #044A80 !important;
+            border-color: #d1e3f0 !important;
+        }
+
+        /* Active Item Hover - Keep it Solid */
+        .category-link.bg-primary-color:hover {
+            background-color: #033a66 !important;
+            color: #ffffff !important;
+            opacity: 1 !important;
         }
 
         .transition-all {

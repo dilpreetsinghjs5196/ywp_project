@@ -24,6 +24,8 @@ class Order extends Model
         'permanent_country',
         'total_amount',
         'payment_method',
+        'razorpay_payment_id',
+        'razorpay_order_id',
         'status',
     ];
 

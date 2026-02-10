@@ -231,11 +231,11 @@
                                 <div
                                     class="form-check border rounded-pill px-4 py-3 mb-0 transition-all payment-option-check">
                                     <input class="form-check-input ms-0 me-3" type="radio" name="payment_method" id="online"
-                                        value="online" disabled>
-                                    <label class="form-check-label w-100 fw-bold text-muted" for="online">
-                                        Online Payment (Coming Soon)
+                                        value="online">
+                                    <label class="form-check-label w-100 fw-bold" for="online">
+                                        Online Payment (Razorpay)
                                         <span class="d-block small text-muted fw-normal">Secure payment via Credit/Debit
-                                            card or UPI.</span>
+                                            card, UPI, or Netbanking.</span>
                                     </label>
                                 </div>
                             </div>
@@ -340,6 +340,7 @@
         }
     </style>
 
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Toggle Login Section
@@ -496,7 +497,50 @@
                     data: $('#checkout-form').serialize(),
                     success: function (response) {
                         if (response.success) {
-                            window.location.href = response.redirect;
+                            if (response.require_payment) {
+                                // Online Payment Flow
+                                var options = {
+                                    "key": response.razorpay_key,
+                                    "amount": response.amount,
+                                    "currency": "INR",
+                                    "name": "Wonder Store",
+                                    "description": "Order Payment",
+                                    "order_id": response.razorpay_order_id, // Use if you generate order id from backend
+                                    "handler": function (payResponse) {
+                                        // Verify payment on backend
+                                        $.ajax({
+                                            url: "{{ route('razorpay.verify') }}",
+                                            method: "POST",
+                                            data: {
+                                                _token: "{{ csrf_token() }}",
+                                                order_id: response.order_id,
+                                                razorpay_payment_id: payResponse.razorpay_payment_id,
+                                                razorpay_order_id: payResponse.razorpay_order_id,
+                                                razorpay_signature: payResponse.razorpay_signature
+                                            },
+                                            success: function (verifyResponse) {
+                                                if (verifyResponse.success) {
+                                                    window.location.href = verifyResponse.redirect;
+                                                }
+                                            }
+                                        });
+                                    },
+                                    "prefill": response.customer,
+                                    "theme": {
+                                        "color": "#044A80"
+                                    },
+                                    "modal": {
+                                        "ondismiss": function () {
+                                            submitBtn.prop('disabled', false).html(originalText);
+                                        }
+                                    }
+                                };
+                                var rzp1 = new Razorpay(options);
+                                rzp1.open();
+                            } else {
+                                // COD Flow
+                                window.location.href = response.redirect;
+                            }
                         }
                     },
                     error: function (xhr) {

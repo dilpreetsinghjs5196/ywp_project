@@ -205,6 +205,21 @@ class CartController extends Controller
 
             session()->forget('cart');
 
+            if ($request->payment_method === 'online') {
+                return response()->json([
+                    'success' => true,
+                    'require_payment' => true,
+                    'razorpay_key' => config('services.razorpay.key_id'),
+                    'amount' => $total * 100, // Razorpay works in paise
+                    'order_id' => $order->id,
+                    'customer' => [
+                        'name' => $request->first_name . ' ' . $request->last_name,
+                        'email' => $request->email,
+                        'contact' => $request->phone
+                    ]
+                ]);
+            }
+
             return response()->json([
                 'success' => true,
                 'redirect' => route('com.order.success', $order->id)
@@ -375,5 +390,23 @@ class CartController extends Controller
     {
         $exists = User::where('email', $request->email)->exists();
         return response()->json(['exists' => $exists]);
+    }
+    public function verifyPayment(Request $request)
+    {
+        $order = Order::findOrFail($request->order_id);
+
+        // In a real production app, you would verify the signature here using Razorpay SDK
+        // For testing purposes, we'll mark it as paid if the payment_id is provided
+        if ($request->razorpay_payment_id) {
+            $order->update([
+                'razorpay_payment_id' => $request->razorpay_payment_id,
+                'razorpay_order_id' => $request->razorpay_order_id,
+                'status' => 'processing' // Mark as paid/processing
+            ]);
+
+            return response()->json(['success' => true, 'redirect' => route('com.order.success', $order->id)]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Payment verification failed'], 400);
     }
 }

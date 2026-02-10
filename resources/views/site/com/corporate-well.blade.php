@@ -114,9 +114,9 @@
                 </div>
                 <!-- Navigation Arrows -->
                 <!-- <div class="d-flex justify-content-center gap-4 mt-5">
-                                <div class="brands-prev-btn cursor-pointer text-dark"><i class="bi bi-chevron-left fs-3"></i></div>
-                                <div class="brands-next-btn cursor-pointer text-dark"><i class="bi bi-chevron-right fs-3"></i></div>
-                            </div> -->
+                                    <div class="brands-prev-btn cursor-pointer text-dark"><i class="bi bi-chevron-left fs-3"></i></div>
+                                    <div class="brands-next-btn cursor-pointer text-dark"><i class="bi bi-chevron-right fs-3"></i></div>
+                                </div> -->
             </div>
         </div>
     </section>
@@ -133,7 +133,7 @@
     <!-- #brands end -->
 
     <!-- Feedback Section -->
-    <section class="section py-5 bg-light bg-white">
+    <section class="section py-5 bg-gray-light">
         <div class="b-container" style="padding-top: 50px;">
             <div class="row justify-content-between">
                 <div class="col-12 col-lg-7 text-center text-lg-start">

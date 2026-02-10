@@ -19,6 +19,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background: #f4f7f6;
+            overflow-x: hidden;
         }
 
         .sidebar {
@@ -28,6 +29,24 @@
             min-height: 100vh;
             color: white;
             transition: all 0.3s;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Hide scrollbar for sidebar but keep functionality */
+        .sidebar-nav-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+        }
+
+        .sidebar-nav-container::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
         }
 
         .sidebar .nav-link {
@@ -48,6 +67,8 @@
 
         .main-content {
             flex: 1;
+            min-width: 0;
+            width: 100%;
         }
 
         .navbar {
@@ -69,107 +90,152 @@
         .btn-primary:hover {
             background: #033a66;
         }
+
+        /* Responsive Sidebar */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                margin-left: -250px;
+                position: fixed;
+            }
+
+            .sidebar.active {
+                margin-left: 0;
+            }
+
+            /* Enable scrollbar visually on mobile to indicate scrollability */
+            .sidebar-nav-container {
+                scrollbar-width: thin;
+                -ms-overflow-style: auto;
+            }
+            .sidebar-nav-container::-webkit-scrollbar {
+                display: block;
+                width: 4px;
+            }
+            .sidebar-nav-container::-webkit-scrollbar-thumb {
+                background: rgba(255,255,255,0.2);
+                border-radius: 10px;
+            }
+
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1000;
+                top: 0;
+                left: 0;
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+        }
     </style>
     @stack('css')
 </head>
 
 <body>
 
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <div class="d-flex">
         <!-- Sidebar -->
-        <div class="sidebar d-flex flex-column">
+        <div class="sidebar d-flex flex-column" id="sidebar">
             <div class="p-4 text-center">
                 <h4 class="fw-bold">YWP Admin</h4>
             </div>
-            <ul class="nav flex-column flex-grow-1">
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
-                        href="{{ route('admin.dashboard') }}">
-                        <i class="bi bi-speedometer2"></i> Dashboard
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Site Content</div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('admin/pages/home*') ? 'active' : '' }}"
-                        href="{{ route('admin.pages.edit', 'home') }}">
-                        <i class="bi bi-house"></i> Home Page
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('admin/pages/about*') ? 'active' : '' }}"
-                        href="{{ route('admin.pages.edit', 'about') }}">
-                        <i class="bi bi-info-circle"></i> About Us
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('admin/pages/corporate*') ? 'active' : '' }}"
-                        href="{{ route('admin.pages.edit', 'corporate') }}">
-                        <i class="bi bi-building"></i> Corporate Page
-                    </a>
-                </li>
-                <li class="nav-item ps-3">
-                    <a class="nav-link {{ request()->routeIs('admin.brands.*') ? 'active' : '' }}"
-                        href="{{ route('admin.brands.index') }}">
-                        <i class="bi bi-award"></i> Brand Partners
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.services.*') ? 'active' : '' }}"
-                        href="{{ route('admin.services.index') }}">
-                        <i class="bi bi-grid"></i> Services
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.teams.*') ? 'active' : '' }}"
-                        href="{{ route('admin.teams.index') }}">
-                        <i class="bi bi-people"></i> Our Team
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.testimonials.*') ? 'active' : '' }}"
-                        href="{{ route('admin.testimonials.index') }}">
-                        <i class="bi bi-chat-left-quote"></i> Testimonials
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Wonder Store</div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.wonder-store-categories.*') ? 'active' : '' }}"
-                        href="{{ route('admin.wonder-store-categories.index') }}">
-                        <i class="bi bi-tags"></i> Categories
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.wonder-store-products.*') ? 'active' : '' }}"
-                        href="{{ route('admin.wonder-store-products.index') }}">
-                        <i class="bi bi-box"></i> Products
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('admin/pages/wonder_store') ? 'active' : '' }}"
-                        href="{{ route('admin.pages.edit', 'wonder_store') }}">
-                        <i class="bi bi-layout-text-window"></i> Banner & Title
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Settings</div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.settings.branding') ? 'active' : '' }}"
-                        href="{{ route('admin.settings.branding') }}">
-                        <i class="bi bi-palette"></i> Branding & Colors
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.settings.contact') ? 'active' : '' }}"
-                        href="{{ route('admin.settings.contact') }}">
-                        <i class="bi bi-telephone"></i> Footer & Contact
-                    </a>
-                </li>
-            </ul>
+            <div class="sidebar-nav-container">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+                            href="{{ route('admin.dashboard') }}">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Site Content</div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('admin/pages/home*') ? 'active' : '' }}"
+                            href="{{ route('admin.pages.edit', 'home') }}">
+                            <i class="bi bi-house"></i> Home Page
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('admin/pages/about*') ? 'active' : '' }}"
+                            href="{{ route('admin.pages.edit', 'about') }}">
+                            <i class="bi bi-info-circle"></i> About Us
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('admin/pages/corporate*') ? 'active' : '' }}"
+                            href="{{ route('admin.pages.edit', 'corporate') }}">
+                            <i class="bi bi-building"></i> Corporate Page
+                        </a>
+                    </li>
+                    <li class="nav-item ps-3">
+                        <a class="nav-link {{ request()->routeIs('admin.brands.*') ? 'active' : '' }}"
+                            href="{{ route('admin.brands.index') }}">
+                            <i class="bi bi-award"></i> Brand Partners
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.services.*') ? 'active' : '' }}"
+                            href="{{ route('admin.services.index') }}">
+                            <i class="bi bi-grid"></i> Services
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.teams.*') ? 'active' : '' }}"
+                            href="{{ route('admin.teams.index') }}">
+                            <i class="bi bi-people"></i> Our Team
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.testimonials.*') ? 'active' : '' }}"
+                            href="{{ route('admin.testimonials.index') }}">
+                            <i class="bi bi-chat-left-quote"></i> Testimonials
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Wonder Store</div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.wonder-store-categories.*') ? 'active' : '' }}"
+                            href="{{ route('admin.wonder-store-categories.index') }}">
+                            <i class="bi bi-tags"></i> Categories
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.wonder-store-products.*') ? 'active' : '' }}"
+                            href="{{ route('admin.wonder-store-products.index') }}">
+                            <i class="bi bi-box"></i> Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('admin/pages/wonder_store') ? 'active' : '' }}"
+                            href="{{ route('admin.pages.edit', 'wonder_store') }}">
+                            <i class="bi bi-layout-text-window"></i> Banner & Title
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Settings</div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.settings.branding') ? 'active' : '' }}"
+                            href="{{ route('admin.settings.branding') }}">
+                            <i class="bi bi-palette"></i> Branding & Colors
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.settings.contact') ? 'active' : '' }}"
+                            href="{{ route('admin.settings.contact') }}">
+                            <i class="bi bi-telephone"></i> Footer & Contact
+                        </a>
+                    </li>
+                </ul>
+            </div>
             <div class="p-4 border-top border-light">
                 <a href="#" class="nav-link p-0 text-white opacity-75"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -182,19 +248,24 @@
         <!-- Main Content -->
         <div class="main-content d-flex flex-column">
             <!-- Top Navbar -->
-            <nav class="navbar navbar-expand-lg px-4 py-3">
+            <nav class="navbar navbar-expand-lg px-3 px-md-4 py-3">
                 <div class="container-fluid">
+                    <button class="btn btn-outline-primary d-lg-none me-2" id="sidebarToggle">
+                        <i class="bi bi-list"></i>
+                    </button>
                     <span class="navbar-text fw-bold text-dark">
                         @yield('page_title', 'Dashboard')
                     </span>
                     <div class="ms-auto d-flex align-items-center">
-                        <a href="{{ route('com.home') }}" target="_blank" class="btn btn-sm btn-outline-primary me-3">
+                        <a href="{{ route('com.home') }}" target="_blank"
+                            class="btn btn-sm btn-outline-primary me-2 me-md-3 d-none d-sm-inline-flex">
                             <i class="bi bi-eye"></i> View Site
                         </a>
                         <div class="dropdown">
                             <a class="text-dark text-decoration-none dropdown-toggle" href="#" role="button"
                                 data-bs-toggle="dropdown">
-                                <i class="bi bi-person-circle fs-5 me-1"></i> Admin
+                                <i class="bi bi-person-circle fs-5 me-1"></i> <span
+                                    class="d-none d-sm-inline">Admin</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="#">Profile</a></li>
@@ -209,7 +280,7 @@
             </nav>
 
             <!-- Content Area -->
-            <div class="container-fluid p-4">
+            <div class="container-fluid p-3 p-md-4">
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
@@ -223,6 +294,17 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('sidebarToggle').addEventListener('click', function () {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        });
+
+        document.getElementById('sidebarOverlay').addEventListener('click', function () {
+            document.getElementById('sidebar').classList.remove('active');
+            this.classList.remove('active');
+        });
+    </script>
     @stack('js')
 </body>
 

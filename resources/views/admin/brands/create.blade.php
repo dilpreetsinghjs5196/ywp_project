@@ -50,7 +50,7 @@
                             </div>
                         </div>
 
-                        <div class="mt-4 text-end">
+                        <div class="mt-4 d-grid d-md-flex justify-content-md-end gap-2">
                             <a href="{{ route('admin.brands.index') }}" class="btn btn-light border px-4">Cancel</a>
                             <button type="submit" class="btn btn-primary px-4">Save Brand</button>
                         </div>

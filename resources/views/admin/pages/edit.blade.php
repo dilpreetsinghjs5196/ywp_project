@@ -31,19 +31,19 @@
                                         <span class="text-muted small">{{ $item->value }}</span>
                                     </div>
                                 @elseif($item->type === 'image')
-                                    <div class="d-flex align-items-start gap-4">
+                                    <div class="d-flex flex-column flex-sm-row align-items-start gap-3 gap-sm-4">
                                         @if($item->value)
                                             <img src="{{ Str::startsWith($item->value, 'image/') ? asset($item->value) : asset('storage/' . $item->value) }}"
-                                                alt="Current" class="img-thumbnail" style="max-height: 120px;">
+                                                alt="Current" class="img-thumbnail" style="max-height: 100px;">
                                         @else
                                             <div class="bg-light d-flex align-items-center justify-content-center border rounded"
-                                                style="width: 120px; height: 120px;">
-                                                <i class="bi bi-image text-muted fs-2"></i>
+                                                style="width: 100px; height: 100px;">
+                                                <i class="bi bi-image text-muted fs-3"></i>
                                             </div>
                                         @endif
-                                        <div class="flex-grow-1">
+                                        <div class="flex-grow-1 w-100">
                                             <input type="file" name="{{ $item->id }}" class="form-control">
-                                            <p class="text-muted small mt-2">Recommended size depends on section. PNG/JPG/WebP
+                                            <p class="text-muted small mt-2 mb-0">Recommended size depends on section. PNG/JPG/WebP
                                                 supported.</p>
                                         </div>
                                     </div>
@@ -55,8 +55,9 @@
             </div>
         @endforeach
 
-        <div class="position-sticky bottom-0 bg-white p-4 border-top text-end" style="z-index: 100;">
-            <button type="submit" class="btn btn-primary px-5 btn-lg">
+        <div class="position-sticky bottom-0 bg-white p-3 p-md-4 border-top text-end"
+            style="z-index: 100; margin: 0 -1.5rem -1.5rem -1.5rem;">
+            <button type="submit" class="btn btn-primary px-4 px-md-5 btn-lg w-100 w-md-auto">
                 <i class="bi bi-save me-2"></i> Save Changes
             </button>
         </div>

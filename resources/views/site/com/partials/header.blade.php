@@ -136,7 +136,7 @@
 
 <style>
   .no-caret::after { display: none !important; }
-  #userMenu:hover { background-color: var(--primary-color); color: white; }
+  #userMenu:hover, #guestMenu:hover { background-color: var(--primary-color); color: white; }
 </style>
 
 <script>

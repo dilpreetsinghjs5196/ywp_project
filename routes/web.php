@@ -26,11 +26,17 @@ Route::post('/checkout/process', [\App\Http\Controllers\com\CartController::clas
 Route::post('/login/ajax', [\App\Http\Controllers\com\CartController::class, 'loginAjax'])->name('login.ajax');
 Route::get('/order-success/{id}', [\App\Http\Controllers\com\CartController::class, 'orderSuccess'])->name('com.order.success');
 
+// Authentication Routes
+Route::get('/login', [\App\Http\Controllers\com\AuthController::class, 'showLogin'])->name('com.login');
+Route::post('/login', [\App\Http\Controllers\com\AuthController::class, 'login']);
+Route::get('/register', [\App\Http\Controllers\com\AuthController::class, 'showRegister'])->name('com.register');
+Route::post('/register', [\App\Http\Controllers\com\AuthController::class, 'register']);
+Route::get('/logout', [\App\Http\Controllers\com\AuthController::class, 'logout'])->name('com.logout');
+
 // User Profile Routes (Protected)
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [\App\Http\Controllers\com\ProfileController::class, 'index'])->name('com.profile');
     Route::post('/profile/update', [\App\Http\Controllers\com\ProfileController::class, 'update'])->name('com.profile.update');
-    Route::get('/logout', [\App\Http\Controllers\com\ProfileController::class, 'logout'])->name('com.logout');
 });
 
 // Admin Panel Routes

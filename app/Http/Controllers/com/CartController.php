@@ -10,6 +10,7 @@ use App\Models\PageContent;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
+use App\Models\CartItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,25 @@ class CartController extends Controller
 {
     public function index()
     {
-        $cart = session()->get('cart', []);
+        if (Auth::check()) {
+            CartItem::syncSessionCart(Auth::id());
+            $cartItems = CartItem::where('user_id', Auth::id())->with('product.category')->get();
+            $cart = [];
+            foreach ($cartItems as $item) {
+                $cart[$item->product_id] = [
+                    "id" => $item->product_id,
+                    "name" => $item->product->category->category_name . " Item",
+                    "quantity" => $item->quantity,
+                    "price" => $item->product->product_price,
+                    "image" => $item->product->product_image,
+                    "category" => $item->product->category->category_name
+                ];
+            }
+            session()->put('cart', $cart); // Keep session in sync for easy access
+        } else {
+            $cart = session()->get('cart', []);
+        }
+
         $settings = SiteSetting::all()->pluck('value', 'key');
         $contents = PageContent::where('page', 'wonder_store')
             ->get()
@@ -40,6 +59,7 @@ class CartController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+            CartItem::syncSessionCart(Auth::id()); // Restore cart from DB immediately
             return response()->json(['success' => true]);
         }
 
@@ -104,6 +124,7 @@ class CartController extends Controller
                     'password' => Hash::make($request->password),
                 ]);
                 Auth::login($user);
+                CartItem::syncSessionCart($user->id);
                 $user_id = $user->id;
             } elseif (Auth::check()) {
                 // Update existing user profile if fields are empty
@@ -165,6 +186,11 @@ class CartController extends Controller
             }
 
             DB::commit();
+
+            if (Auth::check()) {
+                CartItem::where('user_id', Auth::id())->delete();
+            }
+
             session()->forget('cart');
 
             return response()->json([
@@ -216,6 +242,13 @@ class CartController extends Controller
 
         session()->put('cart', $cart);
 
+        if (Auth::check()) {
+            CartItem::updateOrCreate(
+                ['user_id' => Auth::id(), 'product_id' => $id],
+                ['quantity' => $cart[$id]['quantity']]
+            );
+        }
+
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
@@ -233,6 +266,13 @@ class CartController extends Controller
             $cart = session()->get('cart');
             $cart[$request->id]["quantity"] = $request->quantity;
             session()->put('cart', $cart);
+
+            if (Auth::check()) {
+                CartItem::where('user_id', Auth::id())
+                    ->where('product_id', $request->id)
+                    ->update(['quantity' => $request->quantity]);
+            }
+
             session()->flash('success', 'Cart updated successfully');
         }
     }
@@ -244,6 +284,12 @@ class CartController extends Controller
             if (isset($cart[$request->id])) {
                 unset($cart[$request->id]);
                 session()->put('cart', $cart);
+
+                if (Auth::check()) {
+                    CartItem::where('user_id', Auth::id())
+                        ->where('product_id', $request->id)
+                        ->delete();
+                }
             }
             session()->flash('success', 'Product removed successfully');
         }
@@ -251,16 +297,28 @@ class CartController extends Controller
 
     public function getCartCount()
     {
+        if (Auth::check()) {
+            $count = CartItem::where('user_id', Auth::id())->count();
+            // Optional: You could also sync here if needed, but count is the main goal
+            return response()->json(['count' => $count]);
+        }
+
         $cart = session()->get('cart', []);
         return response()->json(['count' => count($cart)]);
     }
 
     public function checkout()
     {
+        if (Auth::check()) {
+            CartItem::syncSessionCart(Auth::id());
+        }
+
         $cart = session()->get('cart', []);
-        /* if (empty($cart)) {
+
+        if (empty($cart)) {
             return redirect()->route('com.cart')->with('error', 'Your cart appears to be empty on our server. Please try adding items again.');
-        } */
+        }
+
         $settings = SiteSetting::all()->pluck('value', 'key');
         $contents = PageContent::where('page', 'wonder_store')
             ->get()

@@ -45,13 +45,4 @@ class ProfileController extends Controller
 
         return back()->with('success', 'Profile updated successfully!');
     }
-
-    public function logout()
-    {
-        Auth::logout();
-        request()->session()->invalidate();
-        request()->session()->regenerateToken();
-
-        return redirect()->route('com.home');
-    }
 }

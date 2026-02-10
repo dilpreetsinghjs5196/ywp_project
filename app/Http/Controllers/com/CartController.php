@@ -114,7 +114,7 @@ class CartController extends Controller
         try {
             $user_id = Auth::id();
 
-            // Handle registration/profile update
+            // Handle registration or association with existing account
             if ($request->has('create_account') && !Auth::check()) {
                 $user = User::create([
                     'name' => $request->first_name . ' ' . $request->last_name,
@@ -141,6 +141,12 @@ class CartController extends Controller
                     'postcode' => $user->postcode ?? $request->postcode,
                     'country' => $user->country ?? $request->country,
                 ]);
+            } elseif (!$user_id) {
+                // Check if a user with this email already exists and just link the order
+                $existingUser = User::where('email', $request->email)->first();
+                if ($existingUser) {
+                    $user_id = $existingUser->id;
+                }
             }
 
             // Calculate total
@@ -363,5 +369,11 @@ class CartController extends Controller
             });
 
         return view('site.com.checkout', compact('cart', 'settings', 'contents'));
+    }
+
+    public function checkEmail(Request $request)
+    {
+        $exists = User::where('email', $request->email)->exists();
+        return response()->json(['exists' => $exists]);
     }
 }

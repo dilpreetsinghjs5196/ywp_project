@@ -96,22 +96,29 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small text-muted">Email Address</label>
-                                    <input type="email" name="email" class="form-control rounded-pill px-4"
-                                        value="{{ auth()->user()->email ?? '' }}" required>
+                                    <input type="email" name="email" id="checkout_email"
+                                        class="form-control rounded-pill px-4" value="{{ auth()->user()->email ?? '' }}"
+                                        required>
+                                    <div id="email-exists-msg" class="small mt-1 d-none">
+                                        <span class="text-primary-color fw-bold">Email already exists. <a
+                                                href="javascript:void(0)" onclick="$('#toggle-login').click()">Login
+                                                instead?</a></span>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small text-muted">Phone Number</label>
-                                    <input type="tel" name="phone" class="form-control rounded-pill px-4" required>
+                                    <input type="tel" name="phone" class="form-control rounded-pill px-4"
+                                        value="{{ auth()->user()->phone ?? '' }}" required>
                                 </div>
 
                                 @guest
                                     <div class="col-12 mt-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" name="create_account"
-                                                id="create-account-check" required>
+                                                id="create-account-check">
                                             <label class="form-check-label fw-bold" for="create-account-check">
-                                                Create an account? <span class="text-danger small">(Mandatory for first-time
-                                                    guests to complete order)</span>
+                                                Create an account? <span class="text-danger small">(Mandatory to complete
+                                                    order)</span>
                                             </label>
                                         </div>
                                     </div>
@@ -135,27 +142,33 @@
                                 <div class="col-12">
                                     <label class="form-label small text-muted">Street Address</label>
                                     <input type="text" name="address" class="form-control rounded-pill px-4"
-                                        placeholder="House number and street name" required>
+                                        placeholder="House number and street name"
+                                        value="{{ auth()->user()->address ?? '' }}" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small text-muted">City</label>
-                                    <input type="text" name="city" class="form-control rounded-pill px-4" required>
+                                    <input type="text" name="city" class="form-control rounded-pill px-4"
+                                        value="{{ auth()->user()->city ?? '' }}" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small text-muted">State / Province</label>
-                                    <input type="text" name="state" class="form-control rounded-pill px-4" required>
+                                    <input type="text" name="state" class="form-control rounded-pill px-4"
+                                        value="{{ auth()->user()->state ?? '' }}" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small text-muted">Postcode / ZIP</label>
-                                    <input type="text" name="postcode" class="form-control rounded-pill px-4" required>
+                                    <input type="text" name="postcode" class="form-control rounded-pill px-4"
+                                        value="{{ auth()->user()->postcode ?? '' }}" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small text-muted">Country</label>
                                     <select name="country" class="form-select rounded-pill px-4" required>
-                                        <option value="India">India</option>
-                                        <option value="USA">USA</option>
-                                        <option value="UK">UK</option>
-                                        <option value="Canada">Canada</option>
+                                        <option value="India" {{ (auth()->user()->country ?? '') == 'India' ? 'selected' : '' }}>India</option>
+                                        <option value="USA" {{ (auth()->user()->country ?? '') == 'USA' ? 'selected' : '' }}>
+                                            USA</option>
+                                        <option value="UK" {{ (auth()->user()->country ?? '') == 'UK' ? 'selected' : '' }}>UK
+                                        </option>
+                                        <option value="Canada" {{ (auth()->user()->country ?? '') == 'Canada' ? 'selected' : '' }}>Canada</option>
                                     </select>
                                 </div>
                             </div>
@@ -335,6 +348,36 @@
                 $(this).text($('#login-section').hasClass('d-none') ? 'Click here to login' : 'Close login section');
             });
 
+            // Email Existence Check
+            let emailTimeout = null;
+            $('#checkout_email').on('input', function () {
+                clearTimeout(emailTimeout);
+                const email = $(this).val();
+                const msgDiv = $('#email-exists-msg');
+
+                if (email.length > 5 && email.includes('@')) {
+                    emailTimeout = setTimeout(() => {
+                        $.ajax({
+                            url: "{{ route('cart.check-email') }}",
+                            method: "POST",
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                email: email
+                            },
+                            success: function (response) {
+                                if (response.exists) {
+                                    msgDiv.removeClass('d-none');
+                                } else {
+                                    msgDiv.addClass('d-none');
+                                }
+                            }
+                        });
+                    }, 500);
+                } else {
+                    msgDiv.addClass('d-none');
+                }
+            });
+
             // AJAX Login
             $('#btn-login-ajax').on('click', function () {
                 const email = $('#login_email').val();
@@ -401,7 +444,48 @@
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
 
-                const submitBtn = $(this).find('button[type="submit"]');
+                // If logged in, proceed directly
+                @auth
+                    processCheckout();
+                @else
+                            // If guest, check email status first
+                            const email = $('#checkout_email').val();
+                    if (!email) {
+                        alert('Please enter your email address');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "{{ route('cart.check-email') }}",
+                        method: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            email: email
+                        },
+                        success: function (response) {
+                            if (response.exists) {
+                                // Returning User
+                                alert('You already have an account. Please login first to complete your order.');
+                                if ($('#login-section').hasClass('d-none')) {
+                                    $('#toggle-login').click();
+                                }
+                                $('#login_password').focus();
+                            } else {
+                                // New User
+                                if (!$('#create-account-check').is(':checked')) {
+                                    alert('Please check the box to "Create an account" to complete your order.');
+                                    $('#create-account-check').focus();
+                                } else {
+                                    processCheckout();
+                                }
+                            }
+                        }
+                    });
+                @endauth
+                });
+
+            function processCheckout() {
+                const submitBtn = $('#checkout-form').find('button[type="submit"]');
                 const originalText = submitBtn.html();
 
                 submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span> Processing...');
@@ -409,7 +493,7 @@
                 $.ajax({
                     url: "{{ route('com.checkout.process') }}",
                     method: "POST",
-                    data: $(this).serialize(),
+                    data: $('#checkout-form').serialize(),
                     success: function (response) {
                         if (response.success) {
                             window.location.href = response.redirect;
@@ -429,7 +513,7 @@
                         }
                     }
                 });
-            });
+            }
 
             // Make the whole card clickable for payment options
             document.querySelectorAll('.payment-option-check').forEach(card => {

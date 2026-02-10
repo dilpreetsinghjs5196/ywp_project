@@ -24,6 +24,7 @@ Route::get('/cart/count', [\App\Http\Controllers\com\CartController::class, 'get
 Route::get('/checkout', [\App\Http\Controllers\com\CartController::class, 'checkout'])->name('com.checkout');
 Route::post('/checkout/process', [\App\Http\Controllers\com\CartController::class, 'processCheckout'])->name('com.checkout.process');
 Route::post('/login/ajax', [\App\Http\Controllers\com\CartController::class, 'loginAjax'])->name('login.ajax');
+Route::post('/cart/check-email', [\App\Http\Controllers\com\CartController::class, 'checkEmail'])->name('cart.check-email');
 Route::get('/order-success/{id}', [\App\Http\Controllers\com\CartController::class, 'orderSuccess'])->name('com.order.success');
 
 // Authentication Routes

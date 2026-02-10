@@ -77,14 +77,3 @@
   </div>
 </footer>
 <!-- #footer end -->
-
-<!-- Scripts -->
-<script src="{{ asset('js/vendor/jquery.min.js') }}"></script>
-<script src="{{ asset('js/vendor/aos.js') }}"></script>
-<script src="{{ asset('js/vendor/swiper-bundle.min.js') }}"></script>
-<script src="{{ asset('js/vendor/bootstrap.bundle.min.js') }}"></script>
-
-<script src="{{ asset('js/script.js') }}"></script>
-<script src="{{ asset('js/video-player.js') }}"></script>
-<script src="{{ asset('js/script-counter.js') }}"></script>
-<script src="{{ asset('js/script-swiper.js') }}"></script>

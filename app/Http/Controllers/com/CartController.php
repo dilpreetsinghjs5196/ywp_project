@@ -74,7 +74,8 @@ class CartController extends Controller
             'permanent_country' => 'required_without:same_as_shipping|nullable|string|max:100',
         ];
 
-        if ($request->has('create_account') && !Auth::check()) {
+        if (!Auth::check()) {
+            $rules['create_account'] = 'required|accepted';
             $rules['password'] = 'required|min:8|confirmed';
             $rules['email'] = 'required|email|max:255|unique:users,email';
         }
@@ -89,15 +90,32 @@ class CartController extends Controller
         try {
             $user_id = Auth::id();
 
-            // Handle registration
+            // Handle registration/profile update
             if ($request->has('create_account') && !Auth::check()) {
                 $user = User::create([
                     'name' => $request->first_name . ' ' . $request->last_name,
                     'email' => $request->email,
+                    'phone' => $request->phone,
+                    'address' => $request->address,
+                    'city' => $request->city,
+                    'state' => $request->state,
+                    'postcode' => $request->postcode,
+                    'country' => $request->country,
                     'password' => Hash::make($request->password),
                 ]);
                 Auth::login($user);
                 $user_id = $user->id;
+            } elseif (Auth::check()) {
+                // Update existing user profile if fields are empty
+                $user = Auth::user();
+                $user->update([
+                    'phone' => $user->phone ?? $request->phone,
+                    'address' => $user->address ?? $request->address,
+                    'city' => $user->city ?? $request->city,
+                    'state' => $user->state ?? $request->state,
+                    'postcode' => $user->postcode ?? $request->postcode,
+                    'country' => $user->country ?? $request->country,
+                ]);
             }
 
             // Calculate total
@@ -240,9 +258,9 @@ class CartController extends Controller
     public function checkout()
     {
         $cart = session()->get('cart', []);
-        if (empty($cart)) {
-            return redirect()->route('com.cart')->with('error', 'Your cart is empty!');
-        }
+        /* if (empty($cart)) {
+            return redirect()->route('com.cart')->with('error', 'Your cart appears to be empty on our server. Please try adding items again.');
+        } */
         $settings = SiteSetting::all()->pluck('value', 'key');
         $contents = PageContent::where('page', 'wonder_store')
             ->get()

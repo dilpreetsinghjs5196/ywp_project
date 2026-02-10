@@ -30,6 +30,18 @@
         </div>
     </section>
 
+    <style>
+        .form-check-input:checked {
+            background-color: var(--primary-color, #044A80);
+            border-color: var(--primary-color, #044A80);
+        }
+
+        .form-check-input:focus {
+            border-color: var(--primary-color, #044A80);
+            box-shadow: 0 0 0 0.25rem rgba(4, 74, 128, 0.25);
+        }
+    </style>
+
     <!-- Checkout Content -->
     <section class="section py-5">
         <div class="b-container">
@@ -96,9 +108,10 @@
                                     <div class="col-12 mt-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" name="create_account"
-                                                id="create-account-check">
+                                                id="create-account-check" required>
                                             <label class="form-check-label fw-bold" for="create-account-check">
-                                                Create an account?
+                                                Create an account? <span class="text-danger small">(Mandatory for first-time
+                                                    guests to complete order)</span>
                                             </label>
                                         </div>
                                     </div>

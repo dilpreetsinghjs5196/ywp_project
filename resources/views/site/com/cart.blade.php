@@ -33,6 +33,13 @@
     <!-- Cart Content -->
     <section class="section py-5">
         <div class="b-container">
+            @if(session('error'))
+                <div class="alert alert-warning alert-dismissible fade show rounded-pill px-4 mb-4" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             @if(count($cart) > 0)
                 <div class="row g-5">
                     <!-- Cart Items -->
@@ -130,7 +137,7 @@
                                 <span class="fs-4 font-1 fw-bold text-primary-color">Rs.{{ number_format($total, 2) }}</span>
                             </div>
 
-                            <a href="{{ route('com.checkout') }}" class="btn btn-primary-solid w-100 rounded-pill py-3 shadow">
+                            <a href="{{ route('com.checkout') }}" class="btn btn-warning w-100 rounded-pill py-3 shadow">
                                 Proceed to Checkout <i class="bi bi-arrow-right ms-2"></i>
                             </a>
 

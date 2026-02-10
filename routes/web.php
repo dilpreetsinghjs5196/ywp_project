@@ -26,6 +26,13 @@ Route::post('/checkout/process', [\App\Http\Controllers\com\CartController::clas
 Route::post('/login/ajax', [\App\Http\Controllers\com\CartController::class, 'loginAjax'])->name('login.ajax');
 Route::get('/order-success/{id}', [\App\Http\Controllers\com\CartController::class, 'orderSuccess'])->name('com.order.success');
 
+// User Profile Routes (Protected)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [\App\Http\Controllers\com\ProfileController::class, 'index'])->name('com.profile');
+    Route::post('/profile/update', [\App\Http\Controllers\com\ProfileController::class, 'update'])->name('com.profile.update');
+    Route::get('/logout', [\App\Http\Controllers\com\ProfileController::class, 'logout'])->name('com.logout');
+});
+
 // Admin Panel Routes
 Route::prefix('admin')->group(function () {
     Route::get('/', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('admin.dashboard');

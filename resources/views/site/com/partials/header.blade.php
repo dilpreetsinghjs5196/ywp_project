@@ -88,13 +88,43 @@
                 <a class="nav-link" href="contact-us.html">Contact Us</a>
               </li>
             </ul>
-            <div class="d-flex align-items-center ms-lg-3 mt-3 mt-lg-0">
-              <a href="{{ route('com.cart') }}" class="btn btn-outline-primary position-relative rounded-pill px-3 py-2 border-2">
+            <div class="d-flex align-items-center ms-lg-3 mt-3 mt-lg-0 gap-2">
+              @auth
+              <div class="dropdown">
+                <button class="btn btn-outline-primary position-relative rounded-pill px-3 py-2 border-2 dropdown-toggle no-caret" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-person-circle fs-5"></i>
+                  <span id="cart-badge-main" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm" style="display: none; padding: 0.35em 0.65em; font-size: 0.7rem; z-index: 10;">
+                    0
+                  </span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2" aria-labelledby="userMenu">
+                  <li>
+                    <a class="dropdown-item py-2 px-4 rounded-top-4" href="{{ route('com.profile') }}">
+                      <i class="bi bi-person me-2"></i> My Profile
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item py-2 px-4 d-flex justify-content-between align-items-center" href="{{ route('com.cart') }}">
+                      <span><i class="bi bi-cart3 me-2"></i> My Cart</span>
+                      <span id="cart-badge-dropdown" class="badge rounded-pill bg-danger ms-2" style="display: none;">0</span>
+                    </a>
+                  </li>
+                  <li><hr class="dropdown-divider mx-3"></li>
+                  <li>
+                    <a class="dropdown-item py-2 px-4 text-danger rounded-bottom-4" href="{{ route('com.logout') }}">
+                      <i class="bi bi-box-arrow-right me-2"></i> Logout
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              @else
+              <a href="{{ route('com.cart') }}" class="btn btn-outline-primary position-relative rounded-pill px-3 py-2 border-2 {{ request()->routeIs('com.cart') ? 'active' : '' }}" title="Shopping Cart">
                 <i class="bi bi-cart3 fs-5"></i>
                 <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm" style="display: none; padding: 0.35em 0.65em; font-size: 0.7rem; z-index: 10;">
                   0
                 </span>
               </a>
+              @endauth
             </div>
           </div>
         </div>
@@ -103,6 +133,11 @@
     <!-- #navbar end -->
   </div>
 </header>
+
+<style>
+  .no-caret::after { display: none !important; }
+  #userMenu:hover { background-color: var(--primary-color); color: white; }
+</style>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -113,11 +148,14 @@
                 url: "{{ route('cart.count') }}",
                 type: 'GET',
                 success: function(data) {
-                    const badge = $('#cart-badge');
+                    const badges = $('#cart-badge, #cart-badge-main');
+                    const dropdownBadge = $('#cart-badge-dropdown');
                     if (data.count > 0) {
-                        badge.text(data.count).attr('style', 'display: block !important; padding: 0.35em 0.65em; font-size: 0.7rem; z-index: 10;');
+                        badges.text(data.count).attr('style', 'display: block !important; padding: 0.35em 0.65em; font-size: 0.7rem; z-index: 10;');
+                        dropdownBadge.text(data.count).show();
                     } else {
-                        badge.hide();
+                        badges.hide();
+                        dropdownBadge.hide();
                     }
                 },
                 error: function() {

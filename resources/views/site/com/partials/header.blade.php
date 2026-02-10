@@ -88,6 +88,14 @@
                 <a class="nav-link" href="contact-us.html">Contact Us</a>
               </li>
             </ul>
+            <div class="d-flex align-items-center ms-lg-3 mt-3 mt-lg-0">
+              <a href="{{ route('com.cart') }}" class="btn btn-outline-primary position-relative rounded-pill px-3 py-2 border-2">
+                <i class="bi bi-cart3 fs-5"></i>
+                <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm" style="display: none; padding: 0.35em 0.65em; font-size: 0.7rem; z-index: 10;">
+                  0
+                </span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -98,6 +106,29 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    // Initial cart count
+    if (typeof updateCartBadge === 'undefined') {
+        window.updateCartBadge = function() {
+            $.ajax({
+                url: "{{ route('cart.count') }}",
+                type: 'GET',
+                success: function(data) {
+                    const badge = $('#cart-badge');
+                    if (data.count > 0) {
+                        badge.text(data.count).attr('style', 'display: block !important; padding: 0.35em 0.65em; font-size: 0.7rem; z-index: 10;');
+                    } else {
+                        badge.hide();
+                    }
+                },
+                error: function() {
+                    console.error('Failed to fetch cart count');
+                }
+            });
+        }
+    }
+    
+    updateCartBadge();
+
     // Mobile dropdown toggle fix for offcanvas
     const dropdownToggles = document.querySelectorAll('.offcanvas-body .dropdown-toggle');
     dropdownToggles.forEach(toggle => {

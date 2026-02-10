@@ -15,6 +15,13 @@ Route::get('/team/{id}', [\App\Http\Controllers\com\HomeController::class, 'team
 Route::get('/corporate-well-being', [\App\Http\Controllers\com\HomeController::class, 'corporateWellBeing'])->name('com.corporate');
 Route::get('/wonder-store', [\App\Http\Controllers\com\WonderStoreController::class, 'index'])->name('com.store');
 
+// Cart Routes
+Route::get('/cart', [\App\Http\Controllers\com\CartController::class, 'index'])->name('com.cart');
+Route::post('/cart/add/{id}', [\App\Http\Controllers\com\CartController::class, 'add'])->name('cart.add');
+Route::patch('/cart/update', [\App\Http\Controllers\com\CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/remove', [\App\Http\Controllers\com\CartController::class, 'remove'])->name('cart.remove');
+Route::get('/cart/count', [\App\Http\Controllers\com\CartController::class, 'getCartCount'])->name('cart.count');
+
 // Admin Panel Routes
 Route::prefix('admin')->group(function () {
     Route::get('/', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('admin.dashboard');

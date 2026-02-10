@@ -28,9 +28,16 @@
                         </span>
                     </div>
                     <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-3 opacity-0 transition-all">
-                        <button class="btn btn-primary-solid w-100 rounded-pill shadow">
-                            <i class="bi bi-cart-plus me-2"></i> Add to Cart
-                        </button>
+                        @if(isset($cart[$product->id]))
+                            <a href="{{ route('com.cart') }}" class="btn btn-success w-100 rounded-pill shadow">
+                                <i class="bi bi-cart-check me-2"></i> In Cart
+                            </a>
+                        @else
+                            <button class="btn btn-primary-solid w-100 rounded-pill shadow add-to-cart-btn"
+                                data-id="{{ $product->id }}">
+                                <i class="bi bi-cart-plus me-2"></i> Add to Cart
+                            </button>
+                        @endif
                     </div>
                 </div>
                 <div class="card-body p-4 text-center">
@@ -39,7 +46,7 @@
                         {{ $product->product_description ?? 'High-quality wellness product designed to support your journey.' }}
                     </p>
                     <div class="fs-4 fw-bold text-primary-color font-1">
-                        ${{ number_format($product->product_price, 2) }}
+                        Rs.{{ number_format($product->product_price, 2) }}
                     </div>
                 </div>
             </div>

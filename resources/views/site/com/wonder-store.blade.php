@@ -69,10 +69,10 @@
                         </div>
 
                         <!-- <div class="mt-5 p-4 bg-primary-color rounded-4 text-white text-center">
-                                                            <h6 class="mb-2">Special Offer</h6>
-                                                            <h4 class="font-1 fw-bold mb-3">20% Off</h4>
-                                                            <p class="small mb-0 opacity-75">On all wellness journals this month!</p>
-                                                        </div> -->
+                                                                    <h6 class="mb-2">Special Offer</h6>
+                                                                    <h4 class="font-1 fw-bold mb-3">20% Off</h4>
+                                                                    <p class="small mb-0 opacity-75">On all wellness journals this month!</p>
+                                                                </div> -->
                     </div>
                 </div>
 
@@ -163,6 +163,45 @@
                         }
                     });
                 }
+
+                // Global Add to Cart Handler
+                $(document).on('click', '.add-to-cart-btn', function (e) {
+                    e.preventDefault();
+                    const btn = $(this);
+                    const productId = btn.data('id');
+                    const originalContent = btn.html();
+
+                    btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span> Adding...');
+
+                    $.ajax({
+                        url: "{{ url('/cart/add') }}/" + productId,
+                        type: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                // Update header badge
+                                if (window.updateCartBadge) {
+                                    window.updateCartBadge();
+                                }
+
+                                // Visual feedback
+                                btn.removeClass('btn-primary-solid').addClass('btn-success').html('<i class="bi bi-cart-check"></i> In Cart');
+
+                                // Change button to link after a short delay
+                                setTimeout(() => {
+                                    const cartUrl = "{{ route('com.cart') }}";
+                                    btn.parent().html(`<a href="${cartUrl}" class="btn btn-success w-100 rounded-pill shadow"><i class="bi bi-cart-check me-2"></i> In Cart</a>`);
+                                }, 1000);
+                            }
+                        },
+                        error: function () {
+                            btn.prop('disabled', false).html(originalContent);
+                            alert('Something went wrong. Please try again.');
+                        }
+                    });
+                });
             });
         </script>
     @endpush

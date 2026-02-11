@@ -75,7 +75,7 @@
                                         {{ $product->product_description ?? 'No description' }}
                                     </small>
                                 </td>
-                                <td class="fw-bold text-primary-color">${{ number_format($product->product_price, 2) }}</td>
+                                <td class="fw-bold text-primary-color">Rs.{{ number_format($product->product_price, 2) }}</td>
                                 <td>
                                     @if($product->is_active)
                                         <span class="badge bg-success-subtle text-success px-3">Active</span>

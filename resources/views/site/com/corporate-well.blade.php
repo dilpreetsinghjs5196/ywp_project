@@ -114,23 +114,199 @@
                 </div>
                 <!-- Navigation Arrows -->
                 <!-- <div class="d-flex justify-content-center gap-4 mt-5">
-                                    <div class="brands-prev-btn cursor-pointer text-dark"><i class="bi bi-chevron-left fs-3"></i></div>
-                                    <div class="brands-next-btn cursor-pointer text-dark"><i class="bi bi-chevron-right fs-3"></i></div>
-                                </div> -->
+                                        <div class="brands-prev-btn cursor-pointer text-dark"><i class="bi bi-chevron-left fs-3"></i></div>
+                                        <div class="brands-next-btn cursor-pointer text-dark"><i class="bi bi-chevron-right fs-3"></i></div>
+                                    </div> -->
             </div>
         </div>
     </section>
+    <!-- #brands end -->
+    <!-- Workshops Section -->
+    <section class="section py-5" id="workshops" style="background: #f7fbff;">
+        <div class="b-container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h6 class="text-primary-color fw-semibold mb-2">
+                    {{ $contents['workshops']['heading'] ?? 'OUR INITIATIVES' }}
+                </h6>
+                <h2 class="display-4 font-1 fw-bold" style="color:#1e1d1d;">
+                    {{ $contents['workshops']['title'] ?? 'Our Workshops & Initiatives' }}
+                </h2>
+                <div class="mx-auto bg-primary-color mt-3" style="height: 4px; width: 80px; border-radius: 2px;"></div>
+            </div>
+
+            @for ($i = 1; $i <= 8; $i++)
+                @php
+                    $wTitle = $contents['workshops']["workshop_{$i}_title"] ?? null;
+                    $wDesc = $contents['workshops']["workshop_{$i}_description"] ?? null;
+                    $wImage1 = $contents['workshops']["workshop_{$i}_image_1"] ?? null;
+                    $wImage2 = $contents['workshops']["workshop_{$i}_image_2"] ?? null;
+                    $wIcon = $contents['workshops']["workshop_{$i}_icon"] ?? 'bi-star-fill';
+                    
+                    $wImg1Url = $wImage1 ? (Str::startsWith($wImage1, 'image/') ? asset($wImage1) : asset('storage/' . $wImage1)) : asset('image/Place-Holder-600x900.jpg');
+                    $wImg2Url = $wImage2 ? (Str::startsWith($wImage2, 'image/') ? asset($wImage2) : asset('storage/' . $wImage2)) : null;
+                    
+                    $isEven = $i % 2 == 0;
+                @endphp
+
+                @if ($wTitle)
+                    <div class="workshop-block mb-5 py-4" data-aos="{{ $isEven ? 'fade-left' : 'fade-right' }}" data-aos-duration="1000">
+                        <div class="row align-items-center g-5 {{ $isEven ? 'flex-row-reverse' : '' }}">
+                            <!-- Text Column -->
+                            <div class="col-lg-6">
+                                <div class="workshop-info p-3">
+                                    <div class="d-flex align-items-center mb-4 workshop-header">
+                                        <div class="workshop-icon-box bg-primary-color text-white rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm">
+                                            <i class="bi {{ $wIcon }} fs-3"></i>
+                                        </div>
+                                        <h3 class="workshop-heading display-6 font-1 fw-bold mb-0 transition-all text-primary-color">
+                                            {{ $wTitle }}
+                                        </h3>
+                                    </div>
+                                    <p class="fs-5 text-muted-color lh-base mb-4 journal-text">
+                                        {{ $wDesc }}
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Image Column -->
+                            <div class="col-lg-6">
+                                <div class="workshop-gallery position-relative p-2">
+                                    <div class="workshop-main-img-container rounded-5 overflow-hidden shadow-lg border border-5 border-white">
+                                        <img src="{{ $wImg1Url }}" alt="{{ $wTitle }}" class="img-fluid w-100 object-fit-cover workshop-main-img">
+                                    </div>
+                                    @if($wImg2Url)
+                                        <div class="workshop-sub-img-container position-absolute rounded-4 overflow-hidden shadow border border-4 border-white d-none d-md-block" 
+                                             style="width: 220px; height: 160px; bottom: -20px; {{ $isEven ? 'left: -30px;' : 'right: -30px;' }} z-index: 5;">
+                                            <img src="{{ $wImg2Url }}" alt="{{ $wTitle }} detail" class="w-100 h-100 object-fit-cover">
+                                        </div>
+                                    @endif
+                                    <!-- Decorative Circle -->
+                                    <div class="decor-circle d-none d-lg-block" 
+                                         style="width: 350px; height: 350px; top: -70px; {{ $isEven ? 'right: -120px;' : 'left: -120px;' }}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endfor
+        </div>
+    </section>
+
     <style>
-        .cursor-pointer {
-            cursor: pointer;
+        .workshop-block {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+        .workshop-block:last-child {
+            border-bottom: none;
         }
 
-        .brand-logo:hover {
-            filter: grayscale(0%) !important;
-            transform: scale(1.1);
+        .workshop-info {
+            position: relative;
+            z-index: 2;
+        }
+
+        .workshop-icon-box {
+            width: 60px;
+            height: 60px;
+            min-width: 60px;
+            transition: all 0.5s ease;
+            flex-shrink: 0;
+        }
+
+        .workshop-heading {
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
+            word-wrap: break-word;
+        }
+
+        .workshop-heading::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--secondary-color);
+            transition: width 0.4s ease;
+        }
+
+        .workshop-header:hover .workshop-heading {
+            color: var(--secondary-color) !important;
+            transform: translateX(10px);
+        }
+
+        .workshop-header:hover .workshop-heading::after {
+            width: 100%;
+        }
+
+        .workshop-header:hover .workshop-icon-box {
+            transform: scale(1.1) rotate(15deg);
+            background-color: var(--secondary-color) !important;
+        }
+
+        .workshop-gallery {
+            position: relative;
+            z-index: 1;
+        }
+
+        .workshop-main-img-container {
+            transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .workshop-gallery:hover .workshop-main-img-container {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .workshop-main-img {
+            height: 450px;
+            transition: all 1s ease;
+        }
+
+        .journal-text {
+            text-align: justify;
+            opacity: 0.85;
+            line-height: 1.6;
+        }
+
+        /* Decorative circle fix */
+        .decor-circle {
+            position: absolute;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            opacity: 0.05; /* Reduced opacity significantly */
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @media (max-width: 991px) {
+            .workshop-main-img {
+                height: 350px;
+            }
+            .workshop-block {
+                text-align: center;
+                padding-bottom: 3rem !important;
+            }
+            .workshop-header {
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+            }
+            .workshop-icon-box {
+                margin-right: 0 !important;
+                margin-bottom: 1rem;
+            }
+            .workshop-features {
+                justify-content: center;
+            }
+            .workshop-sub-img-container {
+                display: none !important;
+            }
         }
     </style>
-    <!-- #brands end -->
 
     <!-- Feedback Section -->
     <section class="section py-5 bg-gray-light">

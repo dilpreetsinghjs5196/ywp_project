@@ -31,7 +31,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-6">
-                                <label for="product_price" class="form-label fw-bold">Price ($)</label>
+                                <label for="product_price" class="form-label fw-bold">Price (Rs.)</label>
                                 <input type="number" step="0.01"
                                     class="form-control @error('product_price') is-invalid @enderror" id="product_price"
                                     name="product_price"

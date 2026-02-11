@@ -114,9 +114,9 @@
                 </div>
                 <!-- Navigation Arrows -->
                 <!-- <div class="d-flex justify-content-center gap-4 mt-5">
-                                        <div class="brands-prev-btn cursor-pointer text-dark"><i class="bi bi-chevron-left fs-3"></i></div>
-                                        <div class="brands-next-btn cursor-pointer text-dark"><i class="bi bi-chevron-right fs-3"></i></div>
-                                    </div> -->
+                                            <div class="brands-prev-btn cursor-pointer text-dark"><i class="bi bi-chevron-left fs-3"></i></div>
+                                            <div class="brands-next-btn cursor-pointer text-dark"><i class="bi bi-chevron-right fs-3"></i></div>
+                                        </div> -->
             </div>
         </div>
     </section>
@@ -141,24 +141,27 @@
                     $wImage1 = $contents['workshops']["workshop_{$i}_image_1"] ?? null;
                     $wImage2 = $contents['workshops']["workshop_{$i}_image_2"] ?? null;
                     $wIcon = $contents['workshops']["workshop_{$i}_icon"] ?? 'bi-star-fill';
-                    
+
                     $wImg1Url = $wImage1 ? (Str::startsWith($wImage1, 'image/') ? asset($wImage1) : asset('storage/' . $wImage1)) : asset('image/Place-Holder-600x900.jpg');
                     $wImg2Url = $wImage2 ? (Str::startsWith($wImage2, 'image/') ? asset($wImage2) : asset('storage/' . $wImage2)) : null;
-                    
+
                     $isEven = $i % 2 == 0;
                 @endphp
 
                 @if ($wTitle)
-                    <div class="workshop-block mb-5 py-4" data-aos="{{ $isEven ? 'fade-left' : 'fade-right' }}" data-aos-duration="1000">
+                    <div class="workshop-block mb-5 py-4" data-aos="{{ $isEven ? 'fade-left' : 'fade-right' }}"
+                        data-aos-duration="1000">
                         <div class="row align-items-center g-5 {{ $isEven ? 'flex-row-reverse' : '' }}">
                             <!-- Text Column -->
                             <div class="col-lg-6">
                                 <div class="workshop-info p-3">
                                     <div class="d-flex align-items-center mb-4 workshop-header">
-                                        <div class="workshop-icon-box bg-primary-color text-white rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm">
+                                        <div
+                                            class="workshop-icon-box bg-primary-color text-white rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm">
                                             <i class="bi {{ $wIcon }} fs-3"></i>
                                         </div>
-                                        <h3 class="workshop-heading display-6 font-1 fw-bold mb-0 transition-all text-primary-color">
+                                        <h3
+                                            class="workshop-heading display-6 font-1 fw-bold mb-0 transition-all text-primary-color">
                                             {{ $wTitle }}
                                         </h3>
                                     </div>
@@ -170,18 +173,21 @@
                             <!-- Image Column -->
                             <div class="col-lg-6">
                                 <div class="workshop-gallery position-relative p-2">
-                                    <div class="workshop-main-img-container rounded-5 overflow-hidden shadow-lg border border-5 border-white">
-                                        <img src="{{ $wImg1Url }}" alt="{{ $wTitle }}" class="img-fluid w-100 object-fit-cover workshop-main-img">
+                                    <div
+                                        class="workshop-main-img-container rounded-5 overflow-hidden shadow-lg border border-5 border-white">
+                                        <img src="{{ $wImg1Url }}" alt="{{ $wTitle }}"
+                                            class="img-fluid w-100 object-fit-cover workshop-main-img">
                                     </div>
                                     @if($wImg2Url)
-                                        <div class="workshop-sub-img-container position-absolute rounded-4 overflow-hidden shadow border border-4 border-white d-none d-md-block" 
-                                             style="width: 220px; height: 160px; bottom: -20px; {{ $isEven ? 'left: -30px;' : 'right: -30px;' }} z-index: 5;">
+                                        <div class="workshop-sub-img-container position-absolute rounded-4 overflow-hidden shadow border border-4 border-white"
+                                            style="z-index: 5;">
                                             <img src="{{ $wImg2Url }}" alt="{{ $wTitle }} detail" class="w-100 h-100 object-fit-cover">
                                         </div>
                                     @endif
                                     <!-- Decorative Circle -->
-                                    <div class="decor-circle d-none d-lg-block" 
-                                         style="width: 350px; height: 350px; top: -70px; {{ $isEven ? 'right: -120px;' : 'left: -120px;' }}"></div>
+                                    <div class="decor-circle d-none d-lg-block"
+                                        style="width: 350px; height: 350px; top: -70px; {{ $isEven ? 'right: -120px;' : 'left: -120px;' }}">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -196,6 +202,7 @@
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             position: relative;
         }
+
         .workshop-block:last-child {
             border-bottom: none;
         }
@@ -266,6 +273,23 @@
             transition: all 1s ease;
         }
 
+        .workshop-sub-img-container {
+            width: 220px;
+            height: 160px;
+            bottom: -20px;
+            z-index: 5;
+            transition: all 0.5s ease;
+        }
+
+        /* Logic for alternating sub-image sides */
+        .row:not(.flex-row-reverse) .workshop-sub-img-container {
+            right: -30px;
+        }
+
+        .row.flex-row-reverse .workshop-sub-img-container {
+            left: -30px;
+        }
+
         .journal-text {
             text-align: justify;
             opacity: 0.85;
@@ -277,33 +301,60 @@
             position: absolute;
             border-radius: 50%;
             background-color: var(--primary-color);
-            opacity: 0.05; /* Reduced opacity significantly */
+            opacity: 0.05;
             z-index: 0;
             pointer-events: none;
         }
 
         @media (max-width: 991px) {
-            .workshop-main-img {
-                height: 350px;
+            .workshop-gallery {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                padding: 0 !important;
             }
+
+            .workshop-main-img {
+                height: 300px;
+            }
+
             .workshop-block {
                 text-align: center;
-                padding-bottom: 3rem !important;
+                padding-bottom: 4rem !important;
             }
+
             .workshop-header {
                 flex-direction: column;
                 justify-content: center;
                 text-align: center;
+                gap: 10px;
             }
+
             .workshop-icon-box {
                 margin-right: 0 !important;
-                margin-bottom: 1rem;
+                margin-bottom: 0.5rem;
             }
-            .workshop-features {
-                justify-content: center;
-            }
+
             .workshop-sub-img-container {
-                display: none !important;
+                position: relative !important;
+                width: 100% !important;
+                height: 300px !important;
+                bottom: auto !important;
+                right: auto !important;
+                left: auto !important;
+                margin: 0 !important;
+                border: 5px solid white !important;
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+                border-radius: 30px !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .workshop-main-img, .workshop-sub-img-container {
+                height: 250px !important;
+            }
+            .workshop-heading {
+                font-size: 1.75rem !important;
             }
         }
     </style>

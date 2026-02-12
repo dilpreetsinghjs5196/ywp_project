@@ -506,7 +506,8 @@
                                     <p class="fw-bold mb-0 text-dark" id="summary-datetime">Sat, 14 Feb 2026, 11:00 AM IST
                                     </p>
                                     <p class="small text-muted mb-0" id="summary-mode">at In-person,
-                                        {{ $settings['session_duration'] ?? '50 mins' }}</p>
+                                        {{ $settings['session_duration'] ?? '50 mins' }}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -609,14 +610,14 @@
 
                 let dayDiv = document.createElement('div');
                 dayDiv.className = 'calendar-day' + (i === 0 ? ' active' : '');
-                
+
                 // Set initial selected date
-                if(i === 0) selectedDate = date.toISOString().split('T')[0];
+                if (i === 0) selectedDate = date.toISOString().split('T')[0];
 
                 dayDiv.innerHTML = `
-                                    <div class="day-name">${days[date.getDay()]}</div>
-                                    <div class="day-number">${date.getDate()} ${months[date.getMonth()]}</div>
-                                `;
+                                        <div class="day-name">${days[date.getDay()]}</div>
+                                        <div class="day-number">${date.getDate()} ${months[date.getMonth()]}</div>
+                                    `;
 
                 dayDiv.onclick = function () {
                     document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
@@ -632,7 +633,7 @@
 
             window.goToStep = function (step) {
                 currentStep = step;
-                
+
                 // Update sidebar
                 document.querySelectorAll('.step-item').forEach(s => s.classList.remove('active'));
                 document.getElementById(`sidebar-step${step}`).classList.add('active');
@@ -644,7 +645,7 @@
                 document.getElementById('right-step2').style.display = (step === 2 ? 'block' : 'none');
             };
 
-            window.goBack = function() {
+            window.goBack = function () {
                 if (currentStep > 1) {
                     goToStep(currentStep - 1);
                 } else {
@@ -689,7 +690,7 @@
                 const dateText = selectedDateNode.innerText;
                 const dayText = selectedDayNode.innerText;
                 const currentYear = new Date().getFullYear();
-                
+
                 document.getElementById('summary-datetime').innerText = `${dayText}, ${dateText} ${currentYear}, ${selectedTime} IST`;
                 document.getElementById('summary-mode').innerText = `at ${selectedModeName}, {{ $settings['session_duration'] ?? '50 mins' }}`;
 
@@ -697,9 +698,9 @@
             };
 
             // Form Submission with Razorpay
-            document.getElementById('detailsForm').onsubmit = function(e) {
+            document.getElementById('detailsForm').onsubmit = function (e) {
                 e.preventDefault();
-                
+
                 const submitBtn = this.querySelector('button[type="submit"]');
                 const originalText = submitBtn.innerText;
                 submitBtn.disabled = true;
@@ -722,7 +723,7 @@
                     url: "{{ route('com.therapist.booking.initialize') }}",
                     method: 'POST',
                     data: formData,
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             // 2. Open Razorpay
                             const options = {
@@ -744,9 +745,16 @@
                                             razorpay_order_id: payResponse.razorpay_order_id,
                                             razorpay_signature: payResponse.razorpay_signature
                                         },
-                                        success: function(verifyResponse) {
+                                        success: function (verifyResponse) {
                                             if (verifyResponse.success) {
-                                                alert('Success! Your session has been booked. Confirmation emails have been sent.');
+                                                let msg = 'Success! Your session has been booked.';
+                                                if (verifyResponse.email_status && verifyResponse.email_status.includes('failed')) {
+                                                    msg += '\n\nNote: We completed your booking but had trouble sending the confirmation email. Please contact support if needed.';
+                                                } else {
+                                                    msg += ' Confirmation emails have been sent.';
+                                                }
+
+                                                alert(msg);
                                                 window.location.href = "{{ route('com.home') }}";
                                             } else {
                                                 alert('Verification failed: ' + verifyResponse.message);
@@ -754,8 +762,9 @@
                                                 submitBtn.innerText = originalText;
                                             }
                                         },
-                                        error: function() {
-                                            alert('Server error during verification.');
+                                        error: function (xhr) {
+                                            console.error('Verification Error:', xhr);
+                                            alert('Server error during verification. Please contact support with your Payment ID: ' + payResponse.razorpay_payment_id);
                                             submitBtn.disabled = false;
                                             submitBtn.innerText = originalText;
                                         }
@@ -770,7 +779,7 @@
                                     "color": "#044A80"
                                 },
                                 "modal": {
-                                    "ondismiss": function() {
+                                    "ondismiss": function () {
                                         submitBtn.disabled = false;
                                         submitBtn.innerText = originalText;
                                     }
@@ -784,7 +793,7 @@
                             submitBtn.innerText = originalText;
                         }
                     },
-                    error: function(xhr) {
+                    error: function (xhr) {
                         const errors = xhr.responseJSON?.errors;
                         let msg = 'Error initializing booking.';
                         if (errors) {

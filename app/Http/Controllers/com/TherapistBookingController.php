@@ -80,21 +80,60 @@ class TherapistBookingController extends Controller
             ]);
 
             // Send Emails
-            $adminEmail = SiteSetting::where('key', 'workplace_email')->first()->value ?? 'workplacewellbeingbyywp@gmail.com';
-            $therapistEmail = $booking->therapist->email ?? $adminEmail;
+            // Send Emails
+            $emailStatus = 'sent';
+            try {
+                // Configure Mail from Database
+                $smtpSettings = SiteSetting::whereIn('key', [
+                    'mail_mailer',
+                    'mail_host',
+                    'mail_port',
+                    'mail_username',
+                    'mail_password',
+                    'mail_encryption',
+                    'mail_from_address',
+                    'mail_from_name'
+                ])->pluck('value', 'key');
 
-            // 1. Mail to Admin
-            Mail::to($adminEmail)->send(new TherapistBookingConfirmation($booking, 'admin'));
+                if ($smtpSettings->has('mail_host')) {
+                    config([
+                        'mail.default' => $smtpSettings['mail_mailer'] ?? 'smtp',
+                        'mail.mailers.smtp.host' => $smtpSettings['mail_host'],
+                        'mail.mailers.smtp.port' => $smtpSettings['mail_port'],
+                        'mail.mailers.smtp.encryption' => $smtpSettings['mail_encryption'],
+                        'mail.mailers.smtp.username' => $smtpSettings['mail_username'],
+                        'mail.mailers.smtp.password' => $smtpSettings['mail_password'],
+                        'mail.from.address' => $smtpSettings['mail_from_address'],
+                        'mail.from.name' => $smtpSettings['mail_from_name'] ?? config('app.name'),
+                    ]);
+                }
 
-            // 2. Mail to Therapist
-            if ($booking->therapist->email) {
-                Mail::to($booking->therapist->email)->send(new TherapistBookingConfirmation($booking, 'therapist'));
+                $adminEmail = SiteSetting::where('key', 'workplace_email')->first()->value ?? 'dilpreetsingh5196@gmail.com';
+                $therapistEmail = $booking->therapist->email ?? $adminEmail;
+
+                // 1. Mail to Admin
+                Mail::to($adminEmail)->send(new TherapistBookingConfirmation($booking, 'admin'));
+
+                // 2. Mail to Therapist
+                if ($booking->therapist->email) {
+                    Mail::to($booking->therapist->email)->send(new TherapistBookingConfirmation($booking, 'therapist'));
+                }
+
+                // 3. Mail to User
+                Mail::to($booking->email)->send(new TherapistBookingConfirmation($booking, 'user'));
+            } catch (\Exception $e) {
+                // Log the error but don't fail the request
+                \Illuminate\Support\Facades\Log::error('Booking Email Error: ' . $e->getMessage());
+                $emailStatus = 'failed: ' . $e->getMessage();
             }
 
-            // 3. Mail to User
-            Mail::to($booking->email)->send(new TherapistBookingConfirmation($booking, 'user'));
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking confirmed successfully!',
+                'email_status' => $emailStatus
+            ]);
 
-            return response()->json(['success' => true, 'message' => 'Booking confirmed successfully!']);
+
         }
 
         return response()->json(['success' => false, 'message' => 'Payment verification failed'], 400);

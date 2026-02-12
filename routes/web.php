@@ -13,6 +13,8 @@ Route::get('/about', [HomeController::class, 'about'])->name('com.about');
 Route::get('/team', [\App\Http\Controllers\com\HomeController::class, 'team'])->name('com.team');
 Route::get('/team/{id}', [\App\Http\Controllers\com\HomeController::class, 'teamSingle'])->name('com.team.single');
 Route::get('/therapist/booking/{id}', [\App\Http\Controllers\com\HomeController::class, 'therapistBooking'])->name('com.therapist.booking');
+Route::post('/therapist/booking/initialize', [\App\Http\Controllers\com\TherapistBookingController::class, 'initializeBooking'])->name('com.therapist.booking.initialize');
+Route::post('/therapist/booking/verify', [\App\Http\Controllers\com\TherapistBookingController::class, 'verifyPayment'])->name('com.therapist.booking.verify');
 Route::get('/corporate-well-being', [\App\Http\Controllers\com\HomeController::class, 'corporateWellBeing'])->name('com.corporate');
 Route::get('/wonder-store', [\App\Http\Controllers\com\WonderStoreController::class, 'index'])->name('com.store');
 Route::post('/appointment/submit', [\App\Http\Controllers\com\HomeController::class, 'submitAppointment'])->name('com.appointment.submit');

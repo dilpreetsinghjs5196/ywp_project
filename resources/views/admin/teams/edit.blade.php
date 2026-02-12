@@ -16,20 +16,29 @@
                         @method('PUT')
 
                         <div class="row mb-3">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label class="form-label fw-bold">Full Name</label>
                                 <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
                                     value="{{ old('name', $team->name) }}" required>
                                 @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Email Address</label>
+                                <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                                    value="{{ old('email', $team->email) }}" placeholder="e.g. sarah@example.com">
+                                @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
                                 <label class="form-label fw-bold">Designation</label>
                                 <input type="text" name="designation"
                                     class="form-control @error('designation') is-invalid @enderror"
                                     value="{{ old('designation', $team->designation) }}" required>
                                 @error('designation')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label class="form-label fw-bold">Session Fees (₹)</label>
                                 <input type="number" name="fees" class="form-control @error('fees') is-invalid @enderror"
                                     value="{{ old('fees', $team->fees) }}" required placeholder="e.g. 1800">

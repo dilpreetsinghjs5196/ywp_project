@@ -23,6 +23,7 @@ class UpdateTeamRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
             'designation' => 'required|string|max:255',
             'fees' => 'nullable|numeric|min:0',
             'description' => 'nullable|string',

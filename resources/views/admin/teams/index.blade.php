@@ -44,6 +44,7 @@
                         <tr>
                             <th class="ps-4">Image</th>
                             <th>Name & Designation</th>
+                            <th>Email</th>
                             <th>Session Fees</th>
                             <th>Social Links</th>
                             <th>Order</th>
@@ -61,6 +62,13 @@
                                 <td>
                                     <div class="fw-bold">{{ $member->name }}</div>
                                     <small class="text-muted">{{ $member->designation }}</small>
+                                </td>
+                                <td>
+                                    @if($member->email)
+                                        <a href="mailto:{{ $member->email }}" class="text-decoration-none">{{ $member->email }}</a>
+                                    @else
+                                        <span class="text-muted small">Not set</span>
+                                    @endif
                                 </td>
                                 <td>
                                     <span class="text-primary-color fw-bold">₹{{ number_format($member->fees ?? 0) }}</span>

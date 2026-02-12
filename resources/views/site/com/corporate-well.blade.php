@@ -59,7 +59,7 @@
                         {{ $heroDesc }}
                     </p>
                     <div class="d-flex flex-wrap gap-4">
-                        <a href="contact-us.html" class="btn btn-modify px-5 py-3 fs-5">
+                        <a href="{{ route('com.contact') }}" class="btn btn-modify px-5 py-3 fs-5">
                             Get In Touch
                         </a>
                         <a href="#explore" class="btn btn-outline-secondary rounded-pill px-5 py-3 fs-5 fw-bold border-2"
@@ -114,9 +114,9 @@
                 </div>
                 <!-- Navigation Arrows -->
                 <!-- <div class="d-flex justify-content-center gap-4 mt-5">
-                                                <div class="brands-prev-btn cursor-pointer text-dark"><i class="bi bi-chevron-left fs-3"></i></div>
-                                                <div class="brands-next-btn cursor-pointer text-dark"><i class="bi bi-chevron-right fs-3"></i></div>
-                                            </div> -->
+                                                    <div class="brands-prev-btn cursor-pointer text-dark"><i class="bi bi-chevron-left fs-3"></i></div>
+                                                    <div class="brands-next-btn cursor-pointer text-dark"><i class="bi bi-chevron-right fs-3"></i></div>
+                                                </div> -->
             </div>
         </div>
     </section>
@@ -364,57 +364,57 @@
 
     <!-- Feedback Section -->
     <!-- <section class="section py-5 bg-gray-light">
-            <div class="b-container" style="padding-top: 50px;">
-                <div class="row justify-content-between">
-                    <div class="col-12 col-lg-7 text-center text-lg-start">
-                        <h6 class="text-primary-color fw-semibold mb-2">
-                            {{ $contents['testimonials']['small_heading'] ?? 'CLIENT FEEDBACKS' }}
-                        </h6>
-                        <h2 class="font-1" style="font-weight: 800;">
-                            {{ $contents['testimonials']['title'] ?? 'Healing Begins with a Conversation' }}
-                        </h2>
+                <div class="b-container" style="padding-top: 50px;">
+                    <div class="row justify-content-between">
+                        <div class="col-12 col-lg-7 text-center text-lg-start">
+                            <h6 class="text-primary-color fw-semibold mb-2">
+                                {{ $contents['testimonials']['small_heading'] ?? 'CLIENT FEEDBACKS' }}
+                            </h6>
+                            <h2 class="font-1" style="font-weight: 800;">
+                                {{ $contents['testimonials']['title'] ?? 'Healing Begins with a Conversation' }}
+                            </h2>
+                        </div>
+                        <div class="col-12 col-lg-5 text-center text-lg-start mt-4 mt-md-0">
+                            <p class="my-4 text-muted-color" style="font-size: large;">
+                                {{ $contents['testimonials']['description'] ?? '"Healing is support—not just a process. Our team walks with you every step of the way."' }}
+                            </p>
+                        </div>
                     </div>
-                    <div class="col-12 col-lg-5 text-center text-lg-start mt-4 mt-md-0">
-                        <p class="my-4 text-muted-color" style="font-size: large;">
-                            {{ $contents['testimonials']['description'] ?? '"Healing is support—not just a process. Our team walks with you every step of the way."' }}
-                        </p>
-                    </div>
-                </div>
 
-                <div class="position-relative px-md-5">
-                    <div class="swiper testimonials-slider mt-4" style="overflow: hidden; padding-bottom: 50px;">
-                        <div class="swiper-wrapper">
-                            @foreach ($testimonials as $item)
-                                <div class="swiper-slide mt-4">
-                                    <div class="card feedback-card h-100">
-                                        <div class="d-flex align-content-center mb-3">
-                                            <div class="mb-2 text-warning">
-                                                @for ($i = 1; $i <= 5; $i++)
-                                                    <i class="bi bi-star{{ $i <= $item->rating ? '-fill' : '' }}"></i>
-                                                @endfor
+                    <div class="position-relative px-md-5">
+                        <div class="swiper testimonials-slider mt-4" style="overflow: hidden; padding-bottom: 50px;">
+                            <div class="swiper-wrapper">
+                                @foreach ($testimonials as $item)
+                                    <div class="swiper-slide mt-4">
+                                        <div class="card feedback-card h-100">
+                                            <div class="d-flex align-content-center mb-3">
+                                                <div class="mb-2 text-warning">
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        <i class="bi bi-star{{ $i <= $item->rating ? '-fill' : '' }}"></i>
+                                                    @endfor
+                                                </div>
                                             </div>
-                                        </div>
-                                        <p class="fw-bold">"{{ $item->feedback }}"</p>
-                                        <div class="d-flex align-items-center mt-auto pt-3">
-                                            <img src="{{ $item->client_image ? (Str::startsWith($item->client_image, 'image/') ? asset($item->client_image) : asset('storage/' . $item->client_image)) : asset('image/default-user.jpg') }}"
-                                                alt="{{ $item->client_name }}" class="rounded-circle me-3"
-                                                style="width: 64px; height: 64px; object-fit: cover;">
-                                            <div class="mt-2">
-                                                <h5 class="font-1 fw-bold text-primary-color mb-0">{{ $item->client_name }}</h5>
-                                                <p class="text-muted-color mb-0">{{ $item->designation }}</p>
+                                            <p class="fw-bold">"{{ $item->feedback }}"</p>
+                                            <div class="d-flex align-items-center mt-auto pt-3">
+                                                <img src="{{ $item->client_image ? (Str::startsWith($item->client_image, 'image/') ? asset($item->client_image) : asset('storage/' . $item->client_image)) : asset('image/default-user.jpg') }}"
+                                                    alt="{{ $item->client_name }}" class="rounded-circle me-3"
+                                                    style="width: 64px; height: 64px; object-fit: cover;">
+                                                <div class="mt-2">
+                                                    <h5 class="font-1 fw-bold text-primary-color mb-0">{{ $item->client_name }}</h5>
+                                                    <p class="text-muted-color mb-0">{{ $item->designation }}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
+                            <div class="swiper-pagination mt-4 position-relative"></div>
                         </div>
-                        <div class="swiper-pagination mt-4 position-relative"></div>
+                        <div class="swiper-button-next text-primary-color"></div>
+                        <div class="swiper-button-prev text-primary-color"></div>
                     </div>
-                    <div class="swiper-button-next text-primary-color"></div>
-                    <div class="swiper-button-prev text-primary-color"></div>
                 </div>
-            </div>
-        </section> -->
+            </section> -->
     <!-- #feedback end -->
 
     <!-- Appointment Section -->
@@ -507,70 +507,70 @@
 
     <!-- Teams Section -->
     <!-- <section class="section py-5 bg-half-gradient">
-            <div class="b-container" style="padding-top: 50px;">
-                <div class="row text-center" data-aos="fade-up" data-aos-duration="1000">
-                    <h6 class="text-primary-color fw-semibold mb-2">
-                        {{ $contents['teams']['small_heading'] ?? 'OUR SPECIALIST' }}
-                    </h6>
-                    <h2 class="font-1 mb-5" style="font-weight: 800;">
-                        {!! nl2br($contents['teams']['title'] ?? 'Meet Our Senior<br>Therapist') !!}
-                    </h2>
-                </div>
-                <div class="position-relative px-md-5">
-                    <div class="swiper teams-slider" style="overflow: hidden; padding-bottom: 50px;">
-                        <div class="swiper-wrapper">
-                            @foreach ($teams as $member)
-                                <div class="swiper-slide mb-5" data-aos="fade-up" data-aos-easing="linear"
-                                    data-aos-delay="{{ 100 * $loop->iteration }}" data-aos-duration="1000">
-                                    <div class="position-relative rounded-5 transition-hover mx-auto img-container"
-                                        style="max-width: 350px;">
-                                        <div class="ratio-wrapper-419">
-                                            <img src="{{ Str::startsWith($member->image, 'image/') ? asset($member->image) : asset('storage/' . $member->image) }}"
-                                                alt="{{ $member->name }}" class="rounded-5 w-100 h-100 position-absolute"
-                                                style="object-fit: cover;">
-                                        </div>
-                                        <div class="position-absolute w-75" style="bottom: -20px; left: 12.5%; z-index: 10;">
-                                            <div
-                                                class="bg-primary-color d-flex flex-column text-white py-3 align-items-center text-center rounded-5 shadow">
-                                                <div class="mb-2">
-                                                    <h4 class="font-1 fw-bolder mb-0 fs-5 px-2">{{ $member->name }}</h4>
-                                                    <p class="mb-0 small opacity-75">{{ $member->designation }}</p>
-                                                </div>
-                                                <div class="social-box justify-content-center mb-2">
-                                                    @if ($member->facebook)
-                                                        <a href="{{ $member->facebook }}" class="fs-6 rounded-1 py-1"
-                                                            style="width: 30px; height: 30px;"><i
-                                                                class="bi bi-facebook text-white"></i></a>
-                                                    @endif
-                                                    @if ($member->twitter)
-                                                        <a href="{{ $member->twitter }}" class="fs-6 rounded-1 py-1"
-                                                            style="width: 30px; height: 30px;"><i
-                                                                class="bi bi-twitter-x text-white"></i></a>
-                                                    @endif
-                                                    @if ($member->instagram)
-                                                        <a href="{{ $member->instagram }}" class="fs-6 rounded-1 py-1"
-                                                            style="width: 30px; height: 30px;"><i
-                                                                class="bi bi-instagram text-white"></i></a>
-                                                    @endif
-                                                    @if ($member->linkedin)
-                                                        <a href="{{ $member->linkedin }}" class="fs-6 rounded-1 py-1"
-                                                            style="width: 30px; height: 30px;"><i
-                                                                class="bi bi-linkedin text-white"></i></a>
-                                                    @endif
+                <div class="b-container" style="padding-top: 50px;">
+                    <div class="row text-center" data-aos="fade-up" data-aos-duration="1000">
+                        <h6 class="text-primary-color fw-semibold mb-2">
+                            {{ $contents['teams']['small_heading'] ?? 'OUR SPECIALIST' }}
+                        </h6>
+                        <h2 class="font-1 mb-5" style="font-weight: 800;">
+                            {!! nl2br($contents['teams']['title'] ?? 'Meet Our Senior<br>Therapist') !!}
+                        </h2>
+                    </div>
+                    <div class="position-relative px-md-5">
+                        <div class="swiper teams-slider" style="overflow: hidden; padding-bottom: 50px;">
+                            <div class="swiper-wrapper">
+                                @foreach ($teams as $member)
+                                    <div class="swiper-slide mb-5" data-aos="fade-up" data-aos-easing="linear"
+                                        data-aos-delay="{{ 100 * $loop->iteration }}" data-aos-duration="1000">
+                                        <div class="position-relative rounded-5 transition-hover mx-auto img-container"
+                                            style="max-width: 350px;">
+                                            <div class="ratio-wrapper-419">
+                                                <img src="{{ Str::startsWith($member->image, 'image/') ? asset($member->image) : asset('storage/' . $member->image) }}"
+                                                    alt="{{ $member->name }}" class="rounded-5 w-100 h-100 position-absolute"
+                                                    style="object-fit: cover;">
+                                            </div>
+                                            <div class="position-absolute w-75" style="bottom: -20px; left: 12.5%; z-index: 10;">
+                                                <div
+                                                    class="bg-primary-color d-flex flex-column text-white py-3 align-items-center text-center rounded-5 shadow">
+                                                    <div class="mb-2">
+                                                        <h4 class="font-1 fw-bolder mb-0 fs-5 px-2">{{ $member->name }}</h4>
+                                                        <p class="mb-0 small opacity-75">{{ $member->designation }}</p>
+                                                    </div>
+                                                    <div class="social-box justify-content-center mb-2">
+                                                        @if ($member->facebook)
+                                                            <a href="{{ $member->facebook }}" class="fs-6 rounded-1 py-1"
+                                                                style="width: 30px; height: 30px;"><i
+                                                                    class="bi bi-facebook text-white"></i></a>
+                                                        @endif
+                                                        @if ($member->twitter)
+                                                            <a href="{{ $member->twitter }}" class="fs-6 rounded-1 py-1"
+                                                                style="width: 30px; height: 30px;"><i
+                                                                    class="bi bi-twitter-x text-white"></i></a>
+                                                        @endif
+                                                        @if ($member->instagram)
+                                                            <a href="{{ $member->instagram }}" class="fs-6 rounded-1 py-1"
+                                                                style="width: 30px; height: 30px;"><i
+                                                                    class="bi bi-instagram text-white"></i></a>
+                                                        @endif
+                                                        @if ($member->linkedin)
+                                                            <a href="{{ $member->linkedin }}" class="fs-6 rounded-1 py-1"
+                                                                style="width: 30px; height: 30px;"><i
+                                                                    class="bi bi-linkedin text-white"></i></a>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
+                            <div class="swiper-pagination mt-4 position-relative"></div>
                         </div>
-                        <div class="swiper-pagination mt-4 position-relative"></div>
+                        <div class="swiper-button-next text-primary-color"></div>
+                        <div class="swiper-button-prev text-primary-color"></div>
                     </div>
-                    <div class="swiper-button-next text-primary-color"></div>
-                    <div class="swiper-button-prev text-primary-color"></div>
                 </div>
-            </div>
-        </section> -->
+            </section> -->
     <!-- #teams end -->
 
 @endsection

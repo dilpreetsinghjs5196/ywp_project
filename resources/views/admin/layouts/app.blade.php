@@ -204,6 +204,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.appointments.*') ? 'active' : '' }}"
+                            href="{{ route('admin.appointments.index') }}">
+                            <i class="bi bi-envelope-paper"></i> Appointment Queries
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Wonder Store</div>
                     </li>
                     <li class="nav-item">
@@ -252,6 +258,12 @@
                         <a class="nav-link {{ request()->routeIs('admin.settings.contact') ? 'active' : '' }}"
                             href="{{ route('admin.settings.contact') }}">
                             <i class="bi bi-telephone"></i> Footer & Contact
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.settings.mail') ? 'active' : '' }}"
+                            href="{{ route('admin.settings.mail') }}">
+                            <i class="bi bi-envelope-at"></i> SMTP Settings
                         </a>
                     </li>
                 </ul>

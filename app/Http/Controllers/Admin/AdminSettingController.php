@@ -21,6 +21,12 @@ class AdminSettingController extends Controller
         return view('admin.settings.contact', compact('settings'));
     }
 
+    public function mail()
+    {
+        $settings = SiteSetting::where('group', 'smtp')->get();
+        return view('admin.settings.mail', compact('settings'));
+    }
+
     public function update(Request $request)
     {
         $data = $request->except(['_token']);

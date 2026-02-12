@@ -84,23 +84,63 @@ class HomeController extends Controller
         return view('site.com.booking', compact('settings', 'team'));
     }
 
+    public function contact()
+    {
+        $settings = SiteSetting::all()->pluck('value', 'key');
+
+        // Fetch content for the contact page
+        $contents = PageContent::where('page', 'contact')
+            ->get()
+            ->groupBy('section')
+            ->map(function ($section) {
+                return $section->pluck('value', 'key');
+            });
+
+        // Sync 'get_in_touch' section from the home page
+        $homeContents = PageContent::where('page', 'home')
+            ->where('section', 'get_in_touch')
+            ->get()
+            ->pluck('value', 'key');
+
+        if ($homeContents->isNotEmpty()) {
+            $contents['get_in_touch'] = $homeContents;
+        }
+
+        return view('site.com.contact-us', compact('settings', 'contents'));
+    }
+
     public function submitAppointment(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:20',
+            'email' => 'required|email',
+            'phone' => 'required|string',
             'date' => 'required|date',
-            'time' => 'required|string',
+            'time' => 'required',
             'subject' => 'required|string|max:255',
             'message' => 'nullable|string',
         ]);
 
+        $homeContents = PageContent::where('page', 'home')
+            ->where('section', 'get_in_touch')
+            ->get()
+            ->pluck('value', 'key');
+
+        $workplaceEmail = $homeContents['email'] ?? 'workplacewellbeingbyywp@gmail.com';
+        $founderEmail = $homeContents['founder_email'] ?? 'akash@yourewonderfulproject.org';
+        $tertiaryEmail = $homeContents['tertiary_email'] ?? 'info@yourewonderfulproject.org';
+
         try {
-            \App\Models\Booking::create($validated);
-            return response()->json(['status' => 'success', 'message' => 'Appointment request sent successfully!']);
+            // Save to Database
+            \App\Models\Appointment::create($validated);
+
+            \Illuminate\Support\Facades\Mail::to($workplaceEmail)
+                ->cc([$founderEmail, $tertiaryEmail, $validated['email']])
+                ->send(new \App\Mail\AppointmentMail($validated));
+
+            return response()->json(['status' => 'success', 'message' => 'Email sent successfully.']);
         } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
 }

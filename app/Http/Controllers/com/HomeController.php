@@ -123,6 +123,9 @@ class HomeController extends Controller
         $tertiaryEmail = $homeContents['tertiary_email'] ?? 'info@yourewonderfulproject.org';
 
         try {
+            // Save to Database
+            \App\Models\Appointment::create($validated);
+
             \Illuminate\Support\Facades\Mail::to($workplaceEmail)
                 ->cc([$founderEmail, $tertiaryEmail, $validated['email']])
                 ->send(new \App\Mail\AppointmentMail($validated));

@@ -41,12 +41,15 @@
         .sidebar-nav-container {
             flex-grow: 1;
             overflow-y: auto;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
         }
 
         .sidebar-nav-container::-webkit-scrollbar {
-            display: none; /* Chrome, Safari and Opera */
+            display: none;
+            /* Chrome, Safari and Opera */
         }
 
         .sidebar .nav-link {
@@ -107,12 +110,14 @@
                 scrollbar-width: thin;
                 -ms-overflow-style: auto;
             }
+
             .sidebar-nav-container::-webkit-scrollbar {
                 display: block;
                 width: 4px;
             }
+
             .sidebar-nav-container::-webkit-scrollbar-thumb {
-                background: rgba(255,255,255,0.2);
+                background: rgba(255, 255, 255, 0.2);
                 border-radius: 10px;
             }
 
@@ -196,6 +201,12 @@
                         <a class="nav-link {{ request()->routeIs('admin.testimonials.*') ? 'active' : '' }}"
                             href="{{ route('admin.testimonials.index') }}">
                             <i class="bi bi-chat-left-quote"></i> Testimonials
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.appointments.*') ? 'active' : '' }}"
+                            href="{{ route('admin.appointments.index') }}">
+                            <i class="bi bi-envelope-paper"></i> Appointment Queries
                         </a>
                     </li>
                     <li class="nav-item">

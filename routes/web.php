@@ -67,6 +67,9 @@ Route::prefix('admin')->group(function () {
     // Brand Management
     Route::resource('brands', \App\Http\Controllers\Admin\AdminBrandController::class, ['as' => 'admin']);
 
+    // Appointment Queries
+    Route::resource('appointments', \App\Http\Controllers\Admin\AdminAppointmentController::class, ['as' => 'admin'])->only(['index', 'show', 'update', 'destroy']);
+
     // Global Settings
     Route::get('/settings/branding', [\App\Http\Controllers\Admin\AdminSettingController::class, 'branding'])->name('admin.settings.branding');
     Route::get('/settings/contact', [\App\Http\Controllers\Admin\AdminSettingController::class, 'contact'])->name('admin.settings.contact');

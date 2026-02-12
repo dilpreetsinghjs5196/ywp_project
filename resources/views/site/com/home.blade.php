@@ -442,7 +442,8 @@
     <div class="container py-5 px-2 px-md-0">
       <div class="row justify-content-center text-center text-white">
         <div class="col-12 col-xl-10">
-          <h6 class="text-primary-color fw-semibold mb-2">{{ $contents['get_in_touch']['small_heading'] ?? 'GET A QUOTE' }}</h6>
+          <h6 class="text-primary-color fw-semibold mb-2">
+            {{ $contents['get_in_touch']['small_heading'] ?? 'GET A QUOTE' }}</h6>
           <h2 class="font-1 text-white" style="font-weight: 800;">
             {!! $contents['get_in_touch']['quote_title'] ?? 'Take <span class="text-primary-color">The first step</span> toward a <span class="text-primary-color">healthier</span> mind. Join us today and start your journey to <span class="text-primary-color">well-being!</span>' !!}
           </h2>
@@ -478,8 +479,8 @@
                         data-bs-dismiss="toast" aria-label="Close"><i class="bi bi-x-lg"></i></button>
                     </div>
                   </div>
-                  <form id="homeAppointmentForm" class="needs-validation" data-aos="fade-up" data-aos-easing="linear" data-aos-delay="500"
-                    data-aos-duration="1000" novalidate>
+                  <form id="homeAppointmentForm" class="needs-validation" data-aos="fade-up" data-aos-easing="linear"
+                    data-aos-delay="500" data-aos-duration="1000" novalidate>
                     <div class="row g-3">
                       <div class="col-lg-6 col-sm-12">
                         <label for="name" class="form-label font-1 fs-4 fw-bold">Name</label>
@@ -543,7 +544,9 @@
                     <h2 class="font-1" style="font-weight: 800;">
                       {{ $contents['get_in_touch']['title'] ?? 'Need Any Help ? Get In Touch With Us' }}
                     </h2>
-                    <p class="text-muted-color" style="font-size: large;">{{ $contents['get_in_touch']['description'] ?? 'Every small step counts. We’re committed to walking with you through difficult moments, encouraging progress, and nurturing your journey toward lasting mental and emotional recovery.' }}</p>
+                    <p class="text-muted-color" style="font-size: large;">
+                      {{ $contents['get_in_touch']['description'] ?? 'Every small step counts. We’re committed to walking with you through difficult moments, encouraging progress, and nurturing your journey toward lasting mental and emotional recovery.' }}
+                    </p>
                   </div>
 
                   <div class="d-flex align-items-center gap-3 justify-content-start" data-aos="fade-left"
@@ -569,14 +572,16 @@
                       <p class="fw-bold text-primary-color mb-0">Email us</p>
                       <div class="d-flex flex-column text-break">
                         @php
-                            $email = $contents['get_in_touch']['email'] ?? 'workplacewellbeingbyywp@gmail.com';
-                            $founderEmail = $contents['get_in_touch']['founder_email'] ?? 'akash@yourewonderfulproject.org';
-                            $tertiaryEmail = $contents['get_in_touch']['tertiary_email'] ?? 'info@yourewonderfulproject.org';
+                          $email = $contents['get_in_touch']['email'] ?? 'workplacewellbeingbyywp@gmail.com';
+                          $founderEmail = $contents['get_in_touch']['founder_email'] ?? 'akash@yourewonderfulproject.org';
+                          $tertiaryEmail = $contents['get_in_touch']['tertiary_email'] ?? 'info@yourewonderfulproject.org';
                         @endphp
-                        <a href="mailto:{{ $email }}?cc={{ $founderEmail }},{{ $tertiaryEmail }}" class="text-decoration-none h5 fw-bold mb-1 text-dark d-block">
+                        <a href="mailto:{{ $email }}?cc={{ $founderEmail }},{{ $tertiaryEmail }}"
+                          class="text-decoration-none h5 fw-bold mb-1 text-dark d-block">
                           {{ $email }}
                         </a>
-                        <a href="mailto:{{ $founderEmail }}?cc={{ $email }},{{ $tertiaryEmail }}" class="text-decoration-none h5 fw-bold mb-0 text-dark d-block">
+                        <a href="mailto:{{ $founderEmail }}?cc={{ $email }},{{ $tertiaryEmail }}"
+                          class="text-decoration-none h5 fw-bold mb-0 text-dark d-block">
                           {{ $founderEmail }}
                         </a>
                       </div>
@@ -591,7 +596,9 @@
                     </div>
                     <div class="ms-2 font-1 py-2">
                       <p class="fw-bold text-primary-color mb-0">Our location</p>
-                      <h5 class="fw-bold">{!! nl2br($contents['get_in_touch']['address'] ?? '123 Serenity Lane, <br>Blissfield, CA 90210, US.') !!}</h5>
+                      <h5 class="fw-bold">
+                        {!! nl2br($contents['get_in_touch']['address'] ?? '123 Serenity Lane, <br>Blissfield, CA 90210, US.') !!}
+                      </h5>
                     </div>
                   </div>
                 </div>
@@ -681,32 +688,56 @@
         }
       });
 
-      $('#homeAppointmentForm').on('submit', function(e) {
-          e.preventDefault();
-          
-          if (this.checkValidity()) {
-              const name = $('#name').val();
-              const email = $('#email').val();
-              const phone = $('#phone').val();
-              const date = $('#date').val();
-              const time = $('#time').val();
-              const subject = $('#subject').val();
-              const message = $('#message').val();
+      $('#homeAppointmentForm').on('submit', function (e) {
+        e.preventDefault();
 
-              const workplaceEmail = "{{ $contents['get_in_touch']['email'] ?? 'workplacewellbeingbyywp@gmail.com' }}";
-              const founderEmail = "{{ $contents['get_in_touch']['founder_email'] ?? 'akash@yourewonderfulproject.org' }}";
-              const tertiaryEmail = "{{ $contents['get_in_touch']['tertiary_email'] ?? 'info@yourewonderfulproject.org' }}";
+        if (this.checkValidity()) {
+          const $form = $(this);
+          const $submitBtn = $form.find('button[type="submit"]');
+          const originalBtnText = $submitBtn.text();
 
-              const mailTo = workplaceEmail;
-              const cc = `${founderEmail},${tertiaryEmail},${email}`;
-              
-              const body = `Appointment Details:\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nDate: ${date}\nTime: ${time}\n\nMessage:\n${message}`;
-              
-              const mailtoLink = `mailto:${mailTo}?cc=${cc}&subject=${encodeURIComponent('Appointment Request: ' + subject)}&body=${encodeURIComponent(body)}`;
-              
-              window.location.href = mailtoLink;
-          }
-          $(this).addClass('was-validated');
+          $submitBtn.prop('disabled', true).text('Sending...');
+
+          const formData = {
+            _token: "{{ csrf_token() }}",
+            name: $form.find('#name').val(),
+            email: $form.find('#email').val(),
+            phone: $form.find('#phone').val(),
+            date: $form.find('#date').val(),
+            time: $form.find('#time').val(),
+            subject: $form.find('#subject').val(),
+            message: $form.find('#message').val()
+          };
+
+          $.ajax({
+            url: "{{ route('com.appointment.submit') }}",
+            method: "POST",
+            data: formData,
+            success: function (response) {
+              if (response.status === 'success') {
+                const workplaceEmail = "{{ $contents['get_in_touch']['email'] ?? 'workplacewellbeingbyywp@gmail.com' }}";
+                const founderEmail = "{{ $contents['get_in_touch']['founder_email'] ?? 'akash@yourewonderfulproject.org' }}";
+                const tertiaryEmail = "{{ $contents['get_in_touch']['tertiary_email'] ?? 'info@yourewonderfulproject.org' }}";
+
+                const mailTo = workplaceEmail;
+                const cc = `${founderEmail},${tertiaryEmail},${formData.email}`;
+                const body = `Appointment Details:\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nDate: ${formData.date}\nTime: ${formData.time}\n\nMessage:\n${formData.message}`;
+                const mailtoLink = `mailto:${mailTo}?cc=${cc}&subject=${encodeURIComponent('Appointment Request: ' + formData.subject)}&body=${encodeURIComponent(body)}`;
+
+                window.location.href = mailtoLink;
+                $submitBtn.prop('disabled', false).text(originalBtnText);
+              } else {
+                alert('Error: ' + response.message);
+                $submitBtn.prop('disabled', false).text(originalBtnText);
+              }
+            },
+            error: function () {
+              alert('Could not send automated email. Check SMTP settings.');
+              $submitBtn.prop('disabled', false).text(originalBtnText);
+            }
+          });
+        }
+        $(this).addClass('was-validated');
       });
     });
   </script>

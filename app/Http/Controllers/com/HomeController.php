@@ -100,4 +100,36 @@ class HomeController extends Controller
 
         return view('site.com.contact-us', compact('settings', 'contents'));
     }
+
+    public function submitAppointment(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'required|string',
+            'date' => 'required|date',
+            'time' => 'required',
+            'subject' => 'required|string|max:255',
+            'message' => 'nullable|string',
+        ]);
+
+        $homeContents = PageContent::where('page', 'home')
+            ->where('section', 'get_in_touch')
+            ->get()
+            ->pluck('value', 'key');
+
+        $workplaceEmail = $homeContents['email'] ?? 'workplacewellbeingbyywp@gmail.com';
+        $founderEmail = $homeContents['founder_email'] ?? 'akash@yourewonderfulproject.org';
+        $tertiaryEmail = $homeContents['tertiary_email'] ?? 'info@yourewonderfulproject.org';
+
+        try {
+            \Illuminate\Support\Facades\Mail::to($workplaceEmail)
+                ->cc([$founderEmail, $tertiaryEmail, $validated['email']])
+                ->send(new \App\Mail\AppointmentMail($validated));
+
+            return response()->json(['status' => 'success', 'message' => 'Email sent successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
 }

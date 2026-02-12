@@ -478,7 +478,7 @@
                         data-bs-dismiss="toast" aria-label="Close"><i class="bi bi-x-lg"></i></button>
                     </div>
                   </div>
-                  <form class="needs-validation" data-aos="fade-up" data-aos-easing="linear" data-aos-delay="500"
+                  <form id="homeAppointmentForm" class="needs-validation" data-aos="fade-up" data-aos-easing="linear" data-aos-delay="500"
                     data-aos-duration="1000" novalidate>
                     <div class="row g-3">
                       <div class="col-lg-6 col-sm-12">
@@ -565,9 +565,21 @@
                       style="width: 65px; height: 65px;border: 2px solid white;">
                       <i class="bi bi-envelope-fill fs-2 text-white"></i>
                     </div>
-                    <div class="ms-2 font-1 py-2">
+                    <div class="ms-2 font-1 py-1">
                       <p class="fw-bold text-primary-color mb-0">Email us</p>
-                      <h5 class="fw-bold">{{ $contents['get_in_touch']['email'] ?? 'Info@Yourmail.Com' }}</h5>
+                      <div class="d-flex flex-column text-break">
+                        @php
+                            $email = $contents['get_in_touch']['email'] ?? 'workplacewellbeingbyywp@gmail.com';
+                            $founderEmail = $contents['get_in_touch']['founder_email'] ?? 'akash@yourewonderfulproject.org';
+                            $tertiaryEmail = $contents['get_in_touch']['tertiary_email'] ?? 'info@yourewonderfulproject.org';
+                        @endphp
+                        <a href="mailto:{{ $email }}?cc={{ $founderEmail }},{{ $tertiaryEmail }}" class="text-decoration-none h5 fw-bold mb-1 text-dark d-block">
+                          {{ $email }}
+                        </a>
+                        <a href="mailto:{{ $founderEmail }}?cc={{ $email }},{{ $tertiaryEmail }}" class="text-decoration-none h5 fw-bold mb-0 text-dark d-block">
+                          {{ $founderEmail }}
+                        </a>
+                      </div>
                     </div>
                   </div>
                   <div class="d-flex align-items-center gap-3 justify-content-start" data-aos="fade-left"
@@ -667,6 +679,34 @@
             slidesPerView: 3,
           }
         }
+      });
+
+      $('#homeAppointmentForm').on('submit', function(e) {
+          e.preventDefault();
+          
+          if (this.checkValidity()) {
+              const name = $('#name').val();
+              const email = $('#email').val();
+              const phone = $('#phone').val();
+              const date = $('#date').val();
+              const time = $('#time').val();
+              const subject = $('#subject').val();
+              const message = $('#message').val();
+
+              const workplaceEmail = "{{ $contents['get_in_touch']['email'] ?? 'workplacewellbeingbyywp@gmail.com' }}";
+              const founderEmail = "{{ $contents['get_in_touch']['founder_email'] ?? 'akash@yourewonderfulproject.org' }}";
+              const tertiaryEmail = "{{ $contents['get_in_touch']['tertiary_email'] ?? 'info@yourewonderfulproject.org' }}";
+
+              const mailTo = workplaceEmail;
+              const cc = `${founderEmail},${tertiaryEmail},${email}`;
+              
+              const body = `Appointment Details:\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nDate: ${date}\nTime: ${time}\n\nMessage:\n${message}`;
+              
+              const mailtoLink = `mailto:${mailTo}?cc=${cc}&subject=${encodeURIComponent('Appointment Request: ' + subject)}&body=${encodeURIComponent(body)}`;
+              
+              window.location.href = mailtoLink;
+          }
+          $(this).addClass('was-validated');
       });
     });
   </script>

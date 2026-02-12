@@ -73,5 +73,6 @@ Route::prefix('admin')->group(function () {
     // Global Settings
     Route::get('/settings/branding', [\App\Http\Controllers\Admin\AdminSettingController::class, 'branding'])->name('admin.settings.branding');
     Route::get('/settings/contact', [\App\Http\Controllers\Admin\AdminSettingController::class, 'contact'])->name('admin.settings.contact');
+    Route::get('/settings/mail', [\App\Http\Controllers\Admin\AdminSettingController::class, 'mail'])->name('admin.settings.mail');
     Route::post('/settings/update', [\App\Http\Controllers\Admin\AdminSettingController::class, 'update'])->name('admin.settings.update');
 });

@@ -245,6 +245,12 @@
                             <i class="bi bi-telephone"></i> Footer & Contact
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.settings.mail') ? 'active' : '' }}"
+                            href="{{ route('admin.settings.mail') }}">
+                            <i class="bi bi-envelope-at"></i> SMTP Settings
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="p-4 border-top border-light">

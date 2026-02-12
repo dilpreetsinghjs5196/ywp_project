@@ -143,7 +143,8 @@
                                             <div>
                                                 <p class="fw-bold text-primary-color mb-0">Call us anytime</p>
                                                 <h5 class="fw-bold mb-0 text-dark">
-                                                    {{ $contents['get_in_touch']['phone'] ?? '(555) 123-4567' }}</h5>
+                                                    {{ $contents['get_in_touch']['phone'] ?? '(555) 123-4567' }}
+                                                </h5>
                                             </div>
                                         </div>
 
@@ -224,36 +225,46 @@
                     $.ajax({
                         url: "{{ route('com.appointment.submit') }}",
                         method: "POST",
-                        data: formData,
+                        data: formData, // Use the formData object we created
                         success: function (response) {
                             if (response.status === 'success') {
-                                // 2. Trigger mailto redirect as well
-                                const workplaceEmail = "{{ $contents['get_in_touch']['email'] ?? 'workplacewellbeingbyywp@gmail.com' }}";
-                                const founderEmail = "{{ $contents['get_in_touch']['founder_email'] ?? 'akash@yourewonderfulproject.org' }}";
-                                const tertiaryEmail = "{{ $contents['get_in_touch']['tertiary_email'] ?? 'info@yourewonderfulproject.org' }}";
-
-                                const mailTo = workplaceEmail;
-                                const cc = `${founderEmail},${tertiaryEmail},${formData.email}`;
-                                const body = `Appointment Details:\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nDate: ${formData.date}\nTime: ${formData.time}\n\nMessage:\n${formData.message}`;
-                                const mailtoLink = `mailto:${mailTo}?cc=${cc}&subject=${encodeURIComponent('Appointment Request: ' + formData.subject)}&body=${encodeURIComponent(body)}`;
-
+                                // Show success message
                                 if ($('.success_msg').length) {
-                                    const toast = new bootstrap.Toast($('.success_msg')[0]);
-                                    toast.show();
+                                    $('.success_msg').addClass('show').css('display', 'block'); // Force show if BS toast fails
+                                    const toastEl = $('.success_msg')[0];
+                                    if (typeof bootstrap !== 'undefined') {
+                                        const toast = new bootstrap.Toast(toastEl);
+                                        toast.show();
+                                    }
                                 }
 
-                                // Open mail client
-                                window.location.href = mailtoLink;
+                                // Reset the form
+                                $form[0].reset();
+                                $form.removeClass('was-validated');
 
-                                $submitBtn.prop('disabled', false).text(originalBtnText);
+                                $submitBtn.prop('disabled', false).text('Message Sent!');
+                                setTimeout(() => {
+                                    $submitBtn.text(originalBtnText);
+                                }, 3000);
+
                             } else {
-                                alert('SMTP Error: ' + response.message + '\n\nPlease check your .env SMTP settings.');
                                 $submitBtn.prop('disabled', false).text(originalBtnText);
+                                // Show error toast if available
+                                if ($('.error_msg').length) {
+                                    $('.error_msg').addClass('show').css('display', 'block');
+                                    if (typeof bootstrap !== 'undefined') {
+                                        const toast = new bootstrap.Toast($('.error_msg')[0]);
+                                        toast.show();
+                                    }
+                                } else {
+                                    alert('Error: ' + response.message);
+                                }
                             }
                         },
-                        error: function () {
-                            alert('Could not send automated email. Please check your SMTP configuration in .env');
+                        error: function (xhr) {
+                            console.error(xhr);
                             $submitBtn.prop('disabled', false).text(originalBtnText);
+                            alert('An error occurred while sending the message. Please try again later.');
                         }
                     });
                 }

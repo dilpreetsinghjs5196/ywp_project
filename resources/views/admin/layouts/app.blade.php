@@ -41,12 +41,15 @@
         .sidebar-nav-container {
             flex-grow: 1;
             overflow-y: auto;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
         }
 
         .sidebar-nav-container::-webkit-scrollbar {
-            display: none; /* Chrome, Safari and Opera */
+            display: none;
+            /* Chrome, Safari and Opera */
         }
 
         .sidebar .nav-link {
@@ -107,12 +110,14 @@
                 scrollbar-width: thin;
                 -ms-overflow-style: auto;
             }
+
             .sidebar-nav-container::-webkit-scrollbar {
                 display: block;
                 width: 4px;
             }
+
             .sidebar-nav-container::-webkit-scrollbar-thumb {
-                background: rgba(255,255,255,0.2);
+                background: rgba(255, 255, 255, 0.2);
                 border-radius: 10px;
             }
 
@@ -217,6 +222,21 @@
                         <a class="nav-link {{ request()->is('admin/pages/wonder_store') ? 'active' : '' }}"
                             href="{{ route('admin.pages.edit', 'wonder_store') }}">
                             <i class="bi bi-layout-text-window"></i> Banner & Title
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Queries & Bookings</div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.bookings.*') ? 'active' : '' }}"
+                            href="{{ route('admin.bookings.index') }}">
+                            <i class="bi bi-question-circle"></i> Appointment Queries
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.therapist-bookings.*') ? 'active' : '' }}"
+                            href="{{ route('admin.therapist-bookings.index') }}">
+                            <i class="bi bi-calendar-check"></i> Therapist Bookings
                         </a>
                     </li>
                     <li class="nav-item">

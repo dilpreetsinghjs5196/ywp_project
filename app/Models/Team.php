@@ -8,6 +8,7 @@ class Team extends Model
 {
     protected $fillable = [
         'name',
+        'email',
         'designation',
         'fees',
         'image',

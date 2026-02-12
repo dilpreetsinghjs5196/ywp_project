@@ -83,4 +83,24 @@ class HomeController extends Controller
 
         return view('site.com.booking', compact('settings', 'team'));
     }
+
+    public function submitAppointment(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'date' => 'required|date',
+            'time' => 'required|string',
+            'subject' => 'required|string|max:255',
+            'message' => 'nullable|string',
+        ]);
+
+        try {
+            \App\Models\Booking::create($validated);
+            return response()->json(['status' => 'success', 'message' => 'Appointment request sent successfully!']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
 }

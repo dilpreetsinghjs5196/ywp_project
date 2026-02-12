@@ -350,7 +350,7 @@
 
         .continue-btn {
             margin-top: auto;
-            background: #ef4444;
+            background: var(--booking-secondary);
             color: white;
             border: none;
             padding: 15px;
@@ -362,7 +362,7 @@
         }
 
         .continue-btn:hover {
-            background: #dc2626;
+            background: #e6ab00;
             transform: translateY(-2px);
         }
 
@@ -448,7 +448,8 @@
                                     <i class="bi bi-geo-alt-fill text-primary"></i>
                                     <p class="small text-muted fw-bold mb-0">Session Location:</p>
                                 </div>
-                                <p class="mb-0 fw-semibold text-dark">{{ $settings['booking_address'] ?? 'Address not set' }}
+                                <p class="mb-0 fw-semibold text-dark">
+                                    {{ $settings['booking_address'] ?? 'Address not set' }}
                                 </p>
                             </div>
                         </div>
@@ -476,30 +477,36 @@
                     <!-- Step 2 Content (Session Details Summary) -->
                     <div id="center-step2" style="display: none;">
                         <h4 class="section-title">Your Session Details:</h4>
-                        
+
                         <div class="bg-light rounded-4 p-4 border border-secondary-subtle">
                             <div class="d-flex justify-content-between align-items-start mb-4">
                                 <div class="d-flex align-items-center gap-3">
-                                    <img src="{{ Str::startsWith($team->image, 'image/') ? asset($team->image) : asset('storage/' . $team->image) }}" class="rounded-circle border border-2 border-white shadow-sm" style="width: 60px; height: 60px; object-fit: cover;">
+                                    <img src="{{ Str::startsWith($team->image, 'image/') ? asset($team->image) : asset('storage/' . $team->image) }}"
+                                        class="rounded-circle border border-2 border-white shadow-sm"
+                                        style="width: 60px; height: 60px; object-fit: cover;">
                                     <div>
                                         <p class="small text-muted mb-0">Therapy session with</p>
                                         <h5 class="fw-bold mb-0 text-dark">{{ $team->name }}</h5>
                                     </div>
                                 </div>
-                                <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-bold" onclick="goToStep(1)">
+                                <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-bold"
+                                    onclick="goToStep(1)">
                                     <i class="bi bi-pencil-square me-1"></i> EDIT
                                 </button>
                             </div>
 
                             <p class="text-dark fw-bold mb-3">Ahaana Mental Health Hospital</p>
-                            
+
                             <div class="d-flex align-items-center gap-3">
-                                <div class="bg-white rounded-circle p-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <div class="bg-white rounded-circle p-2 shadow-sm d-flex align-items-center justify-content-center"
+                                    style="width: 40px; height: 40px;">
                                     <i class="bi bi-house text-primary fs-5"></i>
                                 </div>
                                 <div>
-                                    <p class="fw-bold mb-0 text-dark" id="summary-datetime">Sat, 14 Feb 2026, 11:00 AM IST</p>
-                                    <p class="small text-muted mb-0" id="summary-mode">at In-person, {{ $settings['session_duration'] ?? '50 mins' }}</p>
+                                    <p class="fw-bold mb-0 text-dark" id="summary-datetime">Sat, 14 Feb 2026, 11:00 AM IST
+                                    </p>
+                                    <p class="small text-muted mb-0" id="summary-mode">at In-person,
+                                        {{ $settings['session_duration'] ?? '50 mins' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -550,25 +557,30 @@
                         <form id="detailsForm">
                             <div class="mb-3">
                                 <label class="form-label small fw-bold text-muted">FULL NAME*</label>
-                                <input type="text" name="name" class="form-control rounded-3 py-2 border-secondary-subtle" required placeholder="Enter full name">
+                                <input type="text" name="name" class="form-control rounded-3 py-2 border-secondary-subtle"
+                                    required placeholder="Enter full name">
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label small fw-bold text-muted">PHONE NUMBER*</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-white border-secondary-subtle text-muted">🇮🇳 +91</span>
-                                    <input type="tel" name="phone" class="form-control border-secondary-subtle py-2" required placeholder="Enter phone number">
+                                    <span class="input-group-text bg-white border-secondary-subtle text-muted">🇮🇳
+                                        +91</span>
+                                    <input type="tel" name="phone" class="form-control border-secondary-subtle py-2"
+                                        required placeholder="Enter phone number">
                                 </div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label small fw-bold text-muted">EMAIL ADDRESS*</label>
-                                <input type="email" name="email" class="form-control rounded-3 py-2 border-secondary-subtle" required placeholder="name@example.com">
+                                <input type="email" name="email" class="form-control rounded-3 py-2 border-secondary-subtle"
+                                    required placeholder="name@example.com">
                             </div>
 
                             <div class="mb-4">
                                 <label class="form-label small fw-bold text-muted">ANY MESSAGE (OPTIONAL)</label>
-                                <textarea name="message" class="form-control rounded-3 border-secondary-subtle" rows="3" placeholder="Additional information..."></textarea>
+                                <textarea name="message" class="form-control rounded-3 border-secondary-subtle" rows="3"
+                                    placeholder="Additional information..."></textarea>
                             </div>
 
                             <button type="submit" class="continue-btn w-100 shadow-lg">
@@ -581,6 +593,7 @@
         </div>
     </div>
 
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const strip = document.getElementById('calendarStrip');
@@ -588,6 +601,7 @@
             const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
             let today = new Date();
+            let selectedDate = null;
 
             for (let i = 0; i < 5; i++) {
                 let date = new Date();
@@ -595,6 +609,10 @@
 
                 let dayDiv = document.createElement('div');
                 dayDiv.className = 'calendar-day' + (i === 0 ? ' active' : '');
+                
+                // Set initial selected date
+                if(i === 0) selectedDate = date.toISOString().split('T')[0];
+
                 dayDiv.innerHTML = `
                                     <div class="day-name">${days[date.getDay()]}</div>
                                     <div class="day-number">${date.getDate()} ${months[date.getMonth()]}</div>
@@ -603,6 +621,7 @@
                 dayDiv.onclick = function () {
                     document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
                     dayDiv.classList.add('active');
+                    selectedDate = date.toISOString().split('T')[0];
                 };
 
                 strip.appendChild(dayDiv);
@@ -677,12 +696,105 @@
                 goToStep(2);
             };
 
-            // Form Submission
+            // Form Submission with Razorpay
             document.getElementById('detailsForm').onsubmit = function(e) {
                 e.preventDefault();
-                const name = this.elements['name'].value;
-                alert('Success! Your session with {{ $team->name }} has been requested. We will contact you at ' + name + ' shortly.');
-                window.location.href = "{{ route('com.home') }}";
+                
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerText;
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'PROCCESSING...';
+
+                const formData = {
+                    _token: "{{ csrf_token() }}",
+                    team_id: "{{ $team->id }}",
+                    name: this.elements['name'].value,
+                    phone: this.elements['phone'].value,
+                    email: this.elements['email'].value,
+                    message: this.elements['message'].value,
+                    date: selectedDate,
+                    time: document.querySelector('.time-slot.selected')?.dataset.time,
+                    mode: selectedModeName
+                };
+
+                // 1. Initialize Booking
+                $.ajax({
+                    url: "{{ route('com.therapist.booking.initialize') }}",
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            // 2. Open Razorpay
+                            const options = {
+                                "key": response.razorpay_key,
+                                "amount": response.amount,
+                                "currency": "INR",
+                                "name": "YWP Therapy",
+                                "description": "Session Booking Fees",
+                                "image": "{{ asset('image/logo-ywp.png') }}",
+                                "handler": function (payResponse) {
+                                    // 3. Verify Payment
+                                    $.ajax({
+                                        url: "{{ route('com.therapist.booking.verify') }}",
+                                        method: 'POST',
+                                        data: {
+                                            _token: "{{ csrf_token() }}",
+                                            booking_id: response.booking_id,
+                                            razorpay_payment_id: payResponse.razorpay_payment_id,
+                                            razorpay_order_id: payResponse.razorpay_order_id,
+                                            razorpay_signature: payResponse.razorpay_signature
+                                        },
+                                        success: function(verifyResponse) {
+                                            if (verifyResponse.success) {
+                                                alert('Success! Your session has been booked. Confirmation emails have been sent.');
+                                                window.location.href = "{{ route('com.home') }}";
+                                            } else {
+                                                alert('Verification failed: ' + verifyResponse.message);
+                                                submitBtn.disabled = false;
+                                                submitBtn.innerText = originalText;
+                                            }
+                                        },
+                                        error: function() {
+                                            alert('Server error during verification.');
+                                            submitBtn.disabled = false;
+                                            submitBtn.innerText = originalText;
+                                        }
+                                    });
+                                },
+                                "prefill": {
+                                    "name": response.customer.name,
+                                    "email": response.customer.email,
+                                    "contact": response.customer.contact
+                                },
+                                "theme": {
+                                    "color": "#044A80"
+                                },
+                                "modal": {
+                                    "ondismiss": function() {
+                                        submitBtn.disabled = false;
+                                        submitBtn.innerText = originalText;
+                                    }
+                                }
+                            };
+                            const rzp1 = new Razorpay(options);
+                            rzp1.open();
+                        } else {
+                            alert('Booking failed: ' + response.message);
+                            submitBtn.disabled = false;
+                            submitBtn.innerText = originalText;
+                        }
+                    },
+                    error: function(xhr) {
+                        const errors = xhr.responseJSON?.errors;
+                        let msg = 'Error initializing booking.';
+                        if (errors) {
+                            msg = Object.values(errors).flat().join('\n');
+                        }
+                        alert(msg);
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = originalText;
+                    }
+                });
             };
         });
     </script>

@@ -15,6 +15,7 @@ Route::get('/team/{id}', [\App\Http\Controllers\com\HomeController::class, 'team
 Route::get('/therapist/booking/{id}', [\App\Http\Controllers\com\HomeController::class, 'therapistBooking'])->name('com.therapist.booking');
 Route::get('/corporate-well-being', [\App\Http\Controllers\com\HomeController::class, 'corporateWellBeing'])->name('com.corporate');
 Route::get('/wonder-store', [\App\Http\Controllers\com\WonderStoreController::class, 'index'])->name('com.store');
+Route::post('/appointment/submit', [\App\Http\Controllers\com\HomeController::class, 'submitAppointment'])->name('com.appointment.submit');
 
 // Cart Routes
 Route::get('/cart', [\App\Http\Controllers\com\CartController::class, 'index'])->name('com.cart');
@@ -70,4 +71,10 @@ Route::prefix('admin')->group(function () {
     Route::get('/settings/branding', [\App\Http\Controllers\Admin\AdminSettingController::class, 'branding'])->name('admin.settings.branding');
     Route::get('/settings/contact', [\App\Http\Controllers\Admin\AdminSettingController::class, 'contact'])->name('admin.settings.contact');
     Route::post('/settings/update', [\App\Http\Controllers\Admin\AdminSettingController::class, 'update'])->name('admin.settings.update');
+
+    // Appointment Queries (General)
+    Route::resource('bookings', \App\Http\Controllers\Admin\AdminBookingController::class, ['as' => 'admin']);
+
+    // Therapist Session Bookings
+    Route::resource('therapist-bookings', \App\Http\Controllers\Admin\AdminTherapistBookingController::class, ['as' => 'admin'])->only(['index', 'show', 'destroy']);
 });

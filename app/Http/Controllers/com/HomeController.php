@@ -75,4 +75,12 @@ class HomeController extends Controller
 
         return view('site.com.corporate-well', compact('settings', 'contents', 'testimonials', 'teams', 'brands'));
     }
+
+    public function therapistBooking($id)
+    {
+        $settings = SiteSetting::all()->pluck('value', 'key');
+        $team = \App\Models\Team::where('is_active', true)->findOrFail($id);
+
+        return view('site.com.booking', compact('settings', 'team'));
+    }
 }

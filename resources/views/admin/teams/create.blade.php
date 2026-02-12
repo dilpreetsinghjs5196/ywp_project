@@ -15,18 +15,24 @@
                         @csrf
 
                         <div class="row mb-3">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="form-label fw-bold">Full Name</label>
                                 <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
                                     value="{{ old('name') }}" required placeholder="e.g. Dr. Sarah Johnson">
                                 @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="form-label fw-bold">Designation</label>
                                 <input type="text" name="designation"
                                     class="form-control @error('designation') is-invalid @enderror"
                                     value="{{ old('designation') }}" required placeholder="e.g. Senior Psychologist">
                                 @error('designation')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Session Fees (₹)</label>
+                                <input type="number" name="fees" class="form-control @error('fees') is-invalid @enderror"
+                                    value="{{ old('fees') }}" required placeholder="e.g. 1800">
+                                @error('fees')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                         </div>
 

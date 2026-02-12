@@ -4,6 +4,32 @@
 @section('page_title', 'Our Experts & Team')
 
 @section('content')
+    <!-- Global Booking Settings -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0 fw-bold"><i class="bi bi-gear-fill me-2 text-primary"></i>Global Booking Settings</h5>
+        </div>
+        <div class="card-body p-4">
+            <form action="{{ route('admin.settings.update') }}" method="POST">
+                @csrf
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <label class="form-label fw-bold">In-Person Booking Address</label>
+                        <textarea name="booking_address" class="form-control" rows="2" required>{{ $bookingSettings['booking_address'] ?? '' }}</textarea>
+                        <small class="text-muted">This address will only be shown when "In-person" mode is selected.</small>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Session Duration</label>
+                        <input type="text" name="session_duration" class="form-control" value="{{ $bookingSettings['session_duration'] ?? '' }}" required placeholder="e.g. 50 mins">
+                        <small class="text-muted">Global duration shown for all sessions.</small>
+                        <div class="mt-3 text-end">
+                            <button type="submit" class="btn btn-primary px-4">Save Booking Settings</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="card border-0 shadow-sm">
         <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
             <h5 class="mb-0 fw-bold">Team Members</h5>
@@ -18,6 +44,7 @@
                         <tr>
                             <th class="ps-4">Image</th>
                             <th>Name & Designation</th>
+                            <th>Session Fees</th>
                             <th>Social Links</th>
                             <th>Order</th>
                             <th>Status</th>
@@ -34,6 +61,9 @@
                                 <td>
                                     <div class="fw-bold">{{ $member->name }}</div>
                                     <small class="text-muted">{{ $member->designation }}</small>
+                                </td>
+                                <td>
+                                    <span class="text-primary-color fw-bold">₹{{ number_format($member->fees ?? 0) }}</span>
                                 </td>
                                 <td>
                                     <div class="d-flex gap-2">
@@ -68,7 +98,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center py-5 text-muted">No team members found. Start by adding one!</td>
+                                <td colspan="7" class="text-center py-5 text-muted">No team members found. Start by adding one!</td>
                             </tr>
                         @endforelse
                     </tbody>

@@ -9,6 +9,7 @@ class Team extends Model
     protected $fillable = [
         'name',
         'designation',
+        'fees',
         'image',
         'description',
         'facebook',

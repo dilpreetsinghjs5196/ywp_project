@@ -83,33 +83,37 @@
                     </div>
 
                     <!-- Booking Section -->
-                    <div class="bg-light p-4 rounded-4 shadow-sm border border-secondary-subtle">
-                        <h4 class="font-1 fw-bold mb-4">Book an Appointment</h4>
-                        <form action="#" method="POST"> <!-- Placeholder action -->
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="bookingDate" class="form-label fw-semibold">Select Date</label>
-                                    <input type="date" class="form-control py-2" id="bookingDate" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="bookingTime" class="form-label fw-semibold">Select Time Slot</label>
-                                    <select class="form-select py-2" id="bookingTime" required>
-                                        <option selected disabled value="">Choose a time...</option>
-                                        <option value="09:00">09:00 AM - 10:00 AM</option>
-                                        <option value="10:00">10:00 AM - 11:00 AM</option>
-                                        <option value="11:00">11:00 AM - 12:00 PM</option>
-                                        <option value="13:00">01:00 PM - 02:00 PM</option>
-                                        <option value="14:00">02:00 PM - 03:00 PM</option>
-                                        <option value="15:00">03:00 PM - 04:00 PM</option>
-                                        <option value="16:00">04:00 PM - 05:00 PM</option>
-                                    </select>
-                                </div>
-                                <div class="col-12 mt-4">
-                                    <button type="submit" class="btn btn-primary-solid btn-lg w-100 py-3 fw-bold">Confirm
-                                        Booking</button>
+                    <div class="booking-cta-card p-4 rounded-5 shadow-lg border-0 mt-5"
+                        style="background: linear-gradient(135deg, var(--primary-color), #086bb8); position: relative; overflow: hidden;">
+                        <!-- Decorative background elements -->
+                        <div class="position-absolute opacity-5"
+                            style="right: -30px; bottom: -30px; transform: rotate(-15deg); pointer-events: none;">
+                            <i class="bi bi-calendar-check text-white" style="font-size: 15rem;"></i>
+                        </div>
+
+                        <div class="position-relative" style="z-index: 2;">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <h4 class="font-1 fw-bold text-white mb-3">Begin Your Healing Journey</h4>
+                                    <p class="text-white mb-4 fs-6 fw-medium lh-base">
+                                        Schedule a session with {{ $team->name }} to receive personalized care and support
+                                        tailored to your wellness goals.
+                                    </p>
+                                    @if($team->fees)
+                                        <div class="mb-4">
+                                            <span class="badge bg-white text-primary-color py-2 px-3 rounded-pill fs-6 fw-bold">
+                                                Session Fees: ₹{{ number_format($team->fees) }}
+                                            </span>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
-                        </form>
+
+                            <a href="{{ route('com.therapist.booking', $team->id) }}"
+                                class="btn btn-secondary-solid btn-lg w-100 py-3 fw-bold rounded-pill shadow-sm transition-hover">
+                                <i class="bi bi-calendar-plus me-2"></i> Book Appointment
+                            </a>
+                        </div>
                     </div>
 
                 </div>

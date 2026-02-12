@@ -15,7 +15,8 @@ class AdminTeamController extends Controller
     public function index()
     {
         $teams = Team::orderBy('sort_order')->get();
-        return view('admin.teams.index', compact('teams'));
+        $bookingSettings = \App\Models\SiteSetting::where('group', 'booking')->get()->pluck('value', 'key');
+        return view('admin.teams.index', compact('teams', 'bookingSettings'));
     }
 
     /**

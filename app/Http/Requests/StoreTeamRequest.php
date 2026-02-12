@@ -24,6 +24,7 @@ class StoreTeamRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'designation' => 'required|string|max:255',
+            'fees' => 'nullable|numeric|min:0',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'facebook' => 'nullable|url|max:255',

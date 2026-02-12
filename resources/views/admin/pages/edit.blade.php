@@ -17,7 +17,7 @@
                 <div class="card-body p-4">
                     <div class="row g-4">
                         @foreach($items as $item)
-                            <div class="col-12 {{ in_array($item->type, ['textarea', 'image']) ? 'col-md-12' : 'col-md-6' }}">
+                            <div class="col-12">
                                 <label class="form-label fw-bold">{{ str_replace('_', ' ', ucfirst($item->key)) }}</label>
 
                                 @if($item->type === 'text')

@@ -12,6 +12,7 @@ Route::get('/', [HomeController::class, 'home'])->name('com.home');
 Route::get('/about', [HomeController::class, 'about'])->name('com.about');
 Route::get('/team', [\App\Http\Controllers\com\HomeController::class, 'team'])->name('com.team');
 Route::get('/team/{id}', [\App\Http\Controllers\com\HomeController::class, 'teamSingle'])->name('com.team.single');
+Route::get('/contact-us', [HomeController::class, 'contact'])->name('com.contact');
 Route::get('/corporate-well-being', [\App\Http\Controllers\com\HomeController::class, 'corporateWellBeing'])->name('com.corporate');
 Route::get('/wonder-store', [\App\Http\Controllers\com\WonderStoreController::class, 'index'])->name('com.store');
 

@@ -85,7 +85,9 @@
                   href="{{ route('com.store') }}">Wonder Store</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="contact-us.html">Contact Us</a>
+                <a class="nav-link {{ request()->routeIs('com.contact') ? 'active' : '' }}" 
+                  {{ request()->routeIs('com.contact') ? 'aria-current="page"' : '' }} 
+                  href="{{ route('com.contact') }}">Contact Us</a>
               </li>
             </ul>
             <div class="d-flex align-items-center ms-lg-3 mt-3 mt-lg-0 gap-2">

@@ -75,4 +75,29 @@ class HomeController extends Controller
 
         return view('site.com.corporate-well', compact('settings', 'contents', 'testimonials', 'teams', 'brands'));
     }
+
+    public function contact()
+    {
+        $settings = SiteSetting::all()->pluck('value', 'key');
+
+        // Fetch content for the contact page
+        $contents = PageContent::where('page', 'contact')
+            ->get()
+            ->groupBy('section')
+            ->map(function ($section) {
+                return $section->pluck('value', 'key');
+            });
+
+        // Sync 'get_in_touch' section from the home page
+        $homeContents = PageContent::where('page', 'home')
+            ->where('section', 'get_in_touch')
+            ->get()
+            ->pluck('value', 'key');
+
+        if ($homeContents->isNotEmpty()) {
+            $contents['get_in_touch'] = $homeContents;
+        }
+
+        return view('site.com.contact-us', compact('settings', 'contents'));
+    }
 }

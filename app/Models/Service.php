@@ -12,6 +12,7 @@ class Service extends Model
         'icon',
         'icon_image',
         'description',
+        'goals',
         'image',
         'sort_order',
         'is_active'

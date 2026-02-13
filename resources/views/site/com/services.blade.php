@@ -70,7 +70,23 @@
                                 @endif
                             </div>
                             <h4 class="font-1 fw-bold mb-3 mt-3">{{ $service->title }}</h4>
-                            <p class="text-muted-color mb-0 line-clamp-6 service-description">{{ $service->description }}</p>
+                            <p class="text-muted-color mb-3 line-clamp-6 service-description">{{ $service->description }}</p>
+                            
+                            @if($service->goals)
+                                <div class="mt-4 pt-3 border-top">
+                                    <h6 class="fw-bold text-primary-color mb-3">Goals include:</h6>
+                                    <ul class="list-unstyled mb-0">
+                                        @foreach(explode("\n", str_replace("\r", "", $service->goals)) as $goal)
+                                            @if(trim($goal))
+                                                <li class="d-flex align-items-start mb-2 small text-muted-color">
+                                                    <i class="bi bi-check2-circle text-primary-color me-2 mt-1"></i>
+                                                    <span>{{ trim($goal) }}</span>
+                                                </li>
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

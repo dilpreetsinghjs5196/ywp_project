@@ -28,22 +28,27 @@
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">Icon Class</label>
-                                <input type="text" name="icon" class="form-control @error('icon') is-invalid @enderror" value="{{ old('icon', $service->icon) }}">
+                                <input type="text" name="icon" class="form-control @error('icon') is-invalid @enderror"
+                                    value="{{ old('icon', $service->icon) }}">
                                 @error('icon')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-5">
                                 <label class="form-label fw-bold">Icon Image</label>
                                 @if($service->icon_image)
                                     <div class="mb-2">
-                                        <img src="{{ Str::startsWith($service->icon_image, 'image/') ? asset($service->icon_image) : asset('storage/' . $service->icon_image) }}" width="40" class="rounded bg-primary-color p-1">
+                                        <img src="{{ Str::startsWith($service->icon_image, 'image/') ? asset($service->icon_image) : asset('storage/' . $service->icon_image) }}"
+                                            width="40" class="rounded bg-primary-color p-1">
                                     </div>
                                 @endif
-                                <input type="file" name="icon_image" class="form-control @error('icon_image') is-invalid @enderror">
+                                <input type="file" name="icon_image"
+                                    class="form-control @error('icon_image') is-invalid @enderror">
                                 @error('icon_image')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label fw-bold">Sort Order</label>
-                                <input type="number" name="sort_order" class="form-control @error('sort_order') is-invalid @enderror" value="{{ old('sort_order', $service->sort_order) }}">
+                                <input type="number" name="sort_order"
+                                    class="form-control @error('sort_order') is-invalid @enderror"
+                                    value="{{ old('sort_order', $service->sort_order) }}">
                                 @error('sort_order')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                         </div>
@@ -53,6 +58,16 @@
                             <textarea name="description" class="form-control @error('description') is-invalid @enderror"
                                 rows="3" required>{{ old('description', $service->description) }}</textarea>
                             @error('description')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Goals (Include: Goal 1, Goal 2...)</label>
+                            <textarea name="goals" class="form-control @error('goals') is-invalid @enderror"
+                                rows="4">{{ old('goals', $service->goals) }}</textarea>
+                            <div class="form-text">These goals will only appear on the Services page cards.</div>
+                            @error('goals')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

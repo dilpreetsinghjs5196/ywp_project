@@ -38,6 +38,7 @@ class AdminServiceController extends Controller
             'icon' => 'nullable',
             'icon_image' => 'nullable|image',
             'description' => 'required',
+            'goals' => 'nullable',
             'image' => 'nullable|image',
             'sort_order' => 'nullable|integer',
         ]);
@@ -76,6 +77,7 @@ class AdminServiceController extends Controller
             'icon' => 'nullable',
             'icon_image' => 'nullable|image',
             'description' => 'required',
+            'goals' => 'nullable',
             'image' => 'nullable|image',
             'sort_order' => 'nullable|integer',
         ]);

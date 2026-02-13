@@ -55,6 +55,16 @@
                             @enderror
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Goals (Include: Goal 1, Goal 2...)</label>
+                            <textarea name="goals" class="form-control @error('goals') is-invalid @enderror"
+                                rows="4">{{ old('goals') }}</textarea>
+                            <div class="form-text">These goals will only appear on the Services page cards.</div>
+                            @error('goals')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <div class="mb-4">
                             <label class="form-label fw-bold">Service Image</label>
                             <input type="file" name="image" class="form-control @error('image') is-invalid @enderror">

@@ -7,78 +7,105 @@
     <div class="card">
         <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
             <h5 class="mb-0 fw-bold">All Session Bookings</h5>
-        </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="ps-4">Booking ID</th>
-                            <th>Patient</th>
-                            <th>Therapist</th>
-                            <th>Schedule</th>
-                            <th>Amount</th>
-                            <th>Status</th>
-                            <th class="text-end pe-4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($bookings as $booking)
-                            <tr>
-                                <td class="ps-4 fw-bold">#{{ $booking->id }}</td>
-                                <td>
-                                    <div class="fw-bold">{{ $booking->name }}</div>
-                                    <div class="small text-muted">{{ $booking->email }}</div>
-                                </td>
-                                <td>
-                                    <div class="fw-bold text-primary-color">{{ $booking->therapist->name }}</div>
-                                </td>
-                                <td>
-                                    <div class="fw-bold">{{ \Carbon\Carbon::parse($booking->booking_date)->format('M d, Y') }}</div>
-                                    <div class="badge bg-secondary-subtle text-secondary px-2">{{ $booking->booking_time }}</div>
-                                </td>
-                                <td>
-                                    <div class="fw-bold text-dark">₹{{ number_format($booking->amount, 2) }}</div>
-                                </td>
-                                <td>
-                                    @if($booking->payment_status == 'paid')
-                                        <span class="badge bg-success-subtle text-success px-3">PAID</span>
-                                    @else
-                                        <span class="badge bg-warning-subtle text-warning px-3">PENDING</span>
-                                    @endif
-                                </td>
-                                <td class="text-end pe-4">
-                                    <div class="btn-group">
-                                        <a href="{{ route('admin.therapist-bookings.show', $booking->id) }}"
-                                            class="btn btn-sm btn-light border">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <form action="{{ route('admin.therapist-bookings.destroy', $booking->id) }}" method="POST"
-                                            onsubmit="return confirm('Are you sure you want to delete this booking?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-light border text-danger">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" class="text-center py-5">
-                                    <div class="text-muted">No bookings found.</div>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+            <div class="d-flex gap-2">
+                <a href="{{ route('admin.therapist-bookings.export', request()->query()) }}" class="btn btn-success btn-sm">
+                    <i class="bi bi-file-earmark-spreadsheet me-1"></i> Download CSV
+                </a>
             </div>
         </div>
-        @if($bookings->hasPages())
-        <div class="card-footer bg-white">
-            {{ $bookings->links() }}
+        <div class="card-body bg-light border-bottom p-3">
+            <form id="filterForm" action="{{ route('admin.therapist-bookings.index') }}" method="GET" class="row g-2">
+                <div class="col-md-4">
+                    <input type="text" name="search" id="searchInput" class="form-control form-control-sm"
+                        placeholder="Search by Patient Name..." value="{{ request('search') }}">
+                </div>
+                <div class="col-md-4">
+                    <select name="therapist_id" id="therapistSelect" class="form-select form-select-sm">
+                        <option value="">-- All Therapists --</option>
+                        @foreach($therapists as $t)
+                            <option value="{{ $t->id }}" {{ request('therapist_id') == $t->id ? 'selected' : '' }}>
+                                {{ $t->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary btn-sm px-4">
+                        <i class="bi bi-search me-1"></i> Filter
+                    </button>
+                    <a href="{{ route('admin.therapist-bookings.index') }}" id="clearBtn"
+                        class="btn btn-outline-secondary btn-sm {{ !request()->anyFilled(['search', 'therapist_id']) ? 'd-none' : '' }}">
+                        Clear
+                    </a>
+                </div>
+            </form>
         </div>
-        @endif
+        <div class="card-body p-0" id="tableContainer">
+            @include('admin.therapist_bookings._table')
+        </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function () {
+            const tableContainer = $('#tableContainer');
+            const filterForm = $('#filterForm');
+            const searchInput = $('#searchInput');
+            const therapistSelect = $('#therapistSelect');
+            const csvBtn = $('.btn-success');
+            const clearBtn = $('#clearBtn');
+
+            function updateTable(url) {
+                tableContainer.css('opacity', '0.5');
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function (response) {
+                        tableContainer.html(response);
+                        tableContainer.css('opacity', '1');
+
+                        // Update CSV link
+                        const params = filterForm.serialize();
+                        const baseUrl = "{{ route('admin.therapist-bookings.export') }}";
+                        csvBtn.attr('href', baseUrl + '?' + params);
+
+                        // Show/Hide Clear button
+                        if (searchInput.val() || therapistSelect.val()) {
+                            clearBtn.removeClass('d-none');
+                        } else {
+                            clearBtn.addClass('d-none');
+                        }
+                    }
+                });
+            }
+
+            // Handle form changes (for instant filtering)
+            let timeout = null;
+            searchInput.on('keyup', function () {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    updateTable(filterForm.attr('action') + '?' + filterForm.serialize());
+                }, 500);
+            });
+
+            therapistSelect.on('change', function () {
+                updateTable(filterForm.attr('action') + '?' + filterForm.serialize());
+            });
+
+            // Handle form submit
+            filterForm.on('submit', function (e) {
+                e.preventDefault();
+                updateTable(filterForm.attr('action') + '?' + filterForm.serialize());
+            });
+
+            // Handle pagination clicks
+            $(document).on('click', '.pagination a', function (e) {
+                e.preventDefault();
+                updateTable($(this).attr('href'));
+                $('html, body').animate({ scrollTop: $(".card").offset().top - 100 }, 100);
+            });
+        });
+    </script>
+@endpush

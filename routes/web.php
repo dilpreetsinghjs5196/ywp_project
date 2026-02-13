@@ -100,6 +100,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('bookings', \App\Http\Controllers\Admin\AdminBookingController::class, ['as' => 'admin']);
 
     // Therapist Session Bookings
+    Route::get('therapist-bookings/export-csv', [\App\Http\Controllers\Admin\AdminTherapistBookingController::class, 'exportCsv'])->name('admin.therapist-bookings.export');
     Route::resource('therapist-bookings', \App\Http\Controllers\Admin\AdminTherapistBookingController::class, ['as' => 'admin'])->only(['index', 'show', 'destroy']);
 });
 

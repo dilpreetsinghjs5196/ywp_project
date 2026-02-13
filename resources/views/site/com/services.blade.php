@@ -272,7 +272,7 @@
   </section>
 
   <!-- FAQs Section -->
-  <section class="section bg-gradient-secondary py-5 text-white">
+  <section class="section bg-gradient-secondary py-5 text-white mt-5">
     <div class="b-container py-4">
       <div class="row row-cols-1 row-cols-lg-2">
         <div class="col d-flex flex-column align-items-center align-items-lg-start text-center text-lg-start">

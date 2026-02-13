@@ -282,11 +282,19 @@ img {
 }
 
 .nav-link {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   color: var(--text-color);
   font-weight: 600;
   padding-block: 1.85rem;
-  padding-inline: 1.50rem;
+  padding-inline: 0.85rem;
+  white-space: nowrap;
+}
+
+@media (min-width: 992px) and (max-width: 1210px) {
+  .nav-link {
+    padding-inline: 0.5rem !important;
+    font-size: 1rem !important;
+  }
 }
 
 .nav-link:hover {
@@ -688,6 +696,7 @@ img {
   background:
     -webkit-linear-gradient(var(--primary-color), #9abbfd);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

@@ -26,6 +26,27 @@
                 {{ $settings['secondary_color'] ?? '#ffbf00' }}
             ;
         }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .line-clamp-6 {
+            display: -webkit-box;
+            -webkit-line-clamp: 6;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .service-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
     </style>
 </head>
 

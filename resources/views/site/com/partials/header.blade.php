@@ -60,6 +60,11 @@
                   href="{{ route('com.about') }}">About Us</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('com.services') ? 'active' : '' }}" 
+                  {{ request()->routeIs('com.services') ? 'aria-current="page"' : '' }} 
+                  href="{{ route('com.services') }}">Our Services</a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('com.team') ? 'active' : '' }}" 
                   {{ request()->routeIs('com.team') ? 'aria-current="page"' : '' }} 
                   href="{{ route('com.team') }}">Our Therapists</a>

@@ -298,7 +298,7 @@
                       style="margin-top: -25px;">Read More</a>
                     <h3 class="font-1 mt-5" style="font-weight: 800;">{{ $service->title }}</h3>
                     <hr class="border-primary border-1 opacity-100 w-100 my-4">
-                    <p class="mb-3">{{ $service->description }}</p>
+                    <p class="mb-3 line-clamp-6 service-description">{{ $service->description }}</p>
                   </div>
                 </div>
               </div>

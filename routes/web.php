@@ -18,6 +18,7 @@ Route::post('/therapist/booking/verify', [\App\Http\Controllers\com\TherapistBoo
 Route::get('/contact-us', [HomeController::class, 'contact'])->name('com.contact');
 Route::post('/appointment/submit', [HomeController::class, 'submitAppointment'])->name('com.appointment.submit');
 Route::get('/corporate-well-being', [\App\Http\Controllers\com\HomeController::class, 'corporateWellBeing'])->name('com.corporate');
+Route::get('/services', [\App\Http\Controllers\com\HomeController::class, 'services'])->name('com.services');
 Route::get('/wonder-store', [\App\Http\Controllers\com\WonderStoreController::class, 'index'])->name('com.store');
 
 // Cart Routes

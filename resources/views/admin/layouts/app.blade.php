@@ -186,6 +186,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {{ request()->is('admin/pages/services*') ? 'active' : '' }}"
+                            href="{{ route('admin.pages.edit', 'services') }}">
+                            <i class="bi bi-gear"></i> Services Page
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.services.*') ? 'active' : '' }}"
                             href="{{ route('admin.services.index') }}">
                             <i class="bi bi-grid"></i> Services

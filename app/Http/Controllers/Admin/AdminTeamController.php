@@ -32,10 +32,21 @@ class AdminTeamController extends Controller
      */
     public function store(StoreTeamRequest $request)
     {
-        $data = $request->except(['image']);
+        $data = $request->except(['image', 'availability']);
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('uploads/teams', 'public');
+        }
+
+        if ($request->has('availability')) {
+            $formattedAvailability = [];
+            foreach ($request->availability as $date => $times) {
+                if (!empty($times)) {
+                    $timeArray = array_map('trim', explode(',', $times));
+                    $formattedAvailability[$date] = $timeArray;
+                }
+            }
+            $data['availability'] = $formattedAvailability;
         }
 
         Team::create($data);
@@ -56,7 +67,7 @@ class AdminTeamController extends Controller
      */
     public function update(UpdateTeamRequest $request, Team $team)
     {
-        $data = $request->except(['image']);
+        $data = $request->except(['image', 'availability']);
         $data['is_active'] = $request->has('is_active');
 
         if ($request->hasFile('image')) {
@@ -65,6 +76,19 @@ class AdminTeamController extends Controller
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($team->image);
             }
             $data['image'] = $request->file('image')->store('uploads/teams', 'public');
+        }
+
+        if ($request->has('availability')) {
+            $formattedAvailability = [];
+            foreach ($request->availability as $date => $times) {
+                if (!empty($times)) {
+                    $timeArray = array_map('trim', explode(',', $times));
+                    $formattedAvailability[$date] = $timeArray;
+                }
+            }
+            $data['availability'] = $formattedAvailability;
+        } else {
+            $data['availability'] = null;
         }
 
         $team->update($data);

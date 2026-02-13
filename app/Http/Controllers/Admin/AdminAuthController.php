@@ -10,8 +10,13 @@ class AdminAuthController extends Controller
 {
     public function showLogin()
     {
-        if (Auth::check() && Auth::user()->hasRole('admin')) {
-            return redirect()->route('admin.dashboard');
+        if (Auth::check()) {
+            if (Auth::user()->hasRole('admin')) {
+                return redirect()->route('admin.dashboard');
+            }
+            if (Auth::user()->hasRole('therapist')) {
+                return redirect()->route('therapist.dashboard');
+            }
         }
         return view('admin.auth.login');
     }
@@ -25,14 +30,20 @@ class AdminAuthController extends Controller
 
         if (Auth::attempt($credentials, $request->has('remember'))) {
             $user = Auth::user();
+
             if ($user->hasRole('admin')) {
                 $request->session()->regenerate();
                 return redirect()->intended(route('admin.dashboard'));
             }
 
+            if ($user->hasRole('therapist')) {
+                $request->session()->regenerate();
+                return redirect()->intended(route('therapist.dashboard'));
+            }
+
             Auth::logout();
             return back()->withErrors([
-                'email' => 'You do not have administrative access.',
+                'email' => 'You do not have administrative or therapist access.',
             ])->withInput($request->only('email'));
         }
 

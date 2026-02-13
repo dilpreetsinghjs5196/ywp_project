@@ -34,6 +34,7 @@ class UpdateTeamRequest extends FormRequest
             'linkedin' => 'nullable|url|max:255',
             'sort_order' => 'nullable|integer',
             'is_active' => 'nullable',
+            'availability' => 'nullable|array',
         ];
     }
 }

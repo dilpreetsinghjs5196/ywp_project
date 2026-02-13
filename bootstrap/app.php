@@ -16,7 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\CheckRole::class,
         ]);
         $middleware->redirectTo(
-            fn($request) => ($request->is('admin/*') || $request->is('admin')) ? route('admin.login') : route('login')
+            fn($request) => ($request->is('admin/*') || $request->is('admin') || $request->is('therapist/*')) ? route('admin.login') : route('login')
         );
     })
     ->withExceptions(function (Exceptions $exceptions): void {

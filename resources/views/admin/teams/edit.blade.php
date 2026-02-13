@@ -85,6 +85,48 @@
                         </div>
 
                         <hr class="my-4">
+                        <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-calendar3 me-2"></i> Therapist Availability Calendar</h6>
+                        <p class="small text-muted mb-3">Enter time slots separated by commas (e.g., 10:00 AM, 11:30 AM, 02:00 PM).</p>
+
+                        <div class="table-responsive mb-4">
+                            <table class="table table-sm table-bordered align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width: 180px;">Date</th>
+                                        <th>Available Time Slots</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $nextFortnight = [];
+                                        for ($i = 0; $i < 14; $i++) {
+                                            $nextFortnight[] = \Carbon\Carbon::today()->addDays($i);
+                                        }
+                                        $availability = $team->availability ?? [];
+                                    @endphp
+
+                                    @foreach($nextFortnight as $date)
+                                        @php
+                                            $dateStr = $date->format('Y-m-d');
+                                            $existingTimes = isset($availability[$dateStr]) ? implode(', ', $availability[$dateStr]) : '';
+                                        @endphp
+                                        <tr>
+                                            <td class="bg-light">
+                                                <div class="fw-bold small">{{ $date->format('D, d M Y') }}</div>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="availability[{{ $dateStr }}]" 
+                                                       class="form-control form-control-sm" 
+                                                       placeholder="e.g. 10:00 AM, 12:00 PM"
+                                                       value="{{ $existingTimes }}">
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <hr class="my-4">
                         <h6 class="fw-bold mb-3 text-primary">Social Media Links (Optional)</h6>
 
                         <div class="row mb-4">

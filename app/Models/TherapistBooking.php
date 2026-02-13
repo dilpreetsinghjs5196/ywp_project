@@ -11,6 +11,7 @@ class TherapistBooking extends Model
 
     protected $fillable = [
         'team_id',
+        'therapist_id',
         'name',
         'email',
         'phone',

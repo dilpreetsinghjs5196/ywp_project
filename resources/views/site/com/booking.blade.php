@@ -598,34 +598,87 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const strip = document.getElementById('calendarStrip');
+            const slotsContainer = document.querySelector('.time-slots-container');
             const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
             const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-            let today = new Date();
-            let selectedDate = null;
+            // Therapist Availability Data
+            const availability = @json($team->availability ?? []);
+            const availableDates = Object.keys(availability).sort();
 
-            for (let i = 0; i < 5; i++) {
-                let date = new Date();
-                date.setDate(today.getDate() + i);
+            let selectedDateStr = null;
 
-                let dayDiv = document.createElement('div');
-                dayDiv.className = 'calendar-day' + (i === 0 ? ' active' : '');
+            function renderTimeSlots(dateStr) {
+                const times = availability[dateStr] || [];
 
-                // Set initial selected date
-                if (i === 0) selectedDate = date.toISOString().split('T')[0];
+                if (times.length === 0) {
+                    slotsContainer.innerHTML = '<div class="alert alert-light text-center py-4 border">No slots available for this day.</div>';
+                    return;
+                }
 
-                dayDiv.innerHTML = `
-                                        <div class="day-name">${days[date.getDay()]}</div>
-                                        <div class="day-number">${date.getDate()} ${months[date.getMonth()]}</div>
-                                    `;
+                // Split into Morning (before 12 PM) and Afternoon (12 PM onwards)
+                const morning = times.filter(t => t.toUpperCase().includes('AM') || (t.includes('12:') && t.toUpperCase().includes('AM')));
+                const afternoon = times.filter(t => !morning.includes(t));
 
-                dayDiv.onclick = function () {
-                    document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
-                    dayDiv.classList.add('active');
-                    selectedDate = date.toISOString().split('T')[0];
-                };
+                let html = '';
 
-                strip.appendChild(dayDiv);
+                if (morning.length > 0) {
+                    html += `<div class="time-section-title"><i class="bi bi-brightness-high"></i> Morning</div>`;
+                    html += `<div class="time-slots">`;
+                    morning.forEach(t => {
+                        html += `<div class="time-slot" data-time="${t}">${t}</div>`;
+                    });
+                    html += '</div>';
+                }
+
+                if (afternoon.length > 0) {
+                    html += `<div class="time-section-title"><i class="bi bi-sun"></i> Afternoon</div>`;
+                    html += `<div class="time-slots">`;
+                    afternoon.forEach(t => {
+                        html += `<div class="time-slot" data-time="${t}">${t}</div>`;
+                    });
+                    html += '</div>';
+                }
+
+                slotsContainer.innerHTML = html;
+
+                // Re-bind click events
+                document.querySelectorAll('.time-slot').forEach(slot => {
+                    slot.onclick = function () {
+                        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                        slot.classList.add('selected');
+                    };
+                });
+            }
+
+            if (availableDates.length > 0) {
+                availableDates.forEach((dateStr, i) => {
+                    const dateObj = new Date(dateStr);
+                    const dayDiv = document.createElement('div');
+                    dayDiv.className = 'calendar-day' + (i === 0 ? ' active' : '');
+
+                    if (i === 0) {
+                        selectedDateStr = dateStr;
+                        renderTimeSlots(dateStr);
+                    }
+
+                    dayDiv.innerHTML = `
+                            <div class="day-name">${days[dateObj.getDay()]}</div>
+                            <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
+                        `;
+
+                    dayDiv.onclick = function () {
+                        document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
+                        dayDiv.classList.add('active');
+                        selectedDateStr = dateStr;
+                        renderTimeSlots(dateStr);
+                    };
+
+                    strip.appendChild(dayDiv);
+                });
+            } else {
+                strip.innerHTML = '<div class="alert alert-warning small w-100 text-center">No availability set by therapist.</div>';
+                slotsContainer.innerHTML = '';
             }
 
             let currentStep = 1;
@@ -667,14 +720,6 @@
                 }
             };
 
-            // Time slot selection
-            document.querySelectorAll('.time-slot').forEach(slot => {
-                slot.onclick = function () {
-                    document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-                    slot.classList.add('selected');
-                };
-            });
-
             // Continue button logic
             document.getElementById('continueBooking').onclick = function () {
                 const selectedDateNode = document.querySelector('.calendar-day.active .day-number');
@@ -713,7 +758,7 @@
                     phone: this.elements['phone'].value,
                     email: this.elements['email'].value,
                     message: this.elements['message'].value,
-                    date: selectedDate,
+                    date: selectedDateStr,
                     time: document.querySelector('.time-slot.selected')?.dataset.time,
                     mode: selectedModeName
                 };

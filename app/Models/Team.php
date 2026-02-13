@@ -18,6 +18,12 @@ class Team extends Model
         'instagram',
         'linkedin',
         'sort_order',
-        'is_active'
+        'is_active',
+        'availability'
+    ];
+
+    protected $casts = [
+        'availability' => 'array',
+        'is_active' => 'boolean'
     ];
 }

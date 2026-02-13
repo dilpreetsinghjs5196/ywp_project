@@ -53,10 +53,14 @@ Route::prefix('admin')->group(function () {
     Route::post('/login', [\App\Http\Controllers\Admin\AdminAuthController::class, 'login'])->name('admin.login.submit');
 });
 
+// Admin/Therapist Shared Auth Routes
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::post('/logout', [\App\Http\Controllers\Admin\AdminAuthController::class, 'logout'])->name('admin.logout');
+});
+
 // Admin Panel Routes
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    Route::post('/logout', [\App\Http\Controllers\Admin\AdminAuthController::class, 'logout'])->name('admin.logout');
 
     // Role & User Management
     Route::resource('roles', \App\Http\Controllers\Admin\AdminRoleController::class, ['as' => 'admin']);
@@ -97,4 +101,14 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
     // Therapist Session Bookings
     Route::resource('therapist-bookings', \App\Http\Controllers\Admin\AdminTherapistBookingController::class, ['as' => 'admin'])->only(['index', 'show', 'destroy']);
+});
+
+// Therapist Panel Routes
+Route::prefix('therapist')->middleware(['auth', 'role:therapist'])->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'index'])->name('therapist.dashboard');
+    Route::get('/profile', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'profile'])->name('therapist.profile');
+    Route::put('/profile', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'updateProfile'])->name('therapist.profile.update');
+    Route::get('/clients', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'clients'])->name('therapist.clients');
+    Route::get('/availability', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'availability'])->name('therapist.availability');
+    Route::post('/availability', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'updateAvailability'])->name('therapist.availability.update');
 });

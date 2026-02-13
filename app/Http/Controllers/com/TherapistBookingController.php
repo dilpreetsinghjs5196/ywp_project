@@ -33,6 +33,7 @@ class TherapistBookingController extends Controller
         try {
             $booking = TherapistBooking::create([
                 'team_id' => $request->team_id,
+                'therapist_id' => $request->team_id,
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,

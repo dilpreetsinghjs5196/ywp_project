@@ -437,13 +437,14 @@
   <!-- #feedback end -->
 
   <!-- Quotes Section -->
-  <section class="quotes-section py-5">
+  <section class="quotes-section py-5" style="display: none;">
     <div class="quotes-background"></div>
     <div class="container py-5 px-2 px-md-0">
       <div class="row justify-content-center text-center text-white">
         <div class="col-12 col-xl-10">
           <h6 class="text-primary-color fw-semibold mb-2">
-            {{ $contents['get_in_touch']['small_heading'] ?? 'GET A QUOTE' }}</h6>
+            {{ $contents['get_in_touch']['small_heading'] ?? 'GET A QUOTE' }}
+          </h6>
           <h2 class="font-1 text-white" style="font-weight: 800;">
             {!! $contents['get_in_touch']['quote_title'] ?? 'Take <span class="text-primary-color">The first step</span> toward a <span class="text-primary-color">healthier</span> mind. Join us today and start your journey to <span class="text-primary-color">well-being!</span>' !!}
           </h2>

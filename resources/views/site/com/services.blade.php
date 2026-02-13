@@ -53,11 +53,11 @@
                         <div class="position-relative overflow-hidden" style="height: 200px;">
                             <img src="{{ $servImgUrl }}" class="w-100 h-100 object-fit-cover" alt="{{ $service->title }}">
                         </div>
-                        <div class="card-body p-4 pt-5 position-relative">
+                        <div class="bg-accent-color-2 card-body p-4 position-relative">
                             <div class="position-absolute top-0 start-0 translate-middle-y ms-4" style="margin-top: -10px;">
                                 @if($iconImgUrl)
                                     <div class="bg-white rounded-circle shadow-sm p-2 d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-                                        <img src="{{ $iconImgUrl }}" alt="{{ $service->title }} Icon" style="width: 40px; height: 40px; object-fit: contain;">
+                                        <img src="{{ $iconImgUrl }}" alt="{{ $service->title }} Icon" style="width: 100px; height: 70px; object-fit: contain;">
                                     </div>
                                 @elseif($service->icon)
                                     <div class="bg-primary-color rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">

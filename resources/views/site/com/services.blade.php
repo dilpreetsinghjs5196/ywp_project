@@ -192,8 +192,8 @@
   </section>
 
   <!-- Fees Section -->
-  <section class="section py-5">
-    <div class="b-container pb-4" style="padding-top:3rem !important;">
+  <section class="section py-5 mt-5">
+    <div class="b-container pb-4">
       <div class="card bg-light border-0 rounded-5 p-5 text-center">
         <h6 class="text-primary-color fw-semibold mb-2">{{ $contents['fees']['fees_label'] ?? 'TRANSPARENCY' }}</h6>
         <h2 class="font-1 mb-4" style="font-weight: 800;">{{ $contents['fees']['fees_title'] ?? 'Therapy Fees' }}</h2>

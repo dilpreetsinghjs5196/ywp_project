@@ -112,7 +112,7 @@
 
       <hr class="border-white solid border-2 my-5">
 
-      <div class="row text-white mb-0 mb-xl-5 pt-5">
+      <div class="row text-white mb-0">
         <div class="step-box col-12 col-lg-4" data-aos="fade-right" data-aos-delay="200">
           <h1>01</h1>
           <h3>{{ $contents['steps']['step_1_title'] ?? 'Initial Consultation' }}</h3>
@@ -134,7 +134,7 @@
 
   <!-- Fees Section -->
   <section class="section py-5">
-    <div class="b-container py-5">
+    <div class="b-container pb-5">
         <div class="card bg-light border-0 rounded-5 p-5 text-center">
             <h6 class="text-primary-color fw-semibold mb-2">{{ $contents['fees']['fees_label'] ?? 'TRANSPARENCY' }}</h6>
             <h2 class="font-1 mb-4" style="font-weight: 800;">{{ $contents['fees']['fees_title'] ?? 'Therapy Fees' }}</h2>

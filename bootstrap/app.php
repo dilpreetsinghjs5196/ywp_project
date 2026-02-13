@@ -12,6 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->append(\App\Http\Middleware\GuestCartMiddleware::class);
+        $middleware->alias([
+            'role' => \App\Http\Middleware\CheckRole::class,
+        ]);
+        $middleware->redirectTo(
+            fn($request) => ($request->is('admin/*') || $request->is('admin')) ? route('admin.login') : route('login')
+        );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

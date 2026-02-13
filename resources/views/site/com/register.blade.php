@@ -78,7 +78,7 @@
                                 Register Account <i class="bi bi-arrow-right ms-2"></i>
                             </button>
                             <div class="text-center">
-                                <p class="small text-muted mb-0">Already have an account? <a href="{{ route('com.login') }}"
+                                <p class="small text-muted mb-0">Already have an account? <a href="{{ route('login') }}"
                                         class="text-primary-color fw-bold text-decoration-none">Login Here</a></p>
                             </div>
                         </form>

@@ -35,7 +35,7 @@ Route::post('/razorpay/verify', [\App\Http\Controllers\com\CartController::class
 Route::get('/order-success/{id}', [\App\Http\Controllers\com\CartController::class, 'orderSuccess'])->name('com.order.success');
 
 // Authentication Routes
-Route::get('/login', [\App\Http\Controllers\com\AuthController::class, 'showLogin'])->name('com.login');
+Route::get('/login', [\App\Http\Controllers\com\AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [\App\Http\Controllers\com\AuthController::class, 'login']);
 Route::get('/register', [\App\Http\Controllers\com\AuthController::class, 'showRegister'])->name('com.register');
 Route::post('/register', [\App\Http\Controllers\com\AuthController::class, 'register']);
@@ -47,9 +47,21 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/profile/update', [\App\Http\Controllers\com\ProfileController::class, 'update'])->name('com.profile.update');
 });
 
-// Admin Panel Routes
+// Guest Admin Routes
 Route::prefix('admin')->group(function () {
+    Route::get('/login', [\App\Http\Controllers\Admin\AdminAuthController::class, 'showLogin'])->name('admin.login');
+    Route::post('/login', [\App\Http\Controllers\Admin\AdminAuthController::class, 'login'])->name('admin.login.submit');
+});
+
+// Admin Panel Routes
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::post('/logout', [\App\Http\Controllers\Admin\AdminAuthController::class, 'logout'])->name('admin.logout');
+
+    // Role & User Management
+    Route::resource('roles', \App\Http\Controllers\Admin\AdminRoleController::class, ['as' => 'admin']);
+    Route::post('users/create-from-team/{team}', [\App\Http\Controllers\Admin\AdminUserController::class, 'createFromTeam'])->name('admin.users.create-from-team');
+    Route::resource('users', \App\Http\Controllers\Admin\AdminUserController::class, ['as' => 'admin']);
 
     // Page Content Management
     Route::get('/pages/{slug}', [\App\Http\Controllers\Admin\AdminPageController::class, 'edit'])->name('admin.pages.edit');

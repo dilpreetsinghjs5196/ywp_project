@@ -273,14 +273,29 @@
                             <i class="bi bi-envelope-at"></i> SMTP Settings
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Access Control</div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}"
+                            href="{{ route('admin.roles.index') }}">
+                            <i class="bi bi-shield-lock"></i> Manage Roles
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}"
+                            href="{{ route('admin.users.index') }}">
+                            <i class="bi bi-person-gear"></i> User Roles
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="p-4 border-top border-light">
                 <a href="#" class="nav-link p-0 text-white opacity-75"
-                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();">
                     <i class="bi bi-box-arrow-right"></i> Logout
                 </a>
-                <form id="logout-form" action="#" method="POST" class="d-none">@csrf</form>
+                <form id="admin-logout-form" action="{{ route('admin.logout') }}" method="POST" class="d-none">@csrf</form>
             </div>
         </div>
 
@@ -304,14 +319,16 @@
                             <a class="text-dark text-decoration-none dropdown-toggle" href="#" role="button"
                                 data-bs-toggle="dropdown">
                                 <i class="bi bi-person-circle fs-5 me-1"></i> <span
-                                    class="d-none d-sm-inline">Admin</span>
+                                    class="d-none d-sm-inline">{{ Auth::user()->name }}</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="#">Profile</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="#">Logout</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();">Logout</a>
+                                </li>
                             </ul>
                         </div>
                     </div>

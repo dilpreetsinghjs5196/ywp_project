@@ -45,9 +45,16 @@ class HomeController extends Controller
     public function team()
     {
         $settings = SiteSetting::all()->pluck('value', 'key');
+        $contents = PageContent::where('page', 'team')
+            ->get()
+            ->groupBy('section')
+            ->map(function ($section) {
+                return $section->pluck('value', 'key');
+            });
+
         $teams = \App\Models\Team::where('is_active', true)->orderBy('sort_order')->get();
 
-        return view('site.com.team', compact('settings', 'teams'));
+        return view('site.com.team', compact('settings', 'contents', 'teams'));
     }
 
     public function teamSingle($id)

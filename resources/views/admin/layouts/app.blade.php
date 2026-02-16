@@ -225,6 +225,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {{ request()->is('admin/pages/team*') ? 'active' : '' }}"
+                            href="{{ route('admin.pages.edit', 'team') }}">
+                            <i class="bi bi-people"></i> Our Team Page
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link {{ request()->is('admin/pages/corporate*') ? 'active' : '' }}"
                             href="{{ route('admin.pages.edit', 'corporate') }}">
                             <i class="bi bi-building"></i> Corporate Page
@@ -252,7 +258,7 @@
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.teams.*') ? 'active' : '' }}"
                             href="{{ route('admin.teams.index') }}">
-                            <i class="bi bi-people"></i> Our Team
+                            <i class="bi bi-people"></i> Team Members
                         </a>
                     </li>
                     <li class="nav-item">
@@ -380,7 +386,8 @@
                                     class="d-none d-sm-inline">{{ Auth::user()->name }}</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="{{ route('admin.profile') }}"><i class="bi bi-person me-2"></i> My Profile</a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.profile') }}"><i
+                                            class="bi bi-person me-2"></i> My Profile</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

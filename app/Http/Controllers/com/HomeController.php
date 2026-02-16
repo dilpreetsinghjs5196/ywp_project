@@ -140,6 +140,15 @@ class HomeController extends Controller
         return view('site.com.services', compact('settings', 'contents', 'services'));
     }
 
+    public function serviceTherapists($slug)
+    {
+        $settings = SiteSetting::all()->pluck('value', 'key');
+        $service = \App\Models\Service::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $teams = $service->therapists()->where('is_active', true)->orderBy('sort_order')->get();
+
+        return view('site.com.service_therapists', compact('settings', 'service', 'teams'));
+    }
+
     public function submitAppointment(Request $request)
     {
         $validated = $request->validate([

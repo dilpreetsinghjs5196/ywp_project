@@ -88,6 +88,25 @@
                         </div>
 
                         <div class="mb-4">
+                            <label class="form-label fw-bold">Assign Therapists</label>
+                            <div class="row g-2 p-3 border rounded bg-light" style="max-height: 200px; overflow-y: auto;">
+                                @foreach($therapists as $therapist)
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="therapists[]" 
+                                                value="{{ $therapist->id }}" id="therapist_{{ $therapist->id }}"
+                                                {{ in_array($therapist->id, $service->therapists->pluck('id')->toArray()) ? 'checked' : '' }}>
+                                            <label class="form-check-label small" for="therapist_{{ $therapist->id }}">
+                                                {{ $therapist->name }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <small class="text-muted">Select all therapists who provide this specific service.</small>
+                        </div>
+
+                        <div class="mb-4">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" name="is_active" id="isActive" {{ $service->is_active ? 'checked' : '' }}>
                                 <label class="form-check-label fw-bold" for="isActive">Active Status</label>

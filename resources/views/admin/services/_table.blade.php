@@ -5,6 +5,7 @@
                 <th class="ps-4">Image</th>
                 <th>Title</th>
                 <th>Icon</th>
+                <th>Therapists</th>
                 <th>Order</th>
                 <th>Status</th>
                 <th class="text-end pe-4">Actions</th>
@@ -36,6 +37,11 @@
                         @else
                             <i class="bi {{ $service->icon }} text-primary-color fs-5"></i>
                         @endif
+                    </td>
+                    <td>
+                        <span class="badge bg-primary-subtle text-primary border">
+                            {{ $service->therapists->count() }} Specialists
+                        </span>
                     </td>
                     <td>{{ $service->sort_order }}</td>
                     <td>

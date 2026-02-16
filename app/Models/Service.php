@@ -17,4 +17,9 @@ class Service extends Model
         'sort_order',
         'is_active'
     ];
+
+    public function therapists()
+    {
+        return $this->belongsToMany(Team::class, 'service_team', 'service_id', 'team_id');
+    }
 }

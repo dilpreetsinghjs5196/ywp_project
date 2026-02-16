@@ -293,7 +293,7 @@
                         </div>
                       @endif
                     </div>
-                    <a href="{{ route('com.home') }}"
+                    <a href="#"
                       class="btn btn-dark btn-lg rounded-pill position-absolute top-0 end-0 me-3 fw-medium scale-hover"
                       style="margin-top: -25px;">Read More</a>
                     <h3 class="font-1 mt-5" style="font-weight: 800;">{{ $service->title }}</h3>
@@ -308,8 +308,8 @@
           <div class="swiper-pagination mt-4 position-relative"></div>
         </div>
         <!-- Navigation Arrows -->
-        <div class="swiper-button-next text-primary-color"></div>
-        <div class="swiper-button-prev text-primary-color"></div>
+        <div class="swiper-button-next services-next text-primary-color"></div>
+        <div class="swiper-button-prev services-prev text-primary-color"></div>
       </div>
     </div>
   </section>
@@ -371,8 +371,8 @@
           <div class="swiper-pagination mt-4 position-relative"></div>
         </div>
         <!-- Navigation Arrows -->
-        <div class="swiper-button-next text-primary-color"></div>
-        <div class="swiper-button-prev text-primary-color"></div>
+        <div class="swiper-button-next teams-next text-primary-color"></div>
+        <div class="swiper-button-prev teams-prev text-primary-color"></div>
       </div>
     </div>
   </section>
@@ -429,8 +429,8 @@
           <div class="swiper-pagination mt-4 position-relative"></div>
         </div>
         <!-- Navigation Arrows -->
-        <div class="swiper-button-next text-primary-color"></div>
-        <div class="swiper-button-prev text-primary-color"></div>
+        <div class="swiper-button-next testimonials-next text-primary-color"></div>
+        <div class="swiper-button-prev testimonials-prev text-primary-color"></div>
       </div>
     </div>
   </section>
@@ -629,8 +629,8 @@
           clickable: true,
         },
         navigation: {
-          nextEl: '.services-slider + .swiper-button-next',
-          prevEl: '.services-slider + .swiper-button-prev',
+          nextEl: '.services-next',
+          prevEl: '.services-prev',
         },
         breakpoints: {
           768: {
@@ -650,8 +650,8 @@
           clickable: true,
         },
         navigation: {
-          nextEl: '.teams-slider + .swiper-button-next',
-          prevEl: '.teams-slider + .swiper-button-prev',
+          nextEl: '.teams-next',
+          prevEl: '.teams-prev',
         },
         breakpoints: {
           768: {
@@ -676,8 +676,8 @@
           clickable: true,
         },
         navigation: {
-          nextEl: '.testimonials-slider + .swiper-button-next',
-          prevEl: '.testimonials-slider + .swiper-button-prev',
+          nextEl: '.testimonials-next',
+          prevEl: '.testimonials-prev',
         },
         breakpoints: {
           768: {

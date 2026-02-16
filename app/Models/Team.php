@@ -26,4 +26,9 @@ class Team extends Model
         'availability' => 'array',
         'is_active' => 'boolean'
     ];
+
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'service_team', 'team_id', 'service_id');
+    }
 }

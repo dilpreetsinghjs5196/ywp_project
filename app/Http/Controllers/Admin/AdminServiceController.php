@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Service;
+use App\Models\Team;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
@@ -37,7 +38,8 @@ class AdminServiceController extends Controller
      */
     public function create()
     {
-        return view('admin.services.create');
+        $therapists = Team::where('is_active', true)->get();
+        return view('admin.services.create', compact('therapists'));
     }
 
     /**
@@ -66,7 +68,11 @@ class AdminServiceController extends Controller
             $data['icon_image'] = $request->file('icon_image')->store('uploads/services/icons', 'public');
         }
 
-        Service::create($data);
+        $service = Service::create($data);
+
+        if ($request->has('therapists')) {
+            $service->therapists()->sync($request->therapists);
+        }
 
         return redirect()->route('admin.services.index')->with('success', 'Service created successfully.');
     }
@@ -76,7 +82,8 @@ class AdminServiceController extends Controller
      */
     public function edit(Service $service)
     {
-        return view('admin.services.edit', compact('service'));
+        $therapists = Team::where('is_active', true)->get();
+        return view('admin.services.edit', compact('service', 'therapists'));
     }
 
     /**
@@ -115,6 +122,12 @@ class AdminServiceController extends Controller
         }
 
         $service->update($data);
+
+        if ($request->has('therapists')) {
+            $service->therapists()->sync($request->therapists);
+        } else {
+            $service->therapists()->detach();
+        }
 
         return redirect()->route('admin.services.index')->with('success', 'Service updated successfully.');
     }

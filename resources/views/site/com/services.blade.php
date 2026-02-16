@@ -14,8 +14,8 @@
           clickable: true,
         },
         navigation: {
-          nextEl: '.services-slider + .swiper-button-next',
-          prevEl: '.services-slider + .swiper-button-prev',
+          nextEl: '.services-next',
+          prevEl: '.services-prev',
         },
         breakpoints: {
           768: {
@@ -115,6 +115,13 @@
                     <h4 class="font-1 fw-bold mb-3 mt-3">{{ $service->title }}</h4>
                     <p class="text-muted-color mb-3 line-clamp-6 service-description">{{ $service->description }}</p>
 
+                    <div class="mt-3">
+                      <a href="{{ route('com.services.therapists', $service->slug) }}"
+                        class="text-primary-color fw-bold text-decoration-none d-flex align-items-center">
+                        View Specialists <i class="bi bi-arrow-right ms-2"></i>
+                      </a>
+                    </div>
+
                     @if($service->goals)
                       <div class="mt-4 pt-3 border-top">
                         <h6 class="fw-bold text-primary-color mb-3">Goals include:</h6>
@@ -139,8 +146,8 @@
           <div class="swiper-pagination mt-4 position-relative"></div>
         </div>
         <!-- Navigation Arrows -->
-        <div class="swiper-button-next text-primary-color"></div>
-        <div class="swiper-button-prev text-primary-color"></div>
+        <div class="swiper-button-next services-next text-primary-color"></div>
+        <div class="swiper-button-prev services-prev text-primary-color"></div>
       </div>
     </div>
   </section>

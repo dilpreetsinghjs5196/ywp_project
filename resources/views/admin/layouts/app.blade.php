@@ -136,6 +136,57 @@
                 display: block;
             }
         }
+
+        /* Pagination Styling */
+        .pagination {
+            margin-bottom: 0;
+        }
+
+        .pagination .page-link {
+            color: var(--primary-color);
+            padding: 0.4rem 0.75rem;
+            font-size: 0.875rem;
+            border-radius: 5px;
+            margin: 0 2px;
+            border: 1px solid #e9ecef;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .pagination .page-item:not(.active) .page-link:hover {
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+            color: var(--primary-color);
+        }
+
+        .pagination svg {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .pagination nav .flex.justify-between {
+            display: none !important;
+        }
+
+        /* Custom Pagination Container */
+        .pagination-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        @media (max-width: 575.98px) {
+            .pagination-wrapper {
+                justify-content: center;
+                text-align: center;
+            }
+        }
     </style>
     @stack('css')
 </head>
@@ -210,12 +261,12 @@
                             <i class="bi bi-chat-left-quote"></i> Testimonials
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.appointments.*') ? 'active' : '' }}"
                             href="{{ route('admin.appointments.index') }}">
                             <i class="bi bi-envelope-paper"></i> Appointment Queries
                         </a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Wonder Store</div>
                     </li>
@@ -240,10 +291,16 @@
                     <li class="nav-item">
                         <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Queries & Bookings</div>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.bookings.*') ? 'active' : '' }}"
                             href="{{ route('admin.bookings.index') }}">
                             <i class="bi bi-question-circle"></i> Appointment Queries
+                        </a>
+                    </li> -->
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.appointments.*') ? 'active' : '' }}"
+                            href="{{ route('admin.appointments.index') }}">
+                            <i class="bi bi-envelope-paper"></i> Appointment Queries
                         </a>
                     </li>
                     <li class="nav-item">
@@ -295,7 +352,8 @@
                     onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();">
                     <i class="bi bi-box-arrow-right"></i> Logout
                 </a>
-                <form id="admin-logout-form" action="{{ route('admin.logout') }}" method="POST" class="d-none">@csrf</form>
+                <form id="admin-logout-form" action="{{ route('admin.logout') }}" method="POST" class="d-none">@csrf
+                </form>
             </div>
         </div>
 
@@ -327,7 +385,8 @@
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();">Logout</a>
+                                    <a class="dropdown-item" href="#"
+                                        onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();">Logout</a>
                                 </li>
                             </ul>
                         </div>
@@ -349,6 +408,7 @@
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.getElementById('sidebarToggle').addEventListener('click', function () {
@@ -361,6 +421,7 @@
             this.classList.remove('active');
         });
     </script>
+    @stack('scripts')
     @stack('js')
 </body>
 

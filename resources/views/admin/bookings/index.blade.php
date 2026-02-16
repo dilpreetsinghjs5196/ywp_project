@@ -8,65 +8,75 @@
         <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
             <h5 class="mb-0 fw-bold">All Queries</h5>
         </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="ps-4">Date</th>
-                            <th>Name</th>
-                            <th>Contact</th>
-                            <th>Subject</th>
-                            <th>Status</th>
-                            <th class="text-end pe-4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($bookings as $booking)
-                            <tr>
-                                <td class="ps-4">
-                                    <div class="fw-bold">{{ $booking->created_at->format('M d, Y') }}</div>
-                                    <div class="small text-muted">{{ $booking->created_at->format('h:i A') }}</div>
-                                </td>
-                                <td>
-                                    <div class="fw-bold">{{ $booking->name }}</div>
-                                </td>
-                                <td>
-                                    <div>{{ $booking->email }}</div>
-                                    <div class="small text-muted">{{ $booking->phone }}</div>
-                                </td>
-                                <td>{{ Str::limit($booking->subject, 30) }}</td>
-                                <td>
-                                    <span
-                                        class="badge bg-{{ $booking->status == 'pending' ? 'warning' : ($booking->status == 'confirmed' ? 'success' : 'danger') }}-subtle text-{{ $booking->status == 'pending' ? 'warning' : ($booking->status == 'confirmed' ? 'success' : 'danger') }} px-3">
-                                        {{ strtoupper($booking->status) }}
-                                    </span>
-                                </td>
-                                <td class="text-end pe-4">
-                                    <div class="btn-group">
-                                        <a href="{{ route('admin.bookings.show', $booking->id) }}"
-                                            class="btn btn-sm btn-light border">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <form action="{{ route('admin.bookings.destroy', $booking->id) }}" method="POST"
-                                            onsubmit="return confirm('Delete this query?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-light border text-danger">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="text-center py-5">No queries found.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+        <div class="card-body bg-light border-bottom p-3">
+            <form id="filterForm" action="{{ route('admin.bookings.index') }}" method="GET" class="row g-2">
+                <div class="col-md-5">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                        <input type="text" name="search" id="searchInput" class="form-control border-start-0"
+                            placeholder="Search by Name, Email, Phone or Subject..." value="{{ request('search') }}">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary btn-sm px-4">Filter</button>
+                    <a href="{{ route('admin.bookings.index') }}" id="clearBtn"
+                        class="btn btn-outline-secondary btn-sm {{ !request('search') ? 'd-none' : '' }}">
+                        Clear
+                    </a>
+                </div>
+            </form>
+        </div>
+        <div class="card-body p-0" id="tableContainer">
+            @include('admin.bookings._table')
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function () {
+            const tableContainer = $('#tableContainer');
+            const filterForm = $('#filterForm');
+            const searchInput = $('#searchInput');
+            const clearBtn = $('#clearBtn');
+
+            function updateTable(url) {
+                tableContainer.css('opacity', '0.5');
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function (response) {
+                        tableContainer.html(response);
+                        tableContainer.css('opacity', '1');
+
+                        if (searchInput.val()) {
+                            clearBtn.removeClass('d-none');
+                        } else {
+                            clearBtn.addClass('d-none');
+                        }
+                    }
+                });
+            }
+
+            let timeout = null;
+            searchInput.on('keyup', function () {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    updateTable(filterForm.attr('action') + '?' + filterForm.serialize());
+                }, 500);
+            });
+
+            filterForm.on('submit', function (e) {
+                e.preventDefault();
+                updateTable(filterForm.attr('action') + '?' + filterForm.serialize());
+            });
+
+            $(document).on('click', '.pagination a', function (e) {
+                e.preventDefault();
+                updateTable($(this).attr('href'));
+                $('html, body').animate({ scrollTop: $(".card").offset().top - 100 }, 100);
+            });
+        });
+    </script>
+@endpush

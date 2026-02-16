@@ -12,9 +12,22 @@ class AdminTestimonialController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
-        $testimonials = Testimonial::orderBy('sort_order')->get();
+        $query = Testimonial::query();
+
+        if ($request->filled('search')) {
+            $query->where('client_name', 'like', '%' . $request->search . '%')
+                ->orWhere('feedback', 'like', '%' . $request->search . '%')
+                ->orWhere('designation', 'like', '%' . $request->search . '%');
+        }
+
+        $testimonials = $query->orderBy('sort_order')->paginate(10)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('admin.testimonials._table', compact('testimonials'))->render();
+        }
+
         return view('admin.testimonials.index', compact('testimonials'));
     }
 

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Paginator::useBootstrapFive();
         // Share site settings with all views
         if (!app()->runningInConsole() && \Illuminate\Support\Facades\Schema::hasTable('site_settings')) {
             $allSettings = \App\Models\SiteSetting::all();

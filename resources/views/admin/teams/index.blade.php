@@ -15,12 +15,14 @@
                 <div class="row g-3">
                     <div class="col-md-8">
                         <label class="form-label fw-bold">In-Person Booking Address</label>
-                        <textarea name="booking_address" class="form-control" rows="2" required>{{ $bookingSettings['booking_address'] ?? '' }}</textarea>
+                        <textarea name="booking_address" class="form-control" rows="2"
+                            required>{{ $bookingSettings['booking_address'] ?? '' }}</textarea>
                         <small class="text-muted">This address will only be shown when "In-person" mode is selected.</small>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-bold">Session Duration</label>
-                        <input type="text" name="session_duration" class="form-control" value="{{ $bookingSettings['session_duration'] ?? '' }}" required placeholder="e.g. 50 mins">
+                        <input type="text" name="session_duration" class="form-control"
+                            value="{{ $bookingSettings['session_duration'] ?? '' }}" required placeholder="e.g. 50 mins">
                         <small class="text-muted">Global duration shown for all sessions.</small>
                         <div class="mt-3 text-end">
                             <button type="submit" class="btn btn-primary px-4">Save Booking Settings</button>
@@ -37,81 +39,75 @@
                 <i class="bi bi-plus-lg me-1"></i> Add New Member
             </a>
         </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="ps-4">Image</th>
-                            <th>Name & Designation</th>
-                            <th>Email</th>
-                            <th>Session Fees</th>
-                            <th>Social Links</th>
-                            <th>Order</th>
-                            <th>Status</th>
-                            <th class="text-end pe-4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($teams as $member)
-                            <tr>
-                                <td class="ps-4">
-                                    <img src="{{ $member->image ? (Str::startsWith($member->image, 'image/') ? asset($member->image) : asset('storage/' . $member->image)) : asset('image/default-user.jpg') }}" 
-                                         alt="{{ $member->name }}" class="rounded shadow-sm" style="width: 50px; height: 50px; object-fit: cover;">
-                                </td>
-                                <td>
-                                    <div class="fw-bold">{{ $member->name }}</div>
-                                    <small class="text-muted">{{ $member->designation }}</small>
-                                </td>
-                                <td>
-                                    @if($member->email)
-                                        <a href="mailto:{{ $member->email }}" class="text-decoration-none">{{ $member->email }}</a>
-                                    @else
-                                        <span class="text-muted small">Not set</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <span class="text-primary-color fw-bold">₹{{ number_format($member->fees ?? 0) }}</span>
-                                </td>
-                                <td>
-                                    <div class="d-flex gap-2">
-                                        @if($member->facebook)<i class="bi bi-facebook text-primary"></i>@endif
-                                        @if($member->twitter)<i class="bi bi-twitter text-info"></i>@endif
-                                        @if($member->instagram)<i class="bi bi-instagram text-danger"></i>@endif
-                                        @if($member->linkedin)<i class="bi bi-linkedin text-primary"></i>@endif
-                                    </div>
-                                </td>
-                                <td>{{ $member->sort_order }}</td>
-                                <td>
-                                    @if($member->is_active)
-                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3">Active</span>
-                                    @else
-                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3">Inactive</span>
-                                    @endif
-                                </td>
-                                <td class="text-end pe-4">
-                                    <div class="btn-group">
-                                        <a href="{{ route('admin.teams.edit', $member->id) }}" class="btn btn-light border btn-sm">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <form action="{{ route('admin.teams.destroy', $member->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this team member?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-light border btn-sm text-danger">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" class="text-center py-5 text-muted">No team members found. Start by adding one!</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+        <div class="card-body bg-light border-bottom p-3">
+            <form id="filterForm" action="{{ route('admin.teams.index') }}" method="GET" class="row g-2">
+                <div class="col-md-5">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                        <input type="text" name="search" id="searchInput" class="form-control border-start-0"
+                            placeholder="Search by Name, Designation or Email..." value="{{ request('search') }}">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary btn-sm px-4">Filter</button>
+                    <a href="{{ route('admin.teams.index') }}" id="clearBtn"
+                        class="btn btn-outline-secondary btn-sm {{ !request('search') ? 'd-none' : '' }}">
+                        Clear
+                    </a>
+                </div>
+            </form>
+        </div>
+        <div class="card-body p-0" id="tableContainer">
+            @include('admin.teams._table')
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function () {
+            const tableContainer = $('#tableContainer');
+            const filterForm = $('#filterForm');
+            const searchInput = $('#searchInput');
+            const clearBtn = $('#clearBtn');
+
+            function updateTable(url) {
+                tableContainer.css('opacity', '0.5');
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function (response) {
+                        tableContainer.html(response);
+                        tableContainer.css('opacity', '1');
+
+                        if (searchInput.val()) {
+                            clearBtn.removeClass('d-none');
+                        } else {
+                            clearBtn.addClass('d-none');
+                        }
+                    }
+                });
+            }
+
+            let timeout = null;
+            searchInput.on('keyup', function () {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    updateTable(filterForm.attr('action') + '?' + filterForm.serialize());
+                }, 500);
+            });
+
+            filterForm.on('submit', function (e) {
+                e.preventDefault();
+                updateTable(filterForm.attr('action') + '?' + filterForm.serialize());
+            });
+
+            $(document).on('click', '.pagination a', function (e) {
+                e.preventDefault();
+                updateTable($(this).attr('href'));
+                $('html, body').animate({ scrollTop: $(".card").offset().top - 100 }, 100);
+            });
+        });
+    </script>
+@endpush

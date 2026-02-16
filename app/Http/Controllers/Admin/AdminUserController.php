@@ -13,14 +13,25 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminUserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('roles')->paginate(10);
+        $query = User::with('roles');
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('email', 'like', '%' . $request->search . '%');
+        }
+
+        $users = $query->paginate(10)->withQueryString();
 
         $userEmails = User::pluck('email')->toArray();
         $unregisteredTeamMembers = Team::whereNotNull('email')
             ->whereNotIn('email', $userEmails)
             ->get();
+
+        if ($request->ajax()) {
+            return view('admin.users._table', compact('users', 'unregisteredTeamMembers'))->render();
+        }
 
         return view('admin.users.index', compact('users', 'unregisteredTeamMembers'));
     }

@@ -23,7 +23,7 @@ class AdminTherapistBookingController extends Controller
             $query->where('therapist_id', $request->therapist_id);
         }
 
-        $bookings = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
+        $bookings = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
         $therapists = \App\Models\Team::orderBy('name')->get();
 
         if ($request->ajax()) {

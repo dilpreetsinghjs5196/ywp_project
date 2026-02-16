@@ -8,12 +8,20 @@ use App\Models\WonderStoreCategory;
 
 class AdminWonderStoreCategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = WonderStoreCategory::latest()->get();
+        $query = WonderStoreCategory::query();
+
+        if ($request->filled('search')) {
+            $query->where('category_name', 'like', '%' . $request->search . '%');
+        }
+
+        $categories = $query->latest()->paginate(10)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('admin.wonder_store.categories._table', compact('categories'))->render();
+        }
+
         return view('admin.wonder_store.categories.index', compact('categories'));
     }
 

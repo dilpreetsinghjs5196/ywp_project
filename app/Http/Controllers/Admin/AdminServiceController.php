@@ -14,9 +14,21 @@ class AdminServiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $services = Service::orderBy('sort_order')->get();
+        $query = Service::query();
+
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%')
+                ->orWhere('description', 'like', '%' . $request->search . '%');
+        }
+
+        $services = $query->orderBy('sort_order')->paginate(10)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('admin.services._table', compact('services'))->render();
+        }
+
         return view('admin.services.index', compact('services'));
     }
 

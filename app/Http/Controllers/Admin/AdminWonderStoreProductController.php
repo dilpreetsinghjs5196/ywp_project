@@ -10,25 +10,23 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminWonderStoreProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $query = WonderStoreProduct::with('category');
 
-        // Search by Description (since there is no name/title field per user request)
         if ($request->filled('search')) {
-            $query->where('product_description', 'like', '%' . $request->search . '%');
-        }
-
-        // Filter by Category
-        if ($request->filled('category_id')) {
-            $query->where('category_id', $request->category_id);
+            $query->where('product_description', 'like', '%' . $request->search . '%')
+                ->orWhereHas('category', function ($q) use ($request) {
+                    $q->where('category_name', 'like', '%' . $request->search . '%');
+                });
         }
 
         $products = $query->latest()->paginate(10)->withQueryString();
         $categories = WonderStoreCategory::where('is_active', true)->get();
+
+        if ($request->ajax()) {
+            return view('admin.wonder_store.products._table', compact('products'))->render();
+        }
 
         return view('admin.wonder_store.products.index', compact('products', 'categories'));
     }

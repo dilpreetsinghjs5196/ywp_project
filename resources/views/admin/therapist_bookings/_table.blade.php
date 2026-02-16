@@ -66,6 +66,13 @@
 
 @if($bookings->hasPages())
     <div class="card-footer bg-white border-top">
-        {{ $bookings->links() }}
+        <div class="pagination-wrapper">
+            <div class="text-muted small">
+                Showing {{ $bookings->firstItem() }} to {{ $bookings->lastItem() }} of {{ $bookings->total() }} results
+            </div>
+            <div class="pagination-links">
+                {{ $bookings->links() }}
+            </div>
+        </div>
     </div>
 @endif

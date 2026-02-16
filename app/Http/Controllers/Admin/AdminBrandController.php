@@ -10,12 +10,20 @@ use Illuminate\Support\Str;
 
 class AdminBrandController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $brands = Brand::orderBy('sort_order')->get();
+        $query = Brand::query();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        $brands = $query->orderBy('sort_order')->paginate(10)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('admin.brands._table', compact('brands'))->render();
+        }
+
         return view('admin.brands.index', compact('brands'));
     }
 

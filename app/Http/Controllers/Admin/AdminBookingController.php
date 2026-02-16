@@ -8,9 +8,23 @@ use Illuminate\Http\Request;
 
 class AdminBookingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $bookings = Booking::orderBy('created_at', 'desc')->paginate(15);
+        $query = Booking::query();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('email', 'like', '%' . $request->search . '%')
+                ->orWhere('phone', 'like', '%' . $request->search . '%')
+                ->orWhere('subject', 'like', '%' . $request->search . '%');
+        }
+
+        $bookings = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('admin.bookings._table', compact('bookings'))->render();
+        }
+
         return view('admin.bookings.index', compact('bookings'));
     }
 

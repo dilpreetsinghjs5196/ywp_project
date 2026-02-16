@@ -11,59 +11,75 @@
                 <i class="bi bi-plus-lg me-1"></i> Add New Brand
             </a>
         </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="ps-4">Logo</th>
-                            <th>Brand Name</th>
-                            <th>Order</th>
-                            <th>Status</th>
-                            <th class="text-end pe-4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($brands as $brand)
-                            <tr>
-                                <td class="ps-4">
-                                    <img src="{{ $brand->image ? (Str::startsWith($brand->image, 'image/') ? asset($brand->image) : asset('storage/' . $brand->image)) : asset('image/default-brand.jpg') }}" 
-                                         alt="{{ $brand->name }}" class="rounded shadow-sm" style="width: 80px; height: 50px; object-fit: contain; background: #f8f9fa;">
-                                </td>
-                                <td>
-                                    <div class="fw-bold">{{ $brand->name ?? 'Unnamed Brand' }}</div>
-                                </td>
-                                <td>{{ $brand->sort_order }}</td>
-                                <td>
-                                    @if($brand->is_active)
-                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3">Active</span>
-                                    @else
-                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3">Inactive</span>
-                                    @endif
-                                </td>
-                                <td class="text-end pe-4">
-                                    <div class="btn-group">
-                                        <a href="{{ route('admin.brands.edit', $brand->id) }}" class="btn btn-light border btn-sm">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <form action="{{ route('admin.brands.destroy', $brand->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this brand?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-light border btn-sm text-danger">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="text-center py-5 text-muted">No brands found. Start by adding one!</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+        <div class="card-body bg-light border-bottom p-3">
+            <form id="filterForm" action="{{ route('admin.brands.index') }}" method="GET" class="row g-2">
+                <div class="col-md-5">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                        <input type="text" name="search" id="searchInput" class="form-control border-start-0"
+                            placeholder="Search by Brand Name..." value="{{ request('search') }}">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary btn-sm px-4">Filter</button>
+                    <a href="{{ route('admin.brands.index') }}" id="clearBtn"
+                        class="btn btn-outline-secondary btn-sm {{ !request('search') ? 'd-none' : '' }}">
+                        Clear
+                    </a>
+                </div>
+            </form>
+        </div>
+        <div class="card-body p-0" id="tableContainer">
+            @include('admin.brands._table')
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function () {
+            const tableContainer = $('#tableContainer');
+            const filterForm = $('#filterForm');
+            const searchInput = $('#searchInput');
+            const clearBtn = $('#clearBtn');
+
+            function updateTable(url) {
+                tableContainer.css('opacity', '0.5');
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function (response) {
+                        tableContainer.html(response);
+                        tableContainer.css('opacity', '1');
+
+                        if (searchInput.val()) {
+                            clearBtn.removeClass('d-none');
+                        } else {
+                            clearBtn.addClass('d-none');
+                        }
+                    }
+                });
+            }
+
+            let timeout = null;
+            searchInput.on('keyup', function () {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    updateTable(filterForm.attr('action') + '?' + filterForm.serialize());
+                }, 500);
+            });
+
+            filterForm.on('submit', function (e) {
+                e.preventDefault();
+                updateTable(filterForm.attr('action') + '?' + filterForm.serialize());
+            });
+
+            $(document).on('click', '.pagination a', function (e) {
+                e.preventDefault();
+                updateTable($(this).attr('href'));
+                $('html, body').animate({ scrollTop: $(".card").offset().top - 100 }, 100);
+            });
+        });
+    </script>
+@endpush

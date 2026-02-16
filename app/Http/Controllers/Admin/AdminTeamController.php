@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\Team;
 use App\Http\Requests\StoreTeamRequest;
 use App\Http\Requests\UpdateTeamRequest;
@@ -12,10 +13,23 @@ class AdminTeamController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $teams = Team::orderBy('sort_order')->get();
+        $query = Team::query();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('designation', 'like', '%' . $request->search . '%')
+                ->orWhere('email', 'like', '%' . $request->search . '%');
+        }
+
+        $teams = $query->orderBy('sort_order')->paginate(10)->withQueryString();
         $bookingSettings = \App\Models\SiteSetting::where('group', 'booking')->get()->pluck('value', 'key');
+
+        if ($request->ajax()) {
+            return view('admin.teams._table', compact('teams'))->render();
+        }
+
         return view('admin.teams.index', compact('teams', 'bookingSettings'));
     }
 

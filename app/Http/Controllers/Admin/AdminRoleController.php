@@ -8,9 +8,22 @@ use Illuminate\Http\Request;
 
 class AdminRoleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $roles = Role::all();
+        $query = Role::query();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('slug', 'like', '%' . $request->search . '%')
+                ->orWhere('description', 'like', '%' . $request->search . '%');
+        }
+
+        $roles = $query->paginate(10)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('admin.roles._table', compact('roles'))->render();
+        }
+
         return view('admin.roles.index', compact('roles'));
     }
 

@@ -8,87 +8,75 @@
         <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
             <h5 class="mb-0 fw-bold">All Appointment Requests</h5>
         </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="ps-4">Date Submited</th>
-                            <th>Name</th>
-                            <th>Email/Phone</th>
-                            <th>Appointment Date</th>
-                            <th>Subject</th>
-                            <th>Status</th>
-                            <th class="text-end pe-4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($appointments as $appointment)
-                                            <tr>
-                                                <td class="ps-4">
-                                                    <div class="small fw-semibold">{{ $appointment->created_at->format('M d, Y') }}</div>
-                                                    <div class="small text-muted">{{ $appointment->created_at->format('h:i A') }}</div>
-                                                </td>
-                                                <td>
-                                                    <div class="fw-bold">{{ $appointment->name }}</div>
-                                                </td>
-                                                <td>
-                                                    <div>{{ $appointment->email }}</div>
-                                                    <div class="small text-muted">{{ $appointment->phone }}</div>
-                                                </td>
-                                                <td>
-                                                    <div class="badge bg-primary-subtle text-primary px-2">
-                                                        {{ \Carbon\Carbon::parse($appointment->date)->format('M d, Y') }} at
-                                                        {{ \Carbon\Carbon::parse($appointment->time)->format('h:i A') }}
-                                                    </div>
-                                                </td>
-                                                <td>{{ Str::limit($appointment->subject, 30) }}</td>
-                                                <td>
-                                                    @php
-                                                        $statusClass = match ($appointment->status) {
-                                                            'pending' => 'bg-warning-subtle text-warning',
-                                                            'contacted' => 'bg-info-subtle text-info',
-                                                            'completed' => 'bg-success-subtle text-success',
-                                                            'cancelled' => 'bg-danger-subtle text-danger',
-                                                            default => 'bg-secondary-subtle text-secondary'
-                                                        };
-                                                    @endphp
-                              <span
-                                                        class="badge {{ $statusClass }} px-3 text-capitalize">{{ $appointment->status }}</span>
-                                                </td>
-                                                <td class="text-end pe-4">
-                                                    <div class="btn-group">
-                                                        <a href="{{ route('admin.appointments.show', $appointment->id) }}"
-                                                            class="btn btn-sm btn-light border" title="View Details">
-                                                            <i class="bi bi-eye"></i>
-                                                        </a>
-                                                        <form action="{{ route('admin.appointments.destroy', $appointment->id) }}" method="POST"
-                                                            onsubmit="return confirm('Are you sure you want to delete this inquiry?')">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-light border text-danger"
-                                                                title="Delete">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" class="text-center py-5">
-                                    <div class="text-muted">No appointment requests found yet.</div>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+        <div class="card-body bg-light border-bottom p-3">
+            <form id="filterForm" action="{{ route('admin.appointments.index') }}" method="GET" class="row g-2">
+                <div class="col-md-5">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                        <input type="text" name="search" id="searchInput" class="form-control border-start-0"
+                            placeholder="Search by Name, Email, Phone or Subject..." value="{{ request('search') }}">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary btn-sm px-4">Filter</button>
+                    <a href="{{ route('admin.appointments.index') }}" id="clearBtn"
+                        class="btn btn-outline-secondary btn-sm {{ !request('search') ? 'd-none' : '' }}">
+                        Clear
+                    </a>
+                </div>
+            </form>
         </div>
-        @if($appointments->hasPages())
-            <div class="card-footer bg-white">
-                {{ $appointments->links() }}
-            </div>
-        @endif
+        <div class="card-body p-0" id="tableContainer">
+            @include('admin.appointments._table')
+        </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function () {
+            const tableContainer = $('#tableContainer');
+            const filterForm = $('#filterForm');
+            const searchInput = $('#searchInput');
+            const clearBtn = $('#clearBtn');
+
+            function updateTable(url) {
+                tableContainer.css('opacity', '0.5');
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function (response) {
+                        tableContainer.html(response);
+                        tableContainer.css('opacity', '1');
+
+                        if (searchInput.val()) {
+                            clearBtn.removeClass('d-none');
+                        } else {
+                            clearBtn.addClass('d-none');
+                        }
+                    }
+                });
+            }
+
+            let timeout = null;
+            searchInput.on('keyup', function () {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    updateTable(filterForm.attr('action') + '?' + filterForm.serialize());
+                }, 500);
+            });
+
+            filterForm.on('submit', function (e) {
+                e.preventDefault();
+                updateTable(filterForm.attr('action') + '?' + filterForm.serialize());
+            });
+
+            $(document).on('click', '.pagination a', function (e) {
+                e.preventDefault();
+                updateTable($(this).attr('href'));
+                $('html, body').animate({ scrollTop: $(".card").offset().top - 100 }, 100);
+            });
+        });
+    </script>
+@endpush

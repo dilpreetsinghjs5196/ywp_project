@@ -48,11 +48,56 @@
 
                         <div class="row mb-3">
                             <div class="col-12">
-                                <label class="form-label fw-bold">Description</label>
+                                <label class="form-label fw-bold">Bio / Description</label>
                                 <textarea name="description" class="form-control @error('description') is-invalid @enderror"
                                     rows="4"
-                                    placeholder="Enter therapist description">{{ old('description', $team->description) }}</textarea>
+                                    placeholder="Enter therapist bio">{{ old('description', $team->description) }}</textarea>
                                 @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Mode</label>
+                                <input type="text" name="mode" class="form-control @error('mode') is-invalid @enderror"
+                                    value="{{ old('mode', $team->mode) }}" placeholder="e.g. Online, In-person">
+                                @error('mode')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Languages</label>
+                                <input type="text" name="languages" class="form-control @error('languages') is-invalid @enderror"
+                                    value="{{ old('languages', $team->languages) }}" placeholder="e.g. English, Hindi">
+                                @error('languages')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Specialization</label>
+                                <textarea name="specialization" class="form-control @error('specialization') is-invalid @enderror"
+                                    rows="3" placeholder="e.g. Anxiety, Depression">{{ old('specialization', $team->specialization) }}</textarea>
+                                @error('specialization')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Specialties</label>
+                                <textarea name="specialties" class="form-control @error('specialties') is-invalid @enderror"
+                                    rows="3" placeholder="e.g. Anxiety & Overthinking">{{ old('specialties', $team->specialties) }}</textarea>
+                                @error('specialties')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Qualifications</label>
+                                <textarea name="qualifications" class="form-control @error('qualifications') is-invalid @enderror"
+                                    rows="3" placeholder="e.g. M.A. Clinical Psychology">{{ old('qualifications', $team->qualifications) }}</textarea>
+                                @error('qualifications')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Session Type</label>
+                                <input type="text" name="session_type" class="form-control @error('session_type') is-invalid @enderror"
+                                    value="{{ old('session_type', $team->session_type) }}" placeholder="e.g. Online Video Call">
+                                @error('session_type')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                         </div>
 

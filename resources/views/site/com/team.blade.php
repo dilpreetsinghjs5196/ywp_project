@@ -67,6 +67,23 @@
                       <h5 class="font-1 fw-bolder mb-0" style="font-size: 1.1rem;">{{ $member->name }}</h5>
                     </a>
                     <p class="mb-2 fw-semibold" style="font-size: 0.85rem;">{{ $member->designation }}</p>
+
+                    @if($member->mode || $member->languages)
+                      <div class="d-flex flex-wrap justify-content-center gap-1 mb-2 px-2">
+                        @if($member->mode)
+                          <span class="badge bg-white-transparent text-white border border-white rounded-pill"
+                            style="font-size: 0.65rem;">
+                            📍 {{ $member->mode }}
+                          </span>
+                        @endif
+                        @if($member->languages)
+                          <span class="badge bg-white-transparent text-white border border-white rounded-pill"
+                            style="font-size: 0.65rem;">
+                            🗣 {{ Str::limit($member->languages, 15) }}
+                          </span>
+                        @endif
+                      </div>
+                    @endif
                   </div>
                   <div class="d-flex gap-2 mb-2">
                     <a href="{{ route('com.therapist.booking', $member->id) }}"
@@ -204,6 +221,10 @@
 
     .accordion-button:focus {
       box-shadow: none;
+    }
+
+    .bg-white-transparent {
+      background-color: rgba(255, 255, 255, 0.15);
     }
   </style>
 

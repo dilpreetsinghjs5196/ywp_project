@@ -75,12 +75,83 @@
                     <h5 class="text-primary-color fw-bold text-uppercase mb-2">{{ $team->designation }}</h5>
                     <h2 class="font-1 fw-bold display-5 mb-4">{{ $team->name }}</h2>
 
-                    <div class="mb-5">
+                    <div class="mb-4">
                         <h5 class="fw-bold mb-3 font-1">About Me</h5>
                         <p class="text-muted-color fs-5" style="line-height: 1.8;">
                             {!! nl2br(e($team->description ?? 'No description available.')) !!}
                         </p>
                     </div>
+
+                    <div class="row g-3 mb-4">
+                        @if($team->mode)
+                            <div class="col-md-6 mb-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="fs-4 text-primary-color">📍</span>
+                                    <div>
+                                        <div class="fw-bold small text-muted text-uppercase">Mode</div>
+                                        <div class="fw-semibold">{{ $team->mode }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        @if($team->languages)
+                            <div class="col-md-6 mb-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="fs-4 text-primary-color">🗣</span>
+                                    <div>
+                                        <div class="fw-bold small text-muted text-uppercase">Languages</div>
+                                        <div class="fw-semibold">{{ $team->languages }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        @if($team->session_type)
+                            <div class="col-md-6 mb-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="fs-4 text-primary-color">🔵</span>
+                                    <div>
+                                        <div class="fw-bold small text-muted text-uppercase">Session Type</div>
+                                        <div class="fw-semibold">{{ $team->session_type }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        @if($team->specialization)
+                            <div class="col-12 mb-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="fs-4 text-primary-color">🧩</span>
+                                    <div>
+                                        <div class="fw-bold small text-muted text-uppercase">Specialization</div>
+                                        <div class="fw-semibold">{{ $team->specialization }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+
+                    @if($team->specialties)
+                        <div class="mb-4">
+                            <h5 class="fw-bold mb-2 font-1">Specialties</h5>
+                            <ul class="list-unstyled d-flex flex-wrap gap-2">
+                                @foreach(explode("\n", $team->specialties) as $specialty)
+                                    @if(trim($specialty))
+                                        <li class="bg-light px-3 py-1 rounded-pill border small fw-semibold">
+                                            {{ trim($specialty) }}
+                                        </li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    @if($team->qualifications)
+                        <div class="mb-4">
+                            <h5 class="fw-bold mb-2 font-1">Qualifications</h5>
+                            <div class="text-muted-color">
+                                {!! nl2br(e($team->qualifications)) !!}
+                            </div>
+                        </div>
+                    @endif
 
                     <!-- Booking Section -->
                     <div class="booking-cta-card p-4 rounded-5 shadow-lg border-0 mt-5"

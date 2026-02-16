@@ -422,27 +422,43 @@
 
                 <!-- Main Panel -->
                 <div class="booking-main-content">
+                    @php
+                        $therapistMode = strtolower($team->mode ?? '');
+                        $showInPerson = str_contains($therapistMode, 'in-person') || str_contains($therapistMode, 'offline') || empty($therapistMode);
+                        $showOnline = str_contains($therapistMode, 'online') || str_contains($therapistMode, 'video') || str_contains($therapistMode, 'phone') || empty($therapistMode);
+
+                        $defaultMode = $showInPerson ? 'In-person' : 'Video call';
+                    @endphp
+
                     <!-- Step 1 Content -->
                     <div id="center-step1">
                         <h4 class="section-title">Mode of Session</h4>
 
                         <div class="mode-selection-grid">
-                            <div class="mode-square active" onclick="selectMode(this, 'In-person')">
-                                <i class="bi bi-house"></i>
-                                <span>In-person</span>
-                            </div>
-                            <div class="mode-square" onclick="selectMode(this, 'Video call')">
-                                <i class="bi bi-camera-video"></i>
-                                <span>Video call</span>
-                            </div>
-                            <div class="mode-square" onclick="selectMode(this, 'Phone call')">
-                                <i class="bi bi-telephone"></i>
-                                <span>Phone call</span>
-                            </div>
+                            @if($showInPerson)
+                                <div class="mode-square {{ $defaultMode == 'In-person' ? 'active' : '' }}"
+                                    onclick="selectMode(this, 'In-person')">
+                                    <i class="bi bi-house"></i>
+                                    <span>In-person</span>
+                                </div>
+                            @endif
+
+                            @if($showOnline)
+                                <div class="mode-square {{ $defaultMode == 'Video call' ? 'active' : '' }}"
+                                    onclick="selectMode(this, 'Video call')">
+                                    <i class="bi bi-camera-video"></i>
+                                    <span>Video call</span>
+                                </div>
+                                <div class="mode-square {{ $defaultMode == 'Phone call' ? 'active' : '' }}"
+                                    onclick="selectMode(this, 'Phone call')">
+                                    <i class="bi bi-telephone"></i>
+                                    <span>Phone call</span>
+                                </div>
+                            @endif
                         </div>
 
                         <!-- Dynamic Address Area -->
-                        <div id="addressSection" class="mb-4">
+                        <div id="addressSection" class="mb-4" style="display: {{ $defaultMode == 'In-person' ? 'block' : 'none' }};">
                             <div class="address-card">
                                 <div class="d-flex gap-2 mb-2">
                                     <i class="bi bi-geo-alt-fill text-primary"></i>
@@ -663,9 +679,9 @@
                     }
 
                     dayDiv.innerHTML = `
-                            <div class="day-name">${days[dateObj.getDay()]}</div>
-                            <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
-                        `;
+                                <div class="day-name">${days[dateObj.getDay()]}</div>
+                                <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
+                            `;
 
                     dayDiv.onclick = function () {
                         document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
@@ -682,7 +698,7 @@
             }
 
             let currentStep = 1;
-            let selectedModeName = 'In-person';
+            let selectedModeName = '{{ $defaultMode }}';
 
             window.goToStep = function (step) {
                 currentStep = step;

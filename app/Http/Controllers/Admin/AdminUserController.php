@@ -73,11 +73,18 @@ class AdminUserController extends Controller
         $request->validate([
             'roles' => 'required|array',
             'roles.*' => 'exists:roles,id',
+            'password' => 'nullable|string|min:8|confirmed',
         ]);
 
         $user->roles()->sync($request->roles);
 
-        return redirect()->route('admin.users.index')->with('success', 'User roles updated successfully.');
+        if ($request->filled('password')) {
+            $user->update([
+                'password' => Hash::make($request->password)
+            ]);
+        }
+
+        return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
     }
 
     public function destroy(User $user)

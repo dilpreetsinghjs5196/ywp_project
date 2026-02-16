@@ -62,6 +62,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 // Admin Panel Routes
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/profile', [\App\Http\Controllers\Admin\AdminProfileController::class, 'index'])->name('admin.profile');
+    Route::put('/profile', [\App\Http\Controllers\Admin\AdminProfileController::class, 'update'])->name('admin.profile.update');
 
     // Role & User Management
     Route::resource('roles', \App\Http\Controllers\Admin\AdminRoleController::class, ['as' => 'admin']);
@@ -110,7 +112,9 @@ Route::prefix('therapist')->middleware(['auth', 'role:therapist'])->group(functi
     Route::get('/dashboard', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'index'])->name('therapist.dashboard');
     Route::get('/profile', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'profile'])->name('therapist.profile');
     Route::put('/profile', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'updateProfile'])->name('therapist.profile.update');
+    Route::put('/password', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'updatePassword'])->name('therapist.password.update');
     Route::get('/clients', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'clients'])->name('therapist.clients');
+    Route::get('/bookings', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'bookings'])->name('therapist.bookings');
     Route::get('/availability', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'availability'])->name('therapist.availability');
     Route::post('/availability', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'updateAvailability'])->name('therapist.availability.update');
 });

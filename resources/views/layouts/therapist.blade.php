@@ -98,6 +98,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('therapist.bookings') ? 'active' : '' }}"
+                        href="{{ route('therapist.bookings') }}">
+                        <i class="bi bi-calendar-check"></i> My Bookings
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('therapist.clients') ? 'active' : '' }}"
                         href="{{ route('therapist.clients') }}">
                         <i class="bi bi-people"></i> My Clients

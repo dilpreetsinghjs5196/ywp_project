@@ -107,6 +107,16 @@ class AdminTeamController extends Controller
 
         $team->update($data);
 
+        // Update the linked user's password if provided
+        if ($request->filled('password') && $team->email) {
+            $user = \App\Models\User::where('email', $team->email)->first();
+            if ($user) {
+                $user->update([
+                    'password' => \Illuminate\Support\Facades\Hash::make($request->password)
+                ]);
+            }
+        }
+
         return redirect()->route('admin.teams.index')->with('success', 'Team member updated successfully.');
     }
 

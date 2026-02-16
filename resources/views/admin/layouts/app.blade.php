@@ -380,7 +380,7 @@
                                     class="d-none d-sm-inline">{{ Auth::user()->name }}</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.profile') }}"><i class="bi bi-person me-2"></i> My Profile</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

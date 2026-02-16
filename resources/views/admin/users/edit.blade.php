@@ -40,9 +40,24 @@
                     @enderror
                 </div>
 
+                <div class="mb-4">
+                    <label class="form-label d-block fw-bold mb-3">Login Password</label>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted">New Password (leave blank to keep current)</label>
+                            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror">
+                            @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted">Confirm New Password</label>
+                            <input type="password" name="password_confirmation" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="d-flex gap-2 justify-content-end mt-4">
                     <a href="{{ route('admin.users.index') }}" class="btn btn-light px-4">Cancel</a>
-                    <button type="submit" class="btn btn-primary px-5">Sync Roles</button>
+                    <button type="submit" class="btn btn-primary px-5">Update User</button>
                 </div>
             </form>
         </div>

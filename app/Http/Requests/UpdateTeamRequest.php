@@ -35,6 +35,7 @@ class UpdateTeamRequest extends FormRequest
             'sort_order' => 'nullable|integer',
             'is_active' => 'nullable',
             'availability' => 'nullable|array',
+            'password' => 'nullable|string|min:8|confirmed',
         ];
     }
 }

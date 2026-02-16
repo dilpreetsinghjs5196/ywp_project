@@ -84,6 +84,22 @@
                             </div>
                         </div>
 
+                        <div class="row mb-3 bg-light p-3 rounded">
+                            <div class="col-12 mb-2">
+                                <h6 class="fw-bold text-dark"><i class="bi bi-shield-lock me-1"></i> Login Security</h6>
+                                <p class="small text-muted mb-3">Update the therapist's portal login password here. Leave blank to keep the current password.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">New Login Password</label>
+                                <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Enter new password">
+                                @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Confirm Password</label>
+                                <input type="password" name="password_confirmation" class="form-control" placeholder="Repeat new password">
+                            </div>
+                        </div>
+
                         <hr class="my-4">
                         <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-calendar3 me-2"></i> Therapist Availability Calendar</h6>
                         <p class="small text-muted mb-3">Enter time slots separated by commas (e.g., 10:00 AM, 11:30 AM, 02:00 PM).</p>

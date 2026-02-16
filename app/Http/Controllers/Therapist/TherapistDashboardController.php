@@ -8,6 +8,7 @@ use App\Models\Team;
 use App\Models\TherapistBooking;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class TherapistDashboardController extends Controller
 {
@@ -22,7 +23,6 @@ class TherapistDashboardController extends Controller
         }
 
         $bookings = TherapistBooking::where('therapist_id', $therapist->id)
-            ->where('payment_status', 'paid')
             ->orderBy('booking_date', 'desc')
             ->limit(5)
             ->get();
@@ -35,6 +35,32 @@ class TherapistDashboardController extends Controller
             ->count();
 
         return view('therapist.dashboard', compact('therapist', 'bookings', 'totalEarnings', 'totalClients'));
+    }
+
+    public function bookings(Request $request)
+    {
+        $therapist = Team::where('email', Auth::user()->email)->first();
+        $query = TherapistBooking::where('therapist_id', $therapist->id);
+
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('email', 'like', '%' . $request->search . '%')
+                    ->orWhere('phone', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('payment_status', $request->status);
+        }
+
+        $bookings = $query->orderBy('id', 'desc')->paginate(10)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('therapist.bookings._table', compact('bookings'))->render();
+        }
+
+        return view('therapist.bookings.index', compact('bookings'));
     }
 
     public function profile()
@@ -52,21 +78,48 @@ class TherapistDashboardController extends Controller
             'designation' => 'required|string|max:255',
             'fees' => 'required|numeric',
             'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'facebook' => 'nullable|url',
+            'twitter' => 'nullable|url',
+            'instagram' => 'nullable|url',
+            'linkedin' => 'nullable|url',
         ]);
 
-        $therapist->update($request->all());
+        $data = $request->except('image');
+
+        if ($request->hasFile('image')) {
+            // Delete old image if it exists and is not a default url
+            if ($therapist->image && !Str::startsWith($therapist->image, 'http')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($therapist->image);
+            }
+            $data['image'] = $request->file('image')->store('uploads/teams', 'public');
+        }
+
+        $therapist->update($data);
 
         return back()->with('success', 'Profile updated successfully.');
     }
 
-    public function clients()
+    public function clients(Request $request)
     {
         $therapist = Team::where('email', Auth::user()->email)->first();
-        $clients = TherapistBooking::where('therapist_id', $therapist->id)
-            ->orderBy('id', 'desc')
-            ->paginate(15);
+        $query = TherapistBooking::where('therapist_id', $therapist->id);
 
-        return view('therapist.clients', compact('clients'));
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('email', 'like', '%' . $request->search . '%')
+                    ->orWhere('phone', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $clients = $query->orderBy('id', 'desc')->paginate(10)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('therapist.clients._table', compact('clients'))->render();
+        }
+
+        return view('therapist.clients.index', compact('clients'));
     }
 
     public function availability()
@@ -95,5 +148,25 @@ class TherapistDashboardController extends Controller
         $therapist->update(['availability' => $formattedAvailability]);
 
         return back()->with('success', 'Availability updated successfully.');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'The provided password does not match our records.']);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        return back()->with('success', 'Password updated successfully.');
     }
 }

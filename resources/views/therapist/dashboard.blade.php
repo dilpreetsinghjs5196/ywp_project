@@ -54,7 +54,7 @@
     <div class="row g-4">
         <div class="col-lg-8">
             <div class="card p-4 border-0 shadow-sm">
-                <h5 class="fw-bold mb-4">Recent Paid Bookings</h5>
+                <h5 class="fw-bold mb-4">Recent Bookings</h5>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
                         <thead class="table-light">
@@ -62,6 +62,7 @@
                                 <th>Client</th>
                                 <th>Date & Time</th>
                                 <th>Mode</th>
+                                <th>Status</th>
                                 <th>Amount</th>
                             </tr>
                         </thead>
@@ -78,9 +79,13 @@
                                         <div class="text-muted small">{{ $booking->booking_time }}</div>
                                     </td>
                                     <td>
-                                        <span class="badge rounded-pill bg-light text-dark border">{{ $booking->mode }}</span>
+                                        @if($booking->payment_status === 'paid')
+                                            <span class="badge rounded-pill bg-success-subtle text-success border">Paid</span>
+                                        @else
+                                            <span class="badge rounded-pill bg-warning-subtle text-warning border">Pending</span>
+                                        @endif
                                     </td>
-                                    <td class="fw-bold text-success">₹{{ $booking->amount }}</td>
+                                    <td class="fw-bold text-dark">₹{{ number_format($booking->amount, 2) }}</td>
                                 </tr>
                             @empty
                                 <tr>
@@ -94,7 +99,7 @@
                     </table>
                 </div>
                 <div class="text-end mt-3">
-                    <a href="{{ route('therapist.clients') }}" class="btn btn-sm btn-outline-primary">View All Clients</a>
+                    <a href="{{ route('therapist.bookings') }}" class="btn btn-sm btn-outline-primary">View All Bookings</a>
                 </div>
             </div>
         </div>
@@ -117,7 +122,7 @@
 
                 <h5 class="fw-bold mt-4 mb-3">Profile Snapshot</h5>
                 <div class="text-center">
-                    <img src="{{ Str::startsWith($therapist->image, 'http') ? $therapist->image : asset('storage/' . $therapist->image) }}"
+                    <img src="{{ Str::startsWith($therapist->image, 'image/') ? asset($therapist->image) : asset('storage/' . $therapist->image) }}"
                         class="rounded-circle mb-3 border p-1" style="width: 100px; height: 100px; object-fit: cover;">
                     <h6 class="fw-bold mb-0">{{ $therapist->name }}</h6>
                     <p class="text-muted small">{{ $therapist->designation }}</p>

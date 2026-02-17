@@ -118,9 +118,14 @@
                         <div class="mb-4">
                             <h5 class="fw-bold mb-3 font-1 text-dark">Areas of Expertise</h5>
                             <div class="d-flex flex-wrap gap-2">
-                                @foreach(explode("\n", $team->specialties) as $specialty)
+                                @php
+                                    $specialties = preg_split('/[,\n]+/', $team->specialties);
+                                @endphp
+                                @foreach($specialties as $specialty)
                                     @if(trim($specialty))
-                                        <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fs-6 fw-medium shadow-xs">
+                                        <span
+                                            class="badge bg-light text-dark border px-3 py-2 rounded-pill fs-6 fw-medium shadow-xs text-wrap text-start"
+                                            style="max-width: 100%; white-space: normal;">
                                             {{ trim($specialty) }}
                                         </span>
                                     @endif

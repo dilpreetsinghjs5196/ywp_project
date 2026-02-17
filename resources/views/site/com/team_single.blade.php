@@ -33,137 +33,130 @@
     <!-- #banner end -->
 
     <!-- Team Member Details Section -->
-    <section class="section py-5">
+    <section class="section py-5 bg-white">
         <div class="b-container">
             <div class="row g-5">
                 <!-- Left Column: Image -->
                 <div class="col-lg-5" data-aos="fade-right" data-aos-duration="1000">
-                    <div class="position-relative rounded-5 overflow-hidden shadow-lg">
+                    <div class="position-relative rounded-5 overflow-hidden shadow-lg border-4 border-white">
                         <div class="ratio ratio-1x1">
                             <img src="{{ Str::startsWith($team->image, 'image/') ? asset($team->image) : asset('storage/' . $team->image) }}"
-                                alt="{{ $team->name }}" class="w-100 h-100 object-fit-cover">
+                                alt="{{ $team->name }}" class="w-100 h-100 object-fit-cover shadow">
                         </div>
                     </div>
 
-                    <!-- Social Links (Optional placement below image) -->
-                    <div class="d-flex justify-content-center gap-3 mt-4">
+                    <!-- Social Links -->
+                    <div class="d-flex justify-content-center flex-wrap gap-2 mt-4">
                         @if($team->facebook)
                             <a href="{{ $team->facebook }}" target="_blank"
-                                class="btn btn-primary-solid rounded-circle d-flex align-items-center justify-content-center"
-                                style="width: 45px; height: 45px;"><i class="bi bi-facebook fs-5"></i></a>
+                                class="btn btn-outline-primary rounded-pill px-4 py-2 shadow-sm fw-bold">Facebook</a>
                         @endif
                         @if($team->twitter)
                             <a href="{{ $team->twitter }}" target="_blank"
-                                class="btn btn-primary-solid rounded-circle d-flex align-items-center justify-content-center"
-                                style="width: 45px; height: 45px;"><i class="bi bi-twitter-x fs-5"></i></a>
+                                class="btn btn-outline-primary rounded-pill px-4 py-2 shadow-sm fw-bold">Twitter</a>
                         @endif
                         @if($team->instagram)
                             <a href="{{ $team->instagram }}" target="_blank"
-                                class="btn btn-primary-solid rounded-circle d-flex align-items-center justify-content-center"
-                                style="width: 45px; height: 45px;"><i class="bi bi-instagram fs-5"></i></a>
+                                class="btn btn-outline-primary rounded-pill px-4 py-2 shadow-sm fw-bold">Instagram</a>
                         @endif
                         @if($team->linkedin)
                             <a href="{{ $team->linkedin }}" target="_blank"
-                                class="btn btn-primary-solid rounded-circle d-flex align-items-center justify-content-center"
-                                style="width: 45px; height: 45px;"><i class="bi bi-linkedin fs-5"></i></a>
+                                class="btn btn-outline-primary rounded-pill px-4 py-2 shadow-sm fw-bold">LinkedIn</a>
                         @endif
                     </div>
                 </div>
 
                 <!-- Right Column: Details & Booking -->
                 <div class="col-lg-7" data-aos="fade-left" data-aos-duration="1000">
-                    <h5 class="text-primary-color fw-bold text-uppercase mb-2">{{ $team->designation }}</h5>
+                    <h6 class="text-primary-color fw-bold text-uppercase mb-2 letter-spacing-1">{{ $team->designation }}
+                    </h6>
                     <h2 class="font-1 fw-bold display-5 mb-4">{{ $team->name }}</h2>
 
                     <div class="mb-4">
-                        <h5 class="fw-bold mb-3 font-1">About Me</h5>
-                        <p class="text-muted-color fs-5" style="line-height: 1.8;">
+                        <h4 class="fw-bold mb-3 font-1 text-dark">About {{ $team->name }}</h4>
+                        <p class="text-muted-color fs-5 mb-0" style="line-height: 1.8;">
                             {!! nl2br(e($team->description ?? 'No description available.')) !!}
                         </p>
                     </div>
 
-                    <div class="row g-3 mb-4">
+                    <div class="row g-4 mb-4 mt-2">
                         @if($team->mode)
-                            <div class="col-md-6 mb-2">
-                                <div class="fw-bold small text-muted text-uppercase">Mode</div>
-                                <div class="fw-semibold">{{ $team->mode }}</div>
+                            <div class="col-md-6">
+                                <div>
+                                    <div class="fw-bold small text-muted text-uppercase">Mode</div>
+                                    <div class="fw-semibold text-dark fs-5">{{ $team->mode }}</div>
+                                </div>
                             </div>
                         @endif
                         @if($team->languages)
-                            <div class="col-md-6 mb-2">
-                                <div class="fw-bold small text-muted text-uppercase">Languages</div>
-                                <div class="fw-semibold">{{ $team->languages }}</div>
+                            <div class="col-md-6">
+                                <div>
+                                    <div class="fw-bold small text-muted text-uppercase">Languages</div>
+                                    <div class="fw-semibold text-dark fs-5">{{ $team->languages }}</div>
+                                </div>
                             </div>
                         @endif
                         @if($team->session_type)
-                            <div class="col-md-6 mb-2">
-                                <div class="fw-bold small text-muted text-uppercase">Session Type</div>
-                                <div class="fw-semibold">{{ $team->session_type }}</div>
+                            <div class="col-md-6">
+                                <div>
+                                    <div class="fw-bold small text-muted text-uppercase">Session Type</div>
+                                    <div class="fw-semibold text-dark fs-5">{{ $team->session_type }}</div>
+                                </div>
                             </div>
                         @endif
                         @if($team->specialization)
-                            <div class="col-12 mb-2">
-                                <div class="fw-bold small text-muted text-uppercase">Specialization</div>
-                                <div class="fw-semibold">{{ $team->specialization }}</div>
+                            <div class="col-12">
+                                <div>
+                                    <div class="fw-bold small text-muted text-uppercase">Specialization</div>
+                                    <div class="fw-semibold text-dark fs-5">{{ $team->specialization }}</div>
+                                </div>
                             </div>
                         @endif
                     </div>
 
                     @if($team->specialties)
                         <div class="mb-4">
-                            <h5 class="fw-bold mb-2 font-1">Specialties</h5>
-                            <ul class="list-unstyled d-flex flex-wrap gap-2">
+                            <h5 class="fw-bold mb-3 font-1 text-dark">Areas of Expertise</h5>
+                            <div class="d-flex flex-wrap gap-2">
                                 @foreach(explode("\n", $team->specialties) as $specialty)
                                     @if(trim($specialty))
-                                        <li class="bg-light px-3 py-1 rounded-pill border small fw-semibold">
+                                        <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fs-6 fw-medium shadow-xs">
                                             {{ trim($specialty) }}
-                                        </li>
+                                        </span>
                                     @endif
                                 @endforeach
-                            </ul>
+                            </div>
                         </div>
                     @endif
 
                     @if($team->qualifications)
                         <div class="mb-4">
-                            <h5 class="fw-bold mb-2 font-1">Qualifications</h5>
-                            <div class="text-muted-color">
+                            <h5 class="fw-bold mb-3 font-1 text-dark">Education & Background</h5>
+                            <div class="text-muted-color fs-6 bg-light p-3 rounded-4 border-start border-primary border-4">
                                 {!! nl2br(e($team->qualifications)) !!}
                             </div>
                         </div>
                     @endif
 
                     <!-- Booking Section -->
-                    <div class="booking-cta-card p-4 rounded-5 shadow-lg border-0 mt-5"
-                        style="background: linear-gradient(135deg, var(--primary-color), #086bb8); position: relative; overflow: hidden;">
-                        <!-- Decorative background elements -->
-                        <div class="position-absolute opacity-5"
-                            style="right: -30px; bottom: -30px; transform: rotate(-15deg); pointer-events: none;">
-                            <i class="bi bi-calendar-check text-white" style="font-size: 15rem;"></i>
-                        </div>
+                    <div class="booking-cta-card p-5 rounded-5 shadow-lg border-0 mt-5 overflow-hidden position-relative"
+                        style="background: linear-gradient(135deg, var(--primary-color), #0a5fa0);">
+
+
 
                         <div class="position-relative" style="z-index: 2;">
-                            <div class="row">
-                                <div class="col-lg-9">
-                                    <h4 class="font-1 fw-bold text-white mb-3">Begin Your Healing Journey</h4>
-                                    <p class="text-white mb-4 fs-6 fw-medium lh-base">
-                                        Schedule a session with {{ $team->name }} to receive personalized care and support
-                                        tailored to your wellness goals.
+                            <div class="row align-items-center">
+                                <div class="col-lg-12">
+                                    <h3 class="font-1 fw-bold text-white mb-3">Begin Your Wellness Journey</h3>
+                                    <p class="text-white-50 mb-4 fs-5 fw-medium">
+                                        Connect with {{ $team->name }} today for personalized compassionate care.
                                     </p>
-                                    <!-- @if($team->fees)
-                                <div class="mb-4">
-                                    <span class="badge bg-white text-primary-color py-2 px-3 rounded-pill fs-6 fw-bold">
-                                        Session Fees: ₹{{ number_format($team->fees) }}
-                                    </span>
-                                </div>
-                            @endif -->
+                                    <a href="{{ route('com.therapist.booking', $team->id) }}"
+                                        class="btn btn-secondary-solid btn-lg px-5 py-3 fw-bold rounded-pill shadow transition-hover">
+                                        Book Appointment Now
+                                    </a>
                                 </div>
                             </div>
-
-                            <a href="{{ route('com.therapist.booking', $team->id) }}"
-                                class="btn btn-secondary-solid btn-lg w-100 py-3 fw-bold rounded-pill shadow-sm transition-hover">
-                                <i class="bi bi-calendar-plus me-2"></i> Book Appointment
-                            </a>
                         </div>
                     </div>
 
@@ -172,9 +165,139 @@
         </div>
     </section>
 
-    <!-- Other Therapists Section (Optional) -->
+    <!-- Reviews Section -->
+    <section class="section py-5 bg-gradient-secondary">
+        <div class="b-container">
+            <div class="row g-5">
+                <!-- Display Reviews -->
+                <div class="col-lg-7" data-aos="fade-right">
+                    <h3 class="font-1 fw-bold mb-4 text-white">Patient Reviews</h3>
+                    @if($reviews->count() > 0)
+                        <div class="reviews-list">
+                            @foreach($reviews as $review)
+                                <div
+                                    class="card border-0 shadow-lg rounded-4 p-4 mb-4 bg-white transition-hover position-relative overflow-hidden">
+
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div>
+                                            <h5 class="fw-bold mb-0 text-primary-color">
+                                                {{ $review->is_anonymous ? 'Verified Patient' : $review->name }}
+                                            </h5>
+                                            <small class="text-muted">{{ $review->created_at->format('M d, Y') }}</small>
+                                        </div>
+                                        <div class="bg-warning-subtle px-3 py-1 rounded-pill">
+                                            <div class="text-warning small">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    <i class="bi bi-star{{ $i <= $review->rating ? '-fill' : '' }}"></i>
+                                                @endfor
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-muted-color mb-0 fs-6 lh-base italic">
+                                        "{{ $review->comment }}"
+                                    </p>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div
+                            class="text-center py-5 bg-white bg-opacity-10 rounded-5 border border-white border-opacity-25 shadow-sm">
+                            <i class="bi bi-chat-dots-fill fs-1 text-white opacity-50 mb-3 d-block"></i>
+                            <p class="text-white mb-0 fs-5">No reviews yet. Be the first to share your experience!</p>
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Add Review Form -->
+                <div class="col-lg-5" data-aos="fade-left">
+                    <div class="card border-0 shadow-lg rounded-5 p-5 bg-white sticky-top" style="top: 120px; z-index: 1;">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-pencil-square text-primary-color display-6 mb-2 d-block"></i>
+                            <h4 class="font-1 fw-bold mb-0">Share Your Experience</h4>
+                            <p class="small text-muted">Your feedback helps others find the right support.</p>
+                        </div>
+
+                        @if(session('success'))
+                            <div class="alert alert-success alert-dismissible fade show rounded-4 mb-4" role="alert">
+                                <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        <form action="{{ route('review.submit') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="team_id" value="{{ $team->id }}">
+
+                            <div class="mb-4 text-center">
+                                <label class="form-label fw-bold d-block mb-3">Rate Your Session</label>
+                                <div class="rating-stars d-flex justify-content-center gap-3">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <input type="radio" name="rating" value="{{ $i }}" id="star{{ $i }}" class="d-none" {{ $i == 5 ? 'checked' : '' }}>
+                                        <label for="star{{ $i }}"
+                                            class="cursor-pointer text-warning fs-2 rating-star-label transition-all"
+                                            data-value="{{ $i }}">
+                                            <i class="bi bi-star{{ $i <= 5 ? '-fill' : '' }}"></i>
+                                        </label>
+                                    @endfor
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" name="name" id="name"
+                                            class="form-control rounded-4 border-0 bg-light px-4" required
+                                            placeholder="Full Name">
+                                        <label for="name" class="ps-4">Full Name</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="email" name="email" id="email"
+                                            class="form-control rounded-4 border-0 bg-light px-4" required
+                                            placeholder="Email Address">
+                                        <label for="email" class="ps-4">Email Address</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <textarea name="comment" id="comment"
+                                            class="form-control rounded-4 border-0 bg-light px-4" style="height: 120px"
+                                            required placeholder="Write your review here..."></textarea>
+                                        <label for="comment" class="ps-4">How was your experience?</label>
+                                    </div>
+                                </div>
+
+                                <!-- Anonymous Review Toggle -->
+                                <div class="col-12">
+                                    <div
+                                        class="form-check form-switch d-flex align-items-center gap-3 mb-4 bg-light p-3 rounded-4 px-5">
+                                        <input class="form-check-input ms-0" type="checkbox" name="is_anonymous"
+                                            id="is_anonymous" value="1" style="width: 3em; height: 1.5em; cursor: pointer;">
+                                        <label class="form-check-label fw-semibold text-dark mb-0 fs-6 cursor-pointer"
+                                            for="is_anonymous">
+                                            Keep my review anonymous
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit"
+                                class="btn btn-primary-solid btn-lg w-100 rounded-pill fw-bold shadow transition-hover py-3">
+                                <i class="bi bi-send-fill me-2"></i> Submit Review
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Other Therapists Section -->
     @if($recentTeams->count() > 0)
-        <section class="section py-5 bg-light">
+        <section class="section py-5 bg-white border-top">
             <div class="b-container">
                 <div class="row mb-4">
                     <div class="col-12 text-center">
@@ -216,6 +339,59 @@
         const dateInput = document.getElementById('bookingDate');
         if (dateInput) {
             dateInput.min = new Date().toISOString().split("T")[0];
+        }
+        // Star Rating Interaction
+        const starLabels = document.querySelectorAll('.rating-star-label');
+        starLabels.forEach(label => {
+            label.addEventListener('click', function () {
+                const value = parseInt(this.getAttribute('data-value'));
+                updateStars(value);
+            });
+
+            label.addEventListener('mouseover', function () {
+                const value = parseInt(this.getAttribute('data-value'));
+                highlightStars(value);
+            });
+
+            label.addEventListener('mouseout', function () {
+                const selectedRating = document.querySelector('input[name="rating"]:checked');
+                const value = selectedRating ? parseInt(selectedRating.value) : 0;
+                highlightStars(value);
+            });
+        });
+
+        function updateStars(value) {
+            starLabels.forEach(label => {
+                const labelValue = parseInt(label.getAttribute('data-value'));
+                const icon = label.querySelector('i');
+                if (labelValue <= value) {
+                    icon.classList.remove('bi-star');
+                    icon.classList.add('bi-star-fill');
+                } else {
+                    icon.classList.remove('bi-star-fill');
+                    icon.classList.add('bi-star');
+                }
+            });
+        }
+
+        function highlightStars(value) {
+            starLabels.forEach(label => {
+                const labelValue = parseInt(label.getAttribute('data-value'));
+                const icon = label.querySelector('i');
+                if (labelValue <= value) {
+                    icon.classList.remove('bi-star');
+                    icon.classList.add('bi-star-fill');
+                } else {
+                    icon.classList.remove('bi-star-fill');
+                    icon.classList.add('bi-star');
+                }
+            });
+        }
+
+        // Initialize stars
+        const initialRating = document.querySelector('input[name="rating"]:checked');
+        if (initialRating) {
+            updateStars(parseInt(initialRating.value));
         }
     </script>
 @endpush

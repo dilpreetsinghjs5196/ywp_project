@@ -383,13 +383,13 @@
             <div class="booking-container shadow-2xl">
                 <!-- Left Sidebar -->
                 <div class="booking-steps-sidebar">
-                    <div class="promo-banner">
-                        <div class="d-flex align-items-center gap-2 mb-1">
-                            <i class="bi bi-percent text-warning fs-5"></i>
-                            <span class="fw-bold text-dark">20% OFF</span>
-                        </div>
-                        <p class="small text-muted mb-0">20% Off on Pre-Booking First Session</p>
-                    </div>
+                    <!-- <div class="promo-banner">
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <i class="bi bi-percent text-warning fs-5"></i>
+                                <span class="fw-bold text-dark">20% OFF</span>
+                            </div>
+                            <p class="small text-muted mb-0">20% Off on Pre-Booking First Session</p>
+                        </div> -->
 
                     <div class="booking-steps">
                         <div class="step-item active" id="sidebar-step1">
@@ -458,7 +458,8 @@
                         </div>
 
                         <!-- Dynamic Address Area -->
-                        <div id="addressSection" class="mb-4" style="display: {{ $defaultMode == 'In-person' ? 'block' : 'none' }};">
+                        <div id="addressSection" class="mb-4"
+                            style="display: {{ $defaultMode == 'In-person' ? 'block' : 'none' }};">
                             <div class="address-card">
                                 <div class="d-flex gap-2 mb-2">
                                     <i class="bi bi-geo-alt-fill text-primary"></i>
@@ -679,9 +680,9 @@
                     }
 
                     dayDiv.innerHTML = `
-                                <div class="day-name">${days[dateObj.getDay()]}</div>
-                                <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
-                            `;
+                                    <div class="day-name">${days[dateObj.getDay()]}</div>
+                                    <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
+                                `;
 
                     dayDiv.onclick = function () {
                         document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));

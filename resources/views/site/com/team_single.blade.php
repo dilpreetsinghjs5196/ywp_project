@@ -85,46 +85,26 @@
                     <div class="row g-3 mb-4">
                         @if($team->mode)
                             <div class="col-md-6 mb-2">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="fs-4 text-primary-color">📍</span>
-                                    <div>
-                                        <div class="fw-bold small text-muted text-uppercase">Mode</div>
-                                        <div class="fw-semibold">{{ $team->mode }}</div>
-                                    </div>
-                                </div>
+                                <div class="fw-bold small text-muted text-uppercase">Mode</div>
+                                <div class="fw-semibold">{{ $team->mode }}</div>
                             </div>
                         @endif
                         @if($team->languages)
                             <div class="col-md-6 mb-2">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="fs-4 text-primary-color">🗣</span>
-                                    <div>
-                                        <div class="fw-bold small text-muted text-uppercase">Languages</div>
-                                        <div class="fw-semibold">{{ $team->languages }}</div>
-                                    </div>
-                                </div>
+                                <div class="fw-bold small text-muted text-uppercase">Languages</div>
+                                <div class="fw-semibold">{{ $team->languages }}</div>
                             </div>
                         @endif
                         @if($team->session_type)
                             <div class="col-md-6 mb-2">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="fs-4 text-primary-color">🔵</span>
-                                    <div>
-                                        <div class="fw-bold small text-muted text-uppercase">Session Type</div>
-                                        <div class="fw-semibold">{{ $team->session_type }}</div>
-                                    </div>
-                                </div>
+                                <div class="fw-bold small text-muted text-uppercase">Session Type</div>
+                                <div class="fw-semibold">{{ $team->session_type }}</div>
                             </div>
                         @endif
                         @if($team->specialization)
                             <div class="col-12 mb-2">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="fs-4 text-primary-color">🧩</span>
-                                    <div>
-                                        <div class="fw-bold small text-muted text-uppercase">Specialization</div>
-                                        <div class="fw-semibold">{{ $team->specialization }}</div>
-                                    </div>
-                                </div>
+                                <div class="fw-bold small text-muted text-uppercase">Specialization</div>
+                                <div class="fw-semibold">{{ $team->specialization }}</div>
                             </div>
                         @endif
                     </div>
@@ -170,13 +150,13 @@
                                         Schedule a session with {{ $team->name }} to receive personalized care and support
                                         tailored to your wellness goals.
                                     </p>
-                                    @if($team->fees)
-                                        <div class="mb-4">
-                                            <span class="badge bg-white text-primary-color py-2 px-3 rounded-pill fs-6 fw-bold">
-                                                Session Fees: ₹{{ number_format($team->fees) }}
-                                            </span>
-                                        </div>
-                                    @endif
+                                    <!-- @if($team->fees)
+                                <div class="mb-4">
+                                    <span class="badge bg-white text-primary-color py-2 px-3 rounded-pill fs-6 fw-bold">
+                                        Session Fees: ₹{{ number_format($team->fees) }}
+                                    </span>
+                                </div>
+                            @endif -->
                                 </div>
                             </div>
 

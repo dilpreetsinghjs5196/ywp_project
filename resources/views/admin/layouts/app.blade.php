@@ -267,6 +267,12 @@
                             <i class="bi bi-chat-left-quote"></i> Testimonials
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.reviews.*') ? 'active' : '' }}"
+                            href="{{ route('admin.reviews.index') }}">
+                            <i class="bi bi-star-half"></i> Therapist Reviews
+                        </a>
+                    </li>
                     <!-- <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.appointments.*') ? 'active' : '' }}"
                             href="{{ route('admin.appointments.index') }}">
@@ -406,6 +412,13 @@
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ session('error') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 @endif

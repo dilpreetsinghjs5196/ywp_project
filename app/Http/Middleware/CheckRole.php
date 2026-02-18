@@ -28,6 +28,14 @@ class CheckRole
             }
         }
 
+        // Redirect to respective dashboard if they have a known role but not the required one
+        if ($request->user()->hasRole('admin')) {
+            return redirect()->route('admin.dashboard')->with('error', 'You do not have permission to access that section.');
+        }
+        if ($request->user()->hasRole('therapist')) {
+            return redirect()->route('therapist.dashboard')->with('error', 'You do not have permission to access that section.');
+        }
+
         abort(403, 'Unauthorized action.');
     }
 }

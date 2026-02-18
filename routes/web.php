@@ -17,6 +17,7 @@ Route::post('/therapist/booking/initialize', [\App\Http\Controllers\com\Therapis
 Route::post('/therapist/booking/verify', [\App\Http\Controllers\com\TherapistBookingController::class, 'verifyPayment'])->name('com.therapist.booking.verify');
 Route::get('/contact-us', [HomeController::class, 'contact'])->name('com.contact');
 Route::post('/appointment/submit', [HomeController::class, 'submitAppointment'])->name('com.appointment.submit');
+Route::post('/review/submit', [\App\Http\Controllers\com\ReviewController::class, 'store'])->name('review.submit');
 Route::get('/corporate-well-being', [\App\Http\Controllers\com\HomeController::class, 'corporateWellBeing'])->name('com.corporate');
 Route::get('/services', [\App\Http\Controllers\com\HomeController::class, 'services'])->name('com.services');
 Route::get('/services/{slug}/therapists', [\App\Http\Controllers\com\HomeController::class, 'serviceTherapists'])->name('com.services.therapists');
@@ -89,6 +90,9 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
     // Brand Management
     Route::resource('brands', \App\Http\Controllers\Admin\AdminBrandController::class, ['as' => 'admin']);
+
+    // Review Management
+    Route::resource('reviews', \App\Http\Controllers\Admin\AdminReviewController::class, ['as' => 'admin'])->only(['index', 'update', 'destroy']);
 
     // Appointment Queries
     Route::resource('appointments', \App\Http\Controllers\Admin\AdminAppointmentController::class, ['as' => 'admin'])->only(['index', 'show', 'update', 'destroy']);

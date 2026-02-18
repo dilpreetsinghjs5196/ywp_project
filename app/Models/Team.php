@@ -37,4 +37,14 @@ class Team extends Model
     {
         return $this->belongsToMany(Service::class, 'service_team', 'team_id', 'service_id');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function approvedReviews()
+    {
+        return $this->hasMany(Review::class)->where('status', 'approved');
+    }
 }

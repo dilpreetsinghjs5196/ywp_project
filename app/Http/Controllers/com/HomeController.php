@@ -62,8 +62,9 @@ class HomeController extends Controller
         $settings = SiteSetting::all()->pluck('value', 'key');
         $team = \App\Models\Team::where('is_active', true)->findOrFail($id);
         $recentTeams = \App\Models\Team::where('is_active', true)->where('id', '!=', $id)->orderBy('sort_order')->take(3)->get();
+        $reviews = $team->approvedReviews()->orderBy('created_at', 'desc')->get();
 
-        return view('site.com.team_single', compact('settings', 'team', 'recentTeams'));
+        return view('site.com.team_single', compact('settings', 'team', 'recentTeams', 'reviews'));
     }
 
     public function corporateWellBeing()

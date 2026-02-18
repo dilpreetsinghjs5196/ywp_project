@@ -38,6 +38,14 @@ class AdminAuthController extends Controller
 
             if ($user->hasRole('therapist')) {
                 $request->session()->regenerate();
+
+                // If intended URL is in the admin area, clear it for therapists
+                $intended = session()->get('url.intended');
+                if ($intended && str_contains($intended, '/admin')) {
+                    session()->forget('url.intended');
+                    return redirect()->route('therapist.dashboard');
+                }
+
                 return redirect()->intended(route('therapist.dashboard'));
             }
 

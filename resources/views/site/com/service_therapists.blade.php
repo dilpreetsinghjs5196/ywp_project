@@ -47,56 +47,70 @@
             </div>
 
             <!-- Team Members Grid -->
-            <div class="row g-5">
+            <div class="row g-4">
                 @forelse($teams as $member)
-                    <div class="col-12 col-sm-6 col-xl-3 mb-5" data-aos="fade-up" data-aos-easing="linear"
+                    <div class="col-12 col-lg-6 mb-4" data-aos="fade-up" data-aos-easing="linear"
                         data-aos-delay="{{ 100 * $loop->iteration }}" data-aos-duration="1000">
-                        <div class="position-relative rounded-5 transition-hover mx-auto img-container h-100"
-                            style="max-width: 100%;">
-                            <div class="ratio-wrapper-419">
-                                <a href="{{ route('com.team.single', $member->id) }}">
-                                    <img src="{{ Str::startsWith($member->image, 'image/') ? asset($member->image) : asset('storage/' . $member->image) }}"
-                                        alt="{{ $member->name }}" class="rounded-5 w-100 h-100 position-absolute"
-                                        style="object-fit: cover;">
-                                </a>
+                        <div
+                            class="therapist-brief-card h-100 bg-white rounded-4 shadow-sm border overflow-hidden d-flex flex-column flex-md-row">
+                            <!-- Image Section -->
+                            <div class="therapist-image-box position-relative">
+                                <img src="{{ Str::startsWith($member->image, 'image/') ? asset($member->image) : asset('storage/' . $member->image) }}"
+                                    alt="{{ $member->name }}" class="w-100 h-100" style="object-fit: cover;">
+                                @if($member->is_active)
+                                    <span
+                                        class="position-absolute top-0 start-0 m-3 badge bg-success rounded-pill px-3 shadow-sm">Available</span>
+                                @endif
                             </div>
-                            <div class="position-absolute start-50 translate-middle-x" style="width: 95%; bottom: -3rem;">
-                                <div
-                                    class="bg-primary-color d-flex flex-column text-white py-2 px-1 align-items-center text-center rounded-5 shadow-lg">
-                                    <div class="mb-1">
-                                        <a href="{{ route('com.team.single', $member->id) }}"
-                                            class="text-white text-decoration-none">
-                                            <h5 class="font-1 fw-bolder mb-0" style="font-size: 1.1rem;">{{ $member->name }}
-                                            </h5>
-                                        </a>
-                                        <p class="mb-2 fw-semibold" style="font-size: 0.85rem;">{{ $member->designation }}</p>
+
+                            <!-- Content Section -->
+                            <div class="therapist-details-box p-4 flex-grow-1 d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h4 class="font-1 fw-bold mb-1 text-dark">{{ $member->name }}</h4>
+                                        <p class="text-muted mb-0 fw-medium">{{ $member->designation ?? 'Therapist' }}</p>
                                     </div>
-                                    <div class="social-box justify-content-center mb-1 d-flex gap-2">
-                                        @if($member->facebook)
-                                            <a href="{{ $member->facebook }}" target="_blank" rel="noopener noreferrer"
-                                                class="d-flex align-items-center justify-content-center text-decoration-none"
-                                                style="width: 24px; height: 24px;" title="Facebook"><i
-                                                    class="bi bi-facebook text-white fs-6"></i></a>
-                                        @endif
-                                        @if($member->twitter)
-                                            <a href="{{ $member->twitter }}" target="_blank" rel="noopener noreferrer"
-                                                class="d-flex align-items-center justify-content-center text-decoration-none"
-                                                style="width: 24px; height: 24px;" title="Twitter"><i
-                                                    class="bi bi-twitter-x text-white fs-6"></i></a>
-                                        @endif
-                                        @if($member->instagram)
-                                            <a href="{{ $member->instagram }}" target="_blank" rel="noopener noreferrer"
-                                                class="d-flex align-items-center justify-content-center text-decoration-none"
-                                                style="width: 24px; height: 24px;" title="Instagram"><i
-                                                    class="bi bi-instagram text-white fs-6"></i></a>
-                                        @endif
-                                        @if($member->linkedin)
-                                            <a href="{{ $member->linkedin }}" target="_blank" rel="noopener noreferrer"
-                                                class="d-flex align-items-center justify-content-center text-decoration-none"
-                                                style="width: 24px; height: 24px;" title="LinkedIn"><i
-                                                    class="bi bi-linkedin text-white fs-6"></i></a>
-                                        @endif
-                                    </div>
+                                </div>
+
+                                <!-- Expertise Tags -->
+                                @php
+                                    $specialties = $member->specialties ? explode(',', $member->specialties) : ($member->specialization ? explode(',', $member->specialization) : []);
+                                @endphp
+                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                    @foreach(array_slice($specialties, 0, 3) as $spec)
+                                        <span class="expertise-tag">{{ trim($spec) }}</span>
+                                    @endforeach
+                                    @if(count($specialties) > 3)
+                                        <span class="expertise-tag text-muted">+{{ count($specialties) - 3 }} more</span>
+                                    @endif
+                                </div>
+
+                                <!-- Info List -->
+                                <div class="info-list mb-2">
+                                    @if($member->languages)
+                                        <div class="info-item d-flex align-items-center mb-1">
+                                            <i class="bi bi-translate text-primary-color me-2"></i>
+                                            <span class="text-muted small">Speaks: <span
+                                                    class="text-dark fw-medium">{{ $member->languages }}</span></span>
+                                        </div>
+                                    @endif
+                                    @if($member->mode)
+                                        <div class="info-item d-flex align-items-center mb-1">
+                                            <i class="bi bi-geo-alt text-primary-color me-2"></i>
+                                            <span class="text-muted small">Mode: <span
+                                                    class="text-dark fw-medium">{{ $member->mode }}</span></span>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <!-- Action Section -->
+                                <div class="mt-auto pt-3 border-top d-flex gap-3">
+                                    <a href="{{ route('com.team.single', $member->id) }}"
+                                        class="btn btn-view-profile rounded-pill px-3 fw-bold py-3 text-decoration-none text-center text-nowrap">VIEW
+                                        PROFILE</a>
+                                    <a href="{{ route('com.therapist.booking', $member->id) }}"
+                                        class="btn btn-book-now rounded-pill px-4 fw-bold py-3 text-white text-decoration-none text-center text-nowrap">BOOK
+                                        NOW</a>
                                 </div>
                             </div>
                         </div>
@@ -108,8 +122,86 @@
                     </div>
                 @endforelse
             </div>
+
+            <!-- Pagination Section -->
+            <div class="row mt-5">
+                <div class="col-12 d-flex justify-content-center">
+                    {{ $teams->links() }}
+                </div>
+            </div>
         </div>
     </section>
-    <!-- #team end -->
 
+    <style>
+        .therapist-brief-card {
+            transition: all 0.3s ease;
+            border: 1px solid #eee !important;
+        }
+
+        .therapist-brief-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-color) !important;
+        }
+
+        .therapist-image-box {
+            width: 100%;
+            aspect-ratio: 1/1;
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .therapist-image-box {
+                width: 250px;
+                height: 250px;
+                flex-shrink: 0;
+            }
+        }
+
+        .therapist-details-box {
+            padding: 1.5rem !important;
+        }
+
+        .expertise-tag {
+            background-color: #f0f7ff;
+            color: #007bff;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: 1px solid #e0efff;
+        }
+
+        .btn-view-profile {
+            color: #333;
+            border: 1px solid #ddd;
+            background: #fff;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-view-profile:hover {
+            background-color: #f8f9fa;
+            border-color: #ccc;
+            color: #000 !important;
+        }
+
+        .btn-book-now {
+            background-color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-book-now:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: white !important;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 @endsection

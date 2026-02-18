@@ -52,7 +52,7 @@ class HomeController extends Controller
                 return $section->pluck('value', 'key');
             });
 
-        $teams = \App\Models\Team::where('is_active', true)->orderBy('sort_order')->get();
+        $teams = \App\Models\Team::where('is_active', true)->orderBy('sort_order')->paginate(4);
 
         return view('site.com.team', compact('settings', 'contents', 'teams'));
     }
@@ -152,7 +152,7 @@ class HomeController extends Controller
     {
         $settings = SiteSetting::all()->pluck('value', 'key');
         $service = \App\Models\Service::where('slug', $slug)->where('is_active', true)->firstOrFail();
-        $teams = $service->therapists()->where('is_active', true)->orderBy('sort_order')->get();
+        $teams = $service->therapists()->where('is_active', true)->orderBy('sort_order')->paginate(4);
 
         return view('site.com.service_therapists', compact('settings', 'service', 'teams'));
     }

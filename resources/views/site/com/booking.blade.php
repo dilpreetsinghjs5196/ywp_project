@@ -255,6 +255,50 @@
             border-top: 1px solid var(--booking-border);
         }
 
+        /* Service Selection Cards */
+        .service-selection-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fff;
+            border: 2px solid #e2e8f0 !important;
+        }
+
+        .service-selection-card:hover {
+            border-color: #cbd5e1 !important;
+            transform: translateY(-2px);
+        }
+
+        .service-selection-card.active {
+            border-color: var(--booking-primary) !important;
+            background: #f0f7ff;
+            box-shadow: 0 4px 12px rgba(4, 74, 128, 0.1);
+        }
+
+        .service-check-circle {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid #cbd5e1;
+            position: relative;
+        }
+
+        .service-selection-card.active .service-check-circle {
+            border-color: var(--booking-primary);
+            background: var(--booking-primary);
+        }
+
+        .service-selection-card.active .service-check-circle::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
         .therapist-mini-img {
             width: 50px;
             height: 50px;
@@ -384,12 +428,12 @@
                 <!-- Left Sidebar -->
                 <div class="booking-steps-sidebar">
                     <!-- <div class="promo-banner">
-                                <div class="d-flex align-items-center gap-2 mb-1">
-                                    <i class="bi bi-percent text-warning fs-5"></i>
-                                    <span class="fw-bold text-dark">20% OFF</span>
-                                </div>
-                                <p class="small text-muted mb-0">20% Off on Pre-Booking First Session</p>
-                            </div> -->
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <i class="bi bi-percent text-warning fs-5"></i>
+                                            <span class="fw-bold text-dark">20% OFF</span>
+                                        </div>
+                                        <p class="small text-muted mb-0">20% Off on Pre-Booking First Session</p>
+                                    </div> -->
 
                     <div class="booking-steps">
                         <div class="step-item active" id="sidebar-step1">
@@ -432,6 +476,25 @@
 
                     <!-- Step 1 Content -->
                     <div id="center-step1">
+                        @if($team->services->count() > 0)
+                            <h4 class="section-title">Select Service</h4>
+                            <div class="row g-3 mb-4">
+                                @foreach($team->services as $service)
+                                    <div class="col-md-6">
+                                        <div class="service-selection-card p-3 rounded-4 border {{ $loop->first ? 'active' : '' }}"
+                                            onclick="selectService(this, '{{ $service->id }}', '{{ $service->pivot->fees ?? $team->fees ?? 1800 }}', '{{ $service->title }}')">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="service-check-circle"></div>
+                                                <div class="fw-bold text-dark">{{ $service->title }}</div>
+                                            </div>
+                                            <div class="text-primary-color small fw-bold mt-1">
+                                                ₹{{ number_format($service->pivot->fees ?? $team->fees ?? 1800) }} / session</div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+
                         <h4 class="section-title">Mode of Session</h4>
 
                         <div class="mode-selection-grid">
@@ -708,9 +771,9 @@
                     }
 
                     dayDiv.innerHTML = `
-                                        <div class="day-name">${days[dateObj.getDay()]}</div>
-                                        <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
-                                    `;
+                                                <div class="day-name">${days[dateObj.getDay()]}</div>
+                                                <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
+                                            `;
 
                     dayDiv.onclick = function () {
                         document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
@@ -727,8 +790,19 @@
             }
 
             let currentStep = 1;
-            let selectedModeName = '{{ $defaultMode }}';
+            let selectedModeName = @json($defaultMode);
+            let selectedServiceId = @json($team->services->first()->id ?? null);
+            let selectedServiceName = @json($team->services->first()->title ?? 'Therapy Session');
 
+            window.selectService = function (element, id, price, name) {
+                selectedServiceId = id;
+                selectedServiceName = name;
+                document.querySelectorAll('.service-selection-card').forEach(c => c.classList.remove('active'));
+                element.classList.add('active');
+
+                // Update price display
+                document.querySelector('.price-amount').innerText = '₹' + parseInt(price).toLocaleString();
+            };
             window.goToStep = function (step) {
                 currentStep = step;
 
@@ -799,6 +873,7 @@
                 const formData = {
                     _token: "{{ csrf_token() }}",
                     team_id: "{{ $team->id }}",
+                    service_id: selectedServiceId,
                     name: this.elements['name'].value,
                     phone: this.elements['phone'].value,
                     email: this.elements['email'].value,

@@ -101,6 +101,56 @@
                             </div>
                         </div>
 
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <label class="form-label fw-bold d-block mb-3 border-bottom pb-2 text-primary">Assigned Services & Specific Pricing</label>
+                                <p class="small text-muted mb-3">Select services this therapist provides and set their specific fees for each. If left blank, default fees will be used.</p>
+                                
+                                <div class="row g-3">
+                                    @foreach($services as $service)
+                                        @php
+                                            $isAssigned = isset($assignedServices[$service->id]);
+                                            $customFee = $isAssigned ? $assignedServices[$service->id] : '';
+                                        @endphp
+                                        <div class="col-md-6">
+                                            <div class="card h-100 border shadow-none bg-light-subtle">
+                                                <div class="card-body p-3">
+                                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input service-checkbox" type="checkbox" name="services[]" value="{{ $service->id }}" id="service_{{ $service->id }}" 
+                                                                {{ $isAssigned ? 'checked' : '' }}>
+                                                            <label class="form-check-label fw-bold" for="service_{{ $service->id }}">
+                                                                {{ $service->title }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group input-group-sm {{ $isAssigned ? '' : 'd-none' }}" id="fee_container_{{ $service->id }}">
+                                                        <span class="input-group-text">Fees (₹)</span>
+                                                        <input type="number" name="service_fees[{{ $service->id }}]" class="form-control" placeholder="Specific fee for this service" value="{{ old('service_fees.' . $service->id, $customFee) }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                document.querySelectorAll('.service-checkbox').forEach(checkbox => {
+                                    checkbox.addEventListener('change', function() {
+                                        const feeContainer = document.getElementById('fee_container_' + this.value);
+                                        if (this.checked) {
+                                            feeContainer.classList.remove('d-none');
+                                        } else {
+                                            feeContainer.classList.add('d-none');
+                                        }
+                                    });
+                                });
+                            });
+                        </script>
+
                         <div class="row mb-3">
                             <div class="col-md-6 text-center">
                                 <label class="form-label fw-bold d-block text-start">Current Image</label>

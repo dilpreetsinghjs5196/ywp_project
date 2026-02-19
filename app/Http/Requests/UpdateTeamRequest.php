@@ -44,6 +44,9 @@ class UpdateTeamRequest extends FormRequest
             'availability' => 'nullable|array',
             'weekly_availability' => 'nullable|array',
             'password' => 'nullable|string|min:8|confirmed',
+            'services' => 'nullable|array',
+            'services.*' => 'exists:services,id',
+            'service_fees' => 'nullable|array',
         ];
     }
 }

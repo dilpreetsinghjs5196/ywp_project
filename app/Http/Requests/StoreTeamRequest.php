@@ -42,6 +42,9 @@ class StoreTeamRequest extends FormRequest
             'availability_type' => 'nullable|in:date,weekly',
             'availability' => 'nullable|array',
             'weekly_availability' => 'nullable|array',
+            'services' => 'nullable|array',
+            'services.*' => 'exists:services,id',
+            'service_fees' => 'nullable|array',
         ];
     }
 }

@@ -17,6 +17,7 @@ class TherapistBookingController extends Controller
     {
         $request->validate([
             'team_id' => 'required|exists:teams,id',
+            'service_id' => 'required|exists:services,id',
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:20',
@@ -27,12 +28,20 @@ class TherapistBookingController extends Controller
         ]);
 
         $therapist = Team::findOrFail($request->team_id);
-        $amount = $therapist->fees ?? 1000;
+
+        // Find the service-specific fee if assigned
+        $servicePivot = DB::table('service_team')
+            ->where('team_id', $request->team_id)
+            ->where('service_id', $request->service_id)
+            ->first();
+
+        $amount = ($servicePivot && $servicePivot->fees) ? $servicePivot->fees : ($therapist->fees ?? 1000);
 
         DB::beginTransaction();
         try {
             $booking = TherapistBooking::create([
                 'team_id' => $request->team_id,
+                'service_id' => $request->service_id,
                 'therapist_id' => $request->team_id,
                 'name' => $request->name,
                 'email' => $request->email,

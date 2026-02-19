@@ -87,7 +87,7 @@ class HomeController extends Controller
     public function therapistBooking($id)
     {
         $settings = SiteSetting::all()->pluck('value', 'key');
-        $team = \App\Models\Team::where('is_active', true)->findOrFail($id);
+        $team = \App\Models\Team::with('services')->where('is_active', true)->findOrFail($id);
 
         return view('site.com.booking', compact('settings', 'team'));
     }

@@ -38,7 +38,8 @@ class AdminTeamController extends Controller
      */
     public function create()
     {
-        return view('admin.teams.create');
+        $services = \App\Models\Service::where('is_active', true)->get();
+        return view('admin.teams.create', compact('services'));
     }
 
     /**
@@ -74,7 +75,15 @@ class AdminTeamController extends Controller
             $data['weekly_availability'] = $formattedWeekly;
         }
 
-        Team::create($data);
+        $team = Team::create($data);
+
+        if ($request->has('services')) {
+            $syncData = [];
+            foreach ($request->services as $serviceId) {
+                $syncData[$serviceId] = ['fees' => $request->service_fees[$serviceId] ?? null];
+            }
+            $team->services()->sync($syncData);
+        }
 
         return redirect()->route('admin.teams.index')->with('success', 'Team member added successfully.');
     }
@@ -84,7 +93,9 @@ class AdminTeamController extends Controller
      */
     public function edit(Team $team)
     {
-        return view('admin.teams.edit', compact('team'));
+        $services = \App\Models\Service::where('is_active', true)->get();
+        $assignedServices = $team->services->pluck('pivot.fees', 'id')->toArray();
+        return view('admin.teams.edit', compact('team', 'services', 'assignedServices'));
     }
 
     /**
@@ -130,6 +141,16 @@ class AdminTeamController extends Controller
         }
 
         $team->update($data);
+
+        if ($request->has('services')) {
+            $syncData = [];
+            foreach ($request->services as $serviceId) {
+                $syncData[$serviceId] = ['fees' => $request->service_fees[$serviceId] ?? null];
+            }
+            $team->services()->sync($syncData);
+        } else {
+            $team->services()->detach();
+        }
 
         // Update the linked user's password if provided
         if ($request->filled('password') && $team->email) {

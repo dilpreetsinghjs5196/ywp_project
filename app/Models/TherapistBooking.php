@@ -11,6 +11,7 @@ class TherapistBooking extends Model
 
     protected $fillable = [
         'team_id',
+        'service_id',
         'therapist_id',
         'name',
         'email',
@@ -29,5 +30,10 @@ class TherapistBooking extends Model
     public function therapist()
     {
         return $this->belongsTo(Team::class, 'team_id');
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service_id');
     }
 }

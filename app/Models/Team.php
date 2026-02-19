@@ -38,7 +38,7 @@ class Team extends Model
 
     public function services()
     {
-        return $this->belongsToMany(Service::class, 'service_team', 'team_id', 'service_id');
+        return $this->belongsToMany(Service::class, 'service_team', 'team_id', 'service_id')->withPivot('fees')->withTimestamps();
     }
 
     public function reviews()

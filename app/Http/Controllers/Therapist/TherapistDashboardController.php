@@ -66,9 +66,10 @@ class TherapistDashboardController extends Controller
     public function profile()
     {
         $therapist = Team::where('email', Auth::user()->email)->first();
-        return view('therapist.profile', compact('therapist'));
+        $services = \App\Models\Service::where('is_active', true)->get();
+        $assignedServices = $therapist->services->pluck('pivot.fees', 'id')->toArray();
+        return view('therapist.profile', compact('therapist', 'services', 'assignedServices'));
     }
-
     public function updateProfile(Request $request)
     {
         $therapist = Team::where('email', Auth::user()->email)->first();
@@ -83,9 +84,12 @@ class TherapistDashboardController extends Controller
             'twitter' => 'nullable|url',
             'instagram' => 'nullable|url',
             'linkedin' => 'nullable|url',
+            'services' => 'nullable|array',
+            'services.*' => 'exists:services,id',
+            'service_fees' => 'nullable|array',
         ]);
 
-        $data = $request->except('image');
+        $data = $request->except(['image', 'services', 'service_fees', '_token', '_method']);
 
         if ($request->hasFile('image')) {
             // Delete old image if it exists and is not a default url
@@ -96,6 +100,16 @@ class TherapistDashboardController extends Controller
         }
 
         $therapist->update($data);
+
+        if ($request->has('services')) {
+            $syncData = [];
+            foreach ($request->services as $serviceId) {
+                $syncData[$serviceId] = ['fees' => $request->service_fees[$serviceId] ?? null];
+            }
+            $therapist->services()->sync($syncData);
+        } else {
+            $therapist->services()->detach();
+        }
 
         return back()->with('success', 'Profile updated successfully.');
     }

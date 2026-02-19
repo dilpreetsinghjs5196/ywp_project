@@ -101,13 +101,13 @@
                       <span class="text-muted small">Mode: <span class="text-dark fw-medium">{{ $member->mode }}</span></span>
                     </div>
                   @endif
-                  @if($member->session_type)
-                    <div class="info-item d-flex align-items-center">
-                      <i class="bi bi-camera-video text-primary-color me-2"></i>
-                      <span class="text-muted small">Type: <span
-                          class="text-dark fw-medium">{{ $member->session_type }}</span></span>
-                    </div>
-                  @endif
+                  <!-- @if($member->session_type)
+                        <div class="info-item d-flex align-items-center">
+                          <i class="bi bi-camera-video text-primary-color me-2"></i>
+                          <span class="text-muted small">Type: <span
+                              class="text-dark fw-medium">{{ $member->session_type }}</span></span>
+                        </div>
+                      @endif -->
                 </div>
 
                 <!-- Action Section -->

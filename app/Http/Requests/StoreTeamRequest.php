@@ -39,7 +39,9 @@ class StoreTeamRequest extends FormRequest
             'instagram' => 'nullable|url|max:255',
             'linkedin' => 'nullable|url|max:255',
             'sort_order' => 'nullable|integer',
+            'availability_type' => 'nullable|in:date,weekly',
             'availability' => 'nullable|array',
+            'weekly_availability' => 'nullable|array',
         ];
     }
 }

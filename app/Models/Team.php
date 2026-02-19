@@ -25,11 +25,14 @@ class Team extends Model
         'linkedin',
         'sort_order',
         'is_active',
-        'availability'
+        'availability',
+        'availability_type',
+        'weekly_availability'
     ];
 
     protected $casts = [
         'availability' => 'array',
+        'weekly_availability' => 'array',
         'is_active' => 'boolean'
     ];
 

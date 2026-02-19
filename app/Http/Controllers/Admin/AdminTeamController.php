@@ -63,6 +63,17 @@ class AdminTeamController extends Controller
             $data['availability'] = $formattedAvailability;
         }
 
+        if ($request->has('weekly_availability')) {
+            $formattedWeekly = [];
+            foreach ($request->weekly_availability as $day => $times) {
+                if (!empty($times)) {
+                    $timeArray = array_map('trim', explode(',', $times));
+                    $formattedWeekly[$day] = $timeArray;
+                }
+            }
+            $data['weekly_availability'] = $formattedWeekly;
+        }
+
         Team::create($data);
 
         return redirect()->route('admin.teams.index')->with('success', 'Team member added successfully.');
@@ -103,6 +114,19 @@ class AdminTeamController extends Controller
             $data['availability'] = $formattedAvailability;
         } else {
             $data['availability'] = null;
+        }
+
+        if ($request->has('weekly_availability')) {
+            $formattedWeekly = [];
+            foreach ($request->weekly_availability as $day => $times) {
+                if (!empty($times)) {
+                    $timeArray = array_map('trim', explode(',', $times));
+                    $formattedWeekly[$day] = $timeArray;
+                }
+            }
+            $data['weekly_availability'] = $formattedWeekly;
+        } else {
+            $data['weekly_availability'] = null;
         }
 
         $team->update($data);

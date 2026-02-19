@@ -384,12 +384,12 @@
                 <!-- Left Sidebar -->
                 <div class="booking-steps-sidebar">
                     <!-- <div class="promo-banner">
-                            <div class="d-flex align-items-center gap-2 mb-1">
-                                <i class="bi bi-percent text-warning fs-5"></i>
-                                <span class="fw-bold text-dark">20% OFF</span>
-                            </div>
-                            <p class="small text-muted mb-0">20% Off on Pre-Booking First Session</p>
-                        </div> -->
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <i class="bi bi-percent text-warning fs-5"></i>
+                                    <span class="fw-bold text-dark">20% OFF</span>
+                                </div>
+                                <p class="small text-muted mb-0">20% Off on Pre-Booking First Session</p>
+                            </div> -->
 
                     <div class="booking-steps">
                         <div class="step-item active" id="sidebar-step1">
@@ -620,8 +620,36 @@
             const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
             // Therapist Availability Data
-            const availability = @json($team->availability ?? []);
-            const availableDates = Object.keys(availability).sort();
+            let availability = @json($team->availability ?? []);
+            const availabilityType = @json($team->availability_type ?? 'date');
+            const weeklyAvailability = @json($team->weekly_availability ?? []);
+
+            let availableDates = [];
+
+            if (availabilityType === 'weekly') {
+                // Clean availability for recreation
+                availability = {};
+                for (let i = 0; i < 30; i++) { // Show up to 30 days for weekly
+                    const d = new Date();
+                    d.setHours(0, 0, 0, 0);
+                    d.setDate(d.getDate() + i);
+
+                    const dayNamesFull = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                    const dayName = dayNamesFull[d.getDay()];
+
+                    if (weeklyAvailability[dayName] && weeklyAvailability[dayName].length > 0) {
+                        const y = d.getFullYear();
+                        const m = String(d.getMonth() + 1).padStart(2, '0');
+                        const day = String(d.getDate()).padStart(2, '0');
+                        const dateStr = `${y}-${m}-${day}`;
+
+                        availableDates.push(dateStr);
+                        availability[dateStr] = weeklyAvailability[dayName];
+                    }
+                }
+            } else {
+                availableDates = Object.keys(availability).sort();
+            }
 
             let selectedDateStr = null;
 
@@ -680,9 +708,9 @@
                     }
 
                     dayDiv.innerHTML = `
-                                    <div class="day-name">${days[dateObj.getDay()]}</div>
-                                    <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
-                                `;
+                                        <div class="day-name">${days[dateObj.getDay()]}</div>
+                                        <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
+                                    `;
 
                     dayDiv.onclick = function () {
                         document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));

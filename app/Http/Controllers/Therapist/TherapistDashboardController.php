@@ -133,19 +133,35 @@ class TherapistDashboardController extends Controller
     {
         $therapist = Team::where('email', Auth::user()->email)->first();
 
-        // request format: availability[YYYY-MM-DD] = "10:00 AM, 11:00 AM"
+        $data = [
+            'availability_type' => $request->availability_type ?? 'date'
+        ];
+
+        // Process Date-wise Availability
         $formattedAvailability = [];
         if ($request->has('availability')) {
             foreach ($request->availability as $date => $times) {
                 if (!empty($times)) {
-                    // Convert comma separated string to array and trim whitespace
                     $timeArray = array_map('trim', explode(',', $times));
                     $formattedAvailability[$date] = $timeArray;
                 }
             }
         }
+        $data['availability'] = $formattedAvailability;
 
-        $therapist->update(['availability' => $formattedAvailability]);
+        // Process Weekly Availability
+        $formattedWeekly = [];
+        if ($request->has('weekly_availability')) {
+            foreach ($request->weekly_availability as $day => $times) {
+                if (!empty($times)) {
+                    $timeArray = array_map('trim', explode(',', $times));
+                    $formattedWeekly[$day] = $timeArray;
+                }
+            }
+        }
+        $data['weekly_availability'] = $formattedWeekly;
+
+        $therapist->update($data);
 
         return back()->with('success', 'Availability updated successfully.');
     }

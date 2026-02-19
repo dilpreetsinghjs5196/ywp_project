@@ -40,7 +40,9 @@ class UpdateTeamRequest extends FormRequest
             'linkedin' => 'nullable|url|max:255',
             'sort_order' => 'nullable|integer',
             'is_active' => 'nullable',
+            'availability_type' => 'required|in:date,weekly',
             'availability' => 'nullable|array',
+            'weekly_availability' => 'nullable|array',
             'password' => 'nullable|string|min:8|confirmed',
         ];
     }

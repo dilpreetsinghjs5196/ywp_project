@@ -146,10 +146,20 @@
                         </div>
 
                         <hr class="my-4">
-                        <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-calendar3 me-2"></i> Therapist Availability Calendar</h6>
-                        <p class="small text-muted mb-3">Enter time slots separated by commas (e.g., 10:00 AM, 11:30 AM, 02:00 PM).</p>
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h6 class="fw-bold mb-0 text-primary"><i class="bi bi-calendar3 me-2"></i> Therapist Availability</h6>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <input type="radio" class="btn-check" name="availability_type" id="type_date" value="date" {{ $team->availability_type == 'date' ? 'checked' : '' }}>
+                                <label class="btn label btn-outline-primary" for="type_date">Specific Dates</label>
+                                
+                                <input type="radio" class="btn-check" name="availability_type" id="type_weekly" value="weekly" {{ $team->availability_type == 'weekly' ? 'checked' : '' }}>
+                                <label class="btn label btn-outline-primary" for="type_weekly">Weekly Schedule</label>
+                            </div>
+                        </div>
+                        <p class="small text-muted mb-3">Enter time slots separated by commas (e.g., 06:00 PM, 07:00 PM, 08:00 PM).</p>
 
-                        <div class="table-responsive mb-4">
+                        <!-- Specific Dates Table -->
+                        <div id="date_availability_section" class="table-responsive mb-4" style="{{ $team->availability_type == 'weekly' ? 'display:none;' : '' }}">
                             <table class="table table-sm table-bordered align-middle">
                                 <thead class="table-light">
                                     <tr>
@@ -186,6 +196,63 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <!-- Weekly Schedule Table -->
+                        <div id="weekly_availability_section" class="table-responsive mb-4" style="{{ $team->availability_type == 'date' || !$team->availability_type ? 'display:none;' : '' }}">
+                            <table class="table table-sm table-bordered align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width: 180px;">Day of Week</th>
+                                        <th>Available Time Slots</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                                        $weeklyAvailability = $team->weekly_availability ?? [];
+                                    @endphp
+                                    @foreach($days as $day)
+                                        @php
+                                            $existingWeeklyTimes = isset($weeklyAvailability[$day]) ? implode(', ', $weeklyAvailability[$day]) : '';
+                                        @endphp
+                                        <tr>
+                                            <td class="bg-light">
+                                                <div class="fw-bold small">{{ $day }}</div>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="weekly_availability[{{ $day }}]" 
+                                                       class="form-control form-control-sm" 
+                                                       placeholder="e.g. 06:00 PM, 07:00 PM"
+                                                       value="{{ $existingWeeklyTimes }}">
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const typeDate = document.getElementById('type_date');
+                                const typeWeekly = document.getElementById('type_weekly');
+                                const dateSection = document.getElementById('date_availability_section');
+                                const weeklySection = document.getElementById('weekly_availability_section');
+
+                                typeDate.addEventListener('change', function() {
+                                    if (this.checked) {
+                                        dateSection.style.display = 'block';
+                                        weeklySection.style.display = 'none';
+                                    }
+                                });
+
+                                typeWeekly.addEventListener('change', function() {
+                                    if (this.checked) {
+                                        dateSection.style.display = 'none';
+                                        weeklySection.style.display = 'block';
+                                    }
+                                });
+                            });
+                        </script>
 
                         <hr class="my-4">
                         <h6 class="fw-bold mb-3 text-primary">Social Media Links (Optional)</h6>

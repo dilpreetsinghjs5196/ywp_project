@@ -37,7 +37,7 @@ class HomeController extends Controller
                 return $section->pluck('value', 'key');
             });
 
-        $teams = \App\Models\Team::where('is_active', true)->orderBy('sort_order')->get();
+        $teams = \App\Models\Team::with('services')->where('is_active', true)->orderBy('sort_order')->get();
 
         return view('site.com.about', compact('settings', 'contents', 'teams'));
     }
@@ -52,7 +52,7 @@ class HomeController extends Controller
                 return $section->pluck('value', 'key');
             });
 
-        $teams = \App\Models\Team::where('is_active', true)->orderBy('sort_order')->paginate(4);
+        $teams = \App\Models\Team::with('services')->where('is_active', true)->orderBy('sort_order')->paginate(4);
 
         return view('site.com.team', compact('settings', 'contents', 'teams'));
     }
@@ -60,7 +60,7 @@ class HomeController extends Controller
     public function teamSingle($id)
     {
         $settings = SiteSetting::all()->pluck('value', 'key');
-        $team = \App\Models\Team::where('is_active', true)->findOrFail($id);
+        $team = \App\Models\Team::with('services')->where('is_active', true)->findOrFail($id);
         $recentTeams = \App\Models\Team::where('is_active', true)->where('id', '!=', $id)->orderBy('sort_order')->take(3)->get();
         $reviews = $team->approvedReviews()->orderBy('created_at', 'desc')->get();
 
@@ -78,7 +78,7 @@ class HomeController extends Controller
             });
 
         $testimonials = \App\Models\Testimonial::where('is_active', true)->orderBy('sort_order')->get();
-        $teams = \App\Models\Team::orderBy('sort_order')->get();
+        $teams = \App\Models\Team::with('services')->orderBy('sort_order')->get();
         $brands = \App\Models\Brand::where('is_active', true)->orderBy('sort_order')->get();
 
         return view('site.com.corporate-well', compact('settings', 'contents', 'testimonials', 'teams', 'brands'));
@@ -152,7 +152,7 @@ class HomeController extends Controller
     {
         $settings = SiteSetting::all()->pluck('value', 'key');
         $service = \App\Models\Service::where('slug', $slug)->where('is_active', true)->firstOrFail();
-        $teams = $service->therapists()->where('is_active', true)->orderBy('sort_order')->paginate(4);
+        $teams = $service->therapists()->with('services')->where('is_active', true)->orderBy('sort_order')->paginate(4);
 
         return view('site.com.service_therapists', compact('settings', 'service', 'teams'));
     }

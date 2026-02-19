@@ -87,6 +87,12 @@
 
                                 <!-- Info List -->
                                 <div class="info-list mb-2">
+                                    @if($member->services->count() > 0)
+                                        <div class="info-item d-flex align-items-center mb-1">
+                                            <i class="bi bi-patch-check text-primary-color me-2"></i>
+                                            <span class="text-muted small">Services: <span class="text-dark fw-medium">{{ $member->services->pluck('title')->implode(', ') }}</span></span>
+                                        </div>
+                                    @endif
                                     @if($member->languages)
                                         <div class="info-item d-flex align-items-center mb-1">
                                             <i class="bi bi-translate text-primary-color me-2"></i>

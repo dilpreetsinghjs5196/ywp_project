@@ -112,6 +112,14 @@
                                 </div>
                             </div>
                         @endif
+                        @if($team->services->count() > 0)
+                            <div class="col-12">
+                                <div>
+                                    <div class="fw-bold small text-muted text-uppercase">Services</div>
+                                    <div class="fw-semibold text-dark fs-5">{{ $team->services->pluck('title')->implode(', ') }}</div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
                     @if($team->specialties)
@@ -119,14 +127,14 @@
                             <h5 class="fw-bold mb-3 font-1 text-dark">Areas of Expertise</h5>
                             <div class="d-flex flex-wrap gap-2">
                                 @php
-                                    $specialties = preg_split('/[,\n]+/', $team->specialties);
+                                    $specialties = $team->specialties ? preg_split('/[,\n]+/', $team->specialties) : [];
                                 @endphp
-                                @foreach($specialties as $specialty)
-                                    @if(trim($specialty))
+                                @foreach($specialties as $tag)
+                                    @if(trim($tag))
                                         <span
                                             class="badge bg-light text-dark border px-3 py-2 rounded-pill fs-6 fw-medium shadow-xs text-wrap text-start"
                                             style="max-width: 100%; white-space: normal;">
-                                            {{ trim($specialty) }}
+                                            {{ trim($tag) }}
                                         </span>
                                     @endif
                                 @endforeach

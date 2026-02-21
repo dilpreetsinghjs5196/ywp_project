@@ -249,6 +249,7 @@
                         </a>
                     </li>
 
+
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.services.*') ? 'active' : '' }}"
                             href="{{ route('admin.services.index') }}">
@@ -259,6 +260,18 @@
                         <a class="nav-link {{ request()->routeIs('admin.teams.*') ? 'active' : '' }}"
                             href="{{ route('admin.teams.index') }}">
                             <i class="bi bi-people"></i> Team Members
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.blog-themes.*') ? 'active' : '' }}"
+                            href="{{ route('admin.blog-themes.index') }}">
+                            <i class="bi bi-collection"></i> Blog Themes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.blogs.*') ? 'active' : '' }}"
+                            href="{{ route('admin.blogs.index') }}">
+                            <i class="bi bi-journal-text"></i> Blog Posts
                         </a>
                     </li>
                     <li class="nav-item">
@@ -419,6 +432,17 @@
                 @if(session('error'))
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         {{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                @if($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <ul class="mb-0">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 @endif

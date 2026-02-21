@@ -23,6 +23,10 @@ Route::get('/services', [\App\Http\Controllers\com\HomeController::class, 'servi
 Route::get('/services/{slug}/therapists', [\App\Http\Controllers\com\HomeController::class, 'serviceTherapists'])->name('com.services.therapists');
 Route::get('/wonder-store', [\App\Http\Controllers\com\WonderStoreController::class, 'index'])->name('com.store');
 
+// Blog Routes
+Route::get('/wellness-awareness-hub', [\App\Http\Controllers\com\PublicBlogController::class, 'index'])->name('com.blogs.index');
+Route::get('/wellness-awareness-hub/{slug}', [\App\Http\Controllers\com\PublicBlogController::class, 'show'])->name('com.blogs.show');
+
 // Cart Routes
 Route::get('/cart', [\App\Http\Controllers\com\CartController::class, 'index'])->name('com.cart');
 Route::post('/cart/add/{id}', [\App\Http\Controllers\com\CartController::class, 'add'])->name('cart.add');
@@ -90,6 +94,11 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
     // Brand Management
     Route::resource('brands', \App\Http\Controllers\Admin\AdminBrandController::class, ['as' => 'admin']);
+
+    // Blog Management
+    Route::resource('blog-themes', \App\Http\Controllers\Admin\AdminBlogThemeController::class, ['as' => 'admin']);
+    Route::resource('blogs', \App\Http\Controllers\Admin\AdminBlogController::class, ['as' => 'admin']);
+    Route::post('/ckeditor/upload', [\App\Http\Controllers\Admin\CKEditorController::class, 'upload'])->name('admin.ckeditor.upload');
 
     // Review Management
     Route::resource('reviews', \App\Http\Controllers\Admin\AdminReviewController::class, ['as' => 'admin'])->only(['index', 'update', 'destroy']);

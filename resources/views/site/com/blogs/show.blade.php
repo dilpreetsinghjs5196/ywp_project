@@ -65,7 +65,7 @@
 
                     <!-- Related Stories -->
                     @if($relatedBlogs->count() > 0)
-                        <div class="related-blogs py-4" data-aos="fade-up">
+                        <div class="related-blogs p-4 p-md-5 bg-gradient-secondary rounded-5 mt-5 shadow-sm" data-aos="fade-up">
                             <h3 class="fw-bold fs-2 mb-4 text-primary-color">Related Stories</h3>
                             <div class="row g-4">
                                 @foreach($relatedBlogs as $related)

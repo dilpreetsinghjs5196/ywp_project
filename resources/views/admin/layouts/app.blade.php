@@ -218,12 +218,12 @@
                             <i class="bi bi-house"></i> Home Page
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('admin/pages/about*') ? 'active' : '' }}"
-                            href="{{ route('admin.pages.edit', 'about') }}">
+                    <!-- <li class="nav-item">
+                        <a class="nav-link"
+                            href="">
                             <i class="bi bi-info-circle"></i> About Us
                         </a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('admin/pages/team*') ? 'active' : '' }}"
                             href="{{ route('admin.pages.edit', 'team') }}">

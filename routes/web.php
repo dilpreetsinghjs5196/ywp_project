@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 // Front-end routes
 Route::get('/', [HomeController::class, 'home'])->name('com.home');
-Route::get('/about', [HomeController::class, 'about'])->name('com.about');
+// Route::get('/about', [HomeController::class, 'about'])->name('com.about');
 Route::get('/team', [\App\Http\Controllers\com\HomeController::class, 'team'])->name('com.team');
 Route::get('/team/{id}', [\App\Http\Controllers\com\HomeController::class, 'teamSingle'])->name('com.team.single');
 Route::get('/therapist/booking/{id}', [\App\Http\Controllers\com\HomeController::class, 'therapistBooking'])->name('com.therapist.booking');
@@ -17,6 +17,7 @@ Route::post('/therapist/booking/initialize', [\App\Http\Controllers\com\Therapis
 Route::post('/therapist/booking/verify', [\App\Http\Controllers\com\TherapistBookingController::class, 'verifyPayment'])->name('com.therapist.booking.verify');
 Route::get('/contact-us', [HomeController::class, 'contact'])->name('com.contact');
 Route::post('/appointment/submit', [HomeController::class, 'submitAppointment'])->name('com.appointment.submit');
+Route::post('/therapist-application', [\App\Http\Controllers\TherapistApplicationController::class, 'submit'])->name('com.therapist.application.submit');
 Route::post('/review/submit', [\App\Http\Controllers\com\ReviewController::class, 'store'])->name('review.submit');
 Route::get('/corporate-well-being', [\App\Http\Controllers\com\HomeController::class, 'corporateWellBeing'])->name('com.corporate');
 Route::get('/services', [\App\Http\Controllers\com\HomeController::class, 'services'])->name('com.services');

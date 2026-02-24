@@ -428,12 +428,12 @@
                 <!-- Left Sidebar -->
                 <div class="booking-steps-sidebar">
                     <!-- <div class="promo-banner">
-                                        <div class="d-flex align-items-center gap-2 mb-1">
-                                            <i class="bi bi-percent text-warning fs-5"></i>
-                                            <span class="fw-bold text-dark">20% OFF</span>
-                                        </div>
-                                        <p class="small text-muted mb-0">20% Off on Pre-Booking First Session</p>
-                                    </div> -->
+                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                <i class="bi bi-percent text-warning fs-5"></i>
+                                                <span class="fw-bold text-dark">20% OFF</span>
+                                            </div>
+                                            <p class="small text-muted mb-0">20% Off on Pre-Booking First Session</p>
+                                        </div> -->
 
                     <div class="booking-steps">
                         <div class="step-item active" id="sidebar-step1">
@@ -643,6 +643,24 @@
                             </div>
 
                             <div class="mb-3">
+                                <label class="form-label small fw-bold text-muted">GENDER*</label>
+                                <select name="gender" class="form-select rounded-3 py-2 border-secondary-subtle" required>
+                                    <option value="" selected disabled>Select gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Non-binary">Non-binary</option>
+                                    <option value="Prefer not to say">Prefer not to say</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-muted">CITY/LOCATION*</label>
+                                <input type="text" name="location"
+                                    class="form-control rounded-3 py-2 border-secondary-subtle" required
+                                    placeholder="Enter your city or location">
+                            </div>
+
+                            <div class="mb-3">
                                 <label class="form-label small fw-bold text-muted">PHONE NUMBER*</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white border-secondary-subtle text-muted">🇮🇳
@@ -771,9 +789,9 @@
                     }
 
                     dayDiv.innerHTML = `
-                                                <div class="day-name">${days[dateObj.getDay()]}</div>
-                                                <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
-                                            `;
+                                                    <div class="day-name">${days[dateObj.getDay()]}</div>
+                                                    <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
+                                                `;
 
                     dayDiv.onclick = function () {
                         document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
@@ -875,6 +893,8 @@
                     team_id: "{{ $team->id }}",
                     service_id: selectedServiceId,
                     name: this.elements['name'].value,
+                    gender: this.elements['gender'].value,
+                    location: this.elements['location'].value,
                     phone: this.elements['phone'].value,
                     email: this.elements['email'].value,
                     message: this.elements['message'].value,

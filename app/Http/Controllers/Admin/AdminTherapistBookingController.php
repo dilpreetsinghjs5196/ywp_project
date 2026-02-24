@@ -74,12 +74,14 @@ class AdminTherapistBookingController extends Controller
         header('Content-Disposition: attachment; filename="' . $filename . '"');
 
         // CSV Header
-        fputcsv($handle, ['Booking ID', 'Patient Name', 'Patient Email', 'Patient Phone', 'Therapist Name', 'Booking Date', 'Booking Time', 'Mode', 'Amount', 'Status', 'Booking Created At']);
+        fputcsv($handle, ['Booking ID', 'Patient Name', 'Gender', 'Location', 'Patient Email', 'Patient Phone', 'Therapist Name', 'Booking Date', 'Booking Time', 'Mode', 'Amount', 'Status', 'Booking Created At']);
 
         foreach ($bookings as $booking) {
             fputcsv($handle, [
                 $booking->id,
                 $booking->name,
+                $booking->gender,
+                $booking->location,
                 $booking->email,
                 $booking->phone,
                 $booking->therapist ? $booking->therapist->name : 'N/A',

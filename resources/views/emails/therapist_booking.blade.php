@@ -117,6 +117,14 @@
                 <div class="value">{{ $booking->name }}</div>
             </div>
             <div>
+                <div class="label">Gender</div>
+                <div class="value">{{ $booking->gender }}</div>
+            </div>
+            <div>
+                <div class="label">City/Location</div>
+                <div class="value">{{ $booking->location }}</div>
+            </div>
+            <div>
                 <div class="label">Therapist</div>
                 <div class="value">{{ $booking->therapist->name }}</div>
             </div>

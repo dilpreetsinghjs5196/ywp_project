@@ -3,12 +3,14 @@
   <div class="b-container">
     <div class="d-flex justify-content-between align-items-center text-white px-3">
       <div class="d-flex align-items-center">
-        <div class="pe-3">
-          <p class="my-1 py-1">Office Time : Mon - Fri 8:00 - 6:30</p>
+        <div class="pe-3 border-end">
+          <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#joinUsModal"
+             class="text-white text-decoration-none fw-bold small d-flex align-items-center bg-primary-color px-3 py-1 rounded-pill" style="cursor: pointer;">
+            <i class="bi bi-person-plus-fill me-2"></i> JOIN US
+          </a>
         </div>
-        &nbsp;|&nbsp;
         <div class="ps-3">
-          <p class="my-1 py-1">{{ $settings['office_address'] ?? '123 Serenity Lane, Blissfield, CA 90210' }}</p>
+          <p class="my-1 py-1 small">{{ $settings['office_address'] ?? '123 Serenity Lane, Blissfield, CA 90210' }}</p>
         </div>
       </div>
       <div class="social-box">
@@ -55,19 +57,14 @@
                   href="{{ route('com.home') }}">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('com.about') ? 'active' : '' }}" 
-                  {{ request()->routeIs('com.about') ? 'aria-current="page"' : '' }} 
-                  href="{{ route('com.about') }}">About Us</a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('com.services') ? 'active' : '' }}" 
                   {{ request()->routeIs('com.services') ? 'aria-current="page"' : '' }} 
-                  href="{{ route('com.services') }}">Our Services</a>
+                  href="{{ route('com.services') }}">Services</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('com.team') ? 'active' : '' }}" 
                   {{ request()->routeIs('com.team') ? 'aria-current="page"' : '' }} 
-                  href="{{ route('com.team') }}">Our Therapists</a>
+                  href="{{ route('com.team') }}">Therapists</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('com.corporate') ? 'active' : '' }}" 
@@ -89,20 +86,17 @@
                   {{ request()->routeIs('com.store') ? 'aria-current="page"' : '' }} 
                   href="{{ route('com.store') }}">Wonder Store</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('com.contact') ? 'active' : '' }}" 
-                  {{ request()->routeIs('com.contact') ? 'aria-current="page"' : '' }} 
-                  href="{{ route('com.contact') }}">Contact Us</a>
-              </li>
             </ul>
             <div class="d-flex align-items-center ms-lg-3 mt-3 mt-lg-0 gap-2">
               @auth
               <div class="dropdown">
                 <button class="btn btn-outline-primary position-relative rounded-pill px-3 py-2 border-2 dropdown-toggle no-caret" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
                   <i class="bi bi-person-circle fs-5"></i>
-                  <span id="cart-badge-main" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm" style="display: none; padding: 0.35em 0.65em; font-size: 0.7rem; z-index: 10;">
-                    0
-                  </span>
+                  @if(request()->routeIs('com.store'))
+                    <span id="cart-badge-main" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm" style="display: none; padding: 0.35em 0.65em; font-size: 0.7rem; z-index: 10;">
+                      0
+                    </span>
+                  @endif
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2" aria-labelledby="userMenu">
                   <li>
@@ -125,12 +119,14 @@
                 </ul>
               </div>
               @else
-              <a href="{{ route('com.cart') }}" class="btn btn-outline-primary position-relative rounded-pill px-3 py-2 border-2 {{ request()->routeIs('com.cart') ? 'active' : '' }}" title="Shopping Cart">
-                <i class="bi bi-cart3 fs-5"></i>
-                <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm" style="display: none; padding: 0.35em 0.65em; font-size: 0.7rem; z-index: 10;">
-                  0
-                </span>
-              </a>
+              @if(request()->routeIs('com.store'))
+                <a href="{{ route('com.cart') }}" class="btn btn-outline-primary position-relative rounded-pill px-3 py-2 border-2 {{ request()->routeIs('com.cart') ? 'active' : '' }}" title="Shopping Cart">
+                  <i class="bi bi-cart3 fs-5"></i>
+                  <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm" style="display: none; padding: 0.35em 0.65em; font-size: 0.7rem; z-index: 10;">
+                    0
+                  </span>
+                </a>
+              @endif
               @endauth
             </div>
           </div>

@@ -20,6 +20,8 @@ class TherapistBooking extends Model
         'booking_time',
         'mode',
         'message',
+        'gender',
+        'location',
         'amount',
         'payment_status',
         'razorpay_payment_id',

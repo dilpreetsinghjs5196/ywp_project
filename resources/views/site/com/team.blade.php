@@ -19,7 +19,7 @@
             <li class="breadcrumb-item font-1">
               <a class="text-decoration-none text-white" href="{{ route('com.home') }}">Homepage</a>
             </li>
-            <li class="breadcrumb-item text-primary-color active" aria-current="page">
+            <li class="breadcrumb-item text-primary-color" aria-current="page">
               Our Team
             </li>
           </ol>
@@ -67,9 +67,10 @@
               <!-- Content Section -->
               <div class="therapist-details-box p-4 flex-grow-1 d-flex flex-column">
                 <div class="d-flex justify-content-between align-items-start mb-2">
-                  <div>
-                    <h4 class="font-1 fw-bold mb-1 text-dark">{{ $member->name }}</h4>
-                    <p class="text-muted mb-0 fw-medium">{{ $member->designation ?? 'Therapist' }}</p>
+                  <div class="flex-grow-1">
+                    <h4 class="font-1 fw-bold mb-1 text-dark" style="line-height: 1.2 !important;">{{ $member->name }}</h4>
+                    <p class="text-muted mb-0 fw-medium" style="line-height: 1.4;">{{ $member->designation ?? 'Therapist' }}
+                    </p>
                   </div>
                 </div>
 
@@ -91,7 +92,8 @@
                   @if($member->services->count() > 0)
                     <div class="info-item d-flex align-items-center mb-1">
                       <i class="bi bi-patch-check text-primary-color me-2"></i>
-                      <span class="text-muted small">Services: <span class="text-dark fw-medium">{{ $member->services->pluck('title')->implode(', ') }}</span></span>
+                      <span class="text-muted small">Services: <span
+                          class="text-dark fw-medium">{{ $member->services->pluck('title')->implode(', ') }}</span></span>
                     </div>
                   @endif
                   @if($member->languages)
@@ -108,12 +110,12 @@
                     </div>
                   @endif
                   <!-- @if($member->session_type)
-                            <div class="info-item d-flex align-items-center">
-                              <i class="bi bi-camera-video text-primary-color me-2"></i>
-                              <span class="text-muted small">Type: <span
-                                  class="text-dark fw-medium">{{ $member->session_type }}</span></span>
-                            </div>
-                          @endif -->
+                                                            <div class="info-item d-flex align-items-center">
+                                                              <i class="bi bi-camera-video text-primary-color me-2"></i>
+                                                              <span class="text-muted small">Type: <span
+                                                                  class="text-dark fw-medium">{{ $member->session_type }}</span></span>
+                                                            </div>
+                                                          @endif -->
                 </div>
 
                 <!-- Action Section -->
@@ -135,9 +137,6 @@
 
       <!-- Pagination Section -->
       <div class="row mt-5">
-        <div class="col-12 d-flex justify-content-center">
-          {{ $teams->links() }}
-        </div>
       </div>
     </div>
   </section>
@@ -230,6 +229,7 @@
     </div>
   </section>
 
+
   <style>
     .therapist-brief-card {
       transition: all 0.3s ease;
@@ -258,6 +258,7 @@
 
     .therapist-details-box {
       padding: 1.5rem !important;
+      min-height: 200px;
     }
 
     .expertise-tag {
@@ -320,6 +321,5 @@
 
 @push('js')
   <script>
-    // Team page interactions
   </script>
 @endpush

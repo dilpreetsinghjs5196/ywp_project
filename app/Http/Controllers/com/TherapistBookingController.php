@@ -24,6 +24,8 @@ class TherapistBookingController extends Controller
             'date' => 'required|date',
             'time' => 'required|string',
             'mode' => 'required|string',
+            'gender' => 'required|string',
+            'location' => 'required|string',
             'message' => 'nullable|string',
         ]);
 
@@ -49,6 +51,8 @@ class TherapistBookingController extends Controller
                 'booking_date' => $request->date,
                 'booking_time' => $request->time,
                 'mode' => $request->mode,
+                'gender' => $request->gender,
+                'location' => $request->location,
                 'message' => $request->message,
                 'amount' => $amount,
                 'payment_status' => 'pending',

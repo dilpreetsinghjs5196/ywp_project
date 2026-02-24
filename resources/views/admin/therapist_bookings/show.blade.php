@@ -38,6 +38,10 @@
                                     <a href="tel:{{ $booking->phone }}"
                                         class="text-decoration-none">{{ $booking->phone }}</a>
                                 </div>
+                                <div class="mt-2 pt-2 border-top">
+                                    <div class="small"><span class="text-muted">Gender:</span> <strong>{{ $booking->gender }}</strong></div>
+                                    <div class="small"><span class="text-muted">Location:</span> <strong>{{ $booking->location }}</strong></div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">

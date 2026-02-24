@@ -169,7 +169,7 @@
               $signatureUrl = Str::startsWith($signaturePath, 'image/') ? asset($signaturePath) : asset('storage/' . $signaturePath);
             @endphp
             <img src="{{ $signatureUrl }}" alt="Signature" style="height: 100px;">
-            <a href="{{ route('com.about') }}" class="btn btn-primary-solid">Read More</a>
+            <a href="" class="btn btn-primary-solid">Read More</a>
           </div>
         </div>
       </div>
@@ -315,6 +315,67 @@
   </section>
   <!-- #services end -->
 
+  <style>
+    .therapist-info-box {
+      bottom: 4%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 85%;
+      z-index: 5;
+    }
+
+    .therapist-info-inner {
+      background-color: #044A80 !important;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(5px);
+    }
+
+    @media (max-width: 576px) {
+      .therapist-info-box {
+        width: 92%;
+        bottom: 1%;
+      }
+
+      .therapist-info-inner {
+        padding: 0.5rem !important;
+      }
+
+      .therapist-name {
+        font-size: 0.82rem !important;
+      }
+
+      .therapist-designation {
+        font-size: 0.62rem !important;
+        margin-bottom: 0.2rem !important;
+      }
+
+      .therapist-desc {
+        display: none !important;
+      }
+
+      .btn-view-profile {
+        font-size: 0.68rem !important;
+        padding: 0.35rem 1rem !important;
+        width: auto !important;
+        min-width: 140px;
+      }
+
+      .social-box {
+        margin-bottom: 0.25rem !important;
+        gap: 0.5rem !important;
+      }
+
+      .social-icon-link {
+        width: 16px !important;
+        height: 16px !important;
+      }
+
+      .social-icon-link i {
+        font-size: 0.5rem !important;
+      }
+    }
+  </style>
+
   <!-- Teams Section -->
   <section class="section py-5 bg-half-gradient mt-5">
     <div class="b-container" style="padding-top: 50px;">
@@ -336,30 +397,55 @@
                       src="{{ Str::startsWith($member->image, 'image/') ? asset($member->image) : asset('storage/' . $member->image) }}"
                       alt="{{ $member->name }}" class="rounded-5 w-100 h-100 position-absolute" style="object-fit: cover;">
                   </div>
-                  <div class="position-absolute w-75" style="margin-top: -9rem; margin-left: 12.5%;">
+                  <div class="position-absolute therapist-info-box">
                     <div
-                      class="bg-primary-color d-flex flex-column text-white py-3 align-items-center text-center rounded-5">
-                      <div class="mb-2">
-                        <h4 class="font-1 fw-bolder">{{ $member->name }}</h4>
-                        <p class="mb-0">{{ $member->designation }}</p>
-                      </div>
-                      <div class="social-box justify-content-center mb-2">
-                        @if($member->facebook)
-                          <a href="{{ $member->facebook }}" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
-                              class="bi bi-facebook text-white"></i></a>
+                      class="therapist-info-inner d-flex flex-column text-white p-3 align-items-center text-center rounded-5 shadow-lg">
+                      <h6 class="therapist-name fw-bold mb-1 text-uppercase"
+                        style="font-size: 1.1rem; line-height: 1.2 !important; letter-spacing: 0.5px;">{{ $member->name }}
+                      </h6>
+                      <p class="therapist-designation mb-2 opacity-75 fw-medium"
+                        style="font-size: 0.75rem; line-height: 1.2;">
+                        {{ $member->designation }}
+                      </p>
+                      @if($member->description)
+                        <p class="therapist-desc mb-2 opacity-90 fw-light"
+                          style="font-size: 0.75rem; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-style: italic;">
+                          "{{ strip_tags($member->description) }}"
+                        </p>
+                      @endif
+                      <div class="w-100 mt-auto">
+                        @if($member->facebook || $member->twitter || $member->instagram || $member->linkedin)
+                          <div class="social-box d-flex justify-content-center gap-2 mb-2">
+                            @if($member->facebook)
+                              <a href="{{ $member->facebook }}"
+                                class="social-icon-link rounded-circle d-flex align-items-center justify-content-center"
+                                style="width: 20px; height: 20px; background: rgba(255,255,255,0.1);"><i
+                                  class="bi bi-facebook text-white" style="font-size: 0.6rem;"></i></a>
+                            @endif
+                            @if($member->twitter)
+                              <a href="{{ $member->twitter }}"
+                                class="social-icon-link rounded-circle d-flex align-items-center justify-content-center"
+                                style="width: 20px; height: 20px; background: rgba(255,255,255,0.1);"><i
+                                  class="bi bi-twitter-x text-white" style="font-size: 0.6rem;"></i></a>
+                            @endif
+                            @if($member->instagram)
+                              <a href="{{ $member->instagram }}"
+                                class="social-icon-link rounded-circle d-flex align-items-center justify-content-center"
+                                style="width: 20px; height: 20px; background: rgba(255,255,255,0.1);"><i
+                                  class="bi bi-instagram text-white" style="font-size: 0.6rem;"></i></a>
+                            @endif
+                            @if($member->linkedin)
+                              <a href="{{ $member->linkedin }}"
+                                class="social-icon-link rounded-circle d-flex align-items-center justify-content-center"
+                                style="width: 20px; height: 20px; background: rgba(255,255,255,0.1);"><i
+                                  class="bi bi-linkedin text-white" style="font-size: 0.6rem;"></i></a>
+                            @endif
+                          </div>
                         @endif
-                        @if($member->twitter)
-                          <a href="{{ $member->twitter }}" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
-                              class="bi bi-twitter-x text-white"></i></a>
-                        @endif
-                        @if($member->instagram)
-                          <a href="{{ $member->instagram }}" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
-                              class="bi bi-instagram text-white"></i></a>
-                        @endif
-                        @if($member->linkedin)
-                          <a href="{{ $member->linkedin }}" class="fs-6 rounded-1 py-1" style="width: 30px; height: 30px;"><i
-                              class="bi bi-linkedin text-white"></i></a>
-                        @endif
+                        <a href="{{ route('com.team.single', $member->id) }}"
+                          class="btn btn-secondary-solid btn-view-profile rounded-1 w-100 py-2 border-0"
+                          style="font-size: 0.85rem; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; background-color: var(--secondary-color) !important; color: #000 !important; min-height: unset;">VIEW
+                          PROFILE</a>
                       </div>
                     </div>
                   </div>
@@ -437,7 +523,7 @@
   <!-- #feedback end -->
 
   <!-- Quotes Section -->
-  <section class="quotes-section py-5" style="display: none;">
+  <section class="quotes-section py-5">
     <div class="quotes-background"></div>
     <div class="container py-5 px-2 px-md-0">
       <div class="row justify-content-center text-center text-white">

@@ -79,7 +79,134 @@
         AOS.init();
     </script>
 
+    <!-- Join Us Modal -->
+    <div class="modal fade" id="joinUsModal" tabindex="-1" aria-labelledby="joinUsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 rounded-4 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold font-1">Join Our Growing Team</h2>
+                        <p class="text-muted small">Are you a compassionate mental health professional? We should talk.
+                        </p>
+                    </div>
+
+                    <form id="globalTherapistJoinForm">
+                        @csrf
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase">Full Name*</label>
+                                <input type="text" name="name"
+                                    class="form-control py-2 rounded-3 border-secondary-subtle" required
+                                    placeholder="Joy Doe">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase">Email Address*</label>
+                                <input type="email" name="email"
+                                    class="form-control py-2 rounded-3 border-secondary-subtle" required
+                                    placeholder="joy@example.com">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase">Phone Number*</label>
+                                <input type="tel" name="phone"
+                                    class="form-control py-2 rounded-3 border-secondary-subtle" required
+                                    placeholder="+91 XXXXX XXXXX">
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label small fw-bold text-muted text-uppercase">Specialization*</label>
+                                <input type="text" name="specialization"
+                                    class="form-control py-2 rounded-3 border-secondary-subtle" required
+                                    placeholder="Clinical Psychology, CBT, etc.">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-muted text-uppercase">Years of
+                                    Experience*</label>
+                                <select name="experience" class="form-select py-2 rounded-3 border-secondary-subtle"
+                                    required>
+                                    <option value="" disabled selected>Select experience</option>
+                                    <option value="0-2 years">0-2 years</option>
+                                    <option value="2-5 years">2-5 years</option>
+                                    <option value="5-10 years">5-10 years</option>
+                                    <option value="10+ years">10+ years</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-muted text-uppercase">Short
+                                    Bio/Message</label>
+                                <textarea name="message" class="form-control rounded-3 border-secondary-subtle" rows="4"
+                                    placeholder="Tell us about yourself..."></textarea>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <button type="submit"
+                                    class="btn btn-primary w-100 py-3 rounded-pill fw-bold text-uppercase"
+                                    style="background-color: var(--primary-color); border: none;">
+                                    Submit Application
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="globalJoinResponse" class="mt-4" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @stack('js')
+
+    <script>
+        document.getElementById('globalTherapistJoinForm')?.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const form = this;
+            const btn = form.querySelector('button[type="submit"]');
+            const responseDiv = document.getElementById('globalJoinResponse');
+            const formData = new FormData(form);
+
+            btn.disabled = true;
+            const originalText = btn.innerText;
+            btn.innerText = 'Submitting...';
+            responseDiv.style.display = 'none';
+
+            fetch("{{ route('com.therapist.application.submit') }}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    responseDiv.style.display = 'block';
+                    if (data.success) {
+                        responseDiv.innerHTML = `<div class="alert alert-success rounded-4 border-0 shadow-sm p-3">
+                        <i class="bi bi-check-circle-fill me-2"></i> ${data.message}
+                    </div>`;
+                        form.reset();
+                        setTimeout(() => {
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('joinUsModal'));
+                            modal.hide();
+                            responseDiv.style.display = 'none';
+                        }, 3000);
+                    } else {
+                        responseDiv.innerHTML = `<div class="alert alert-danger rounded-4 border-0 shadow-sm p-3">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> ${data.message}
+                    </div>`;
+                    }
+                })
+                .catch(error => {
+                    responseDiv.style.display = 'block';
+                    responseDiv.innerHTML = `<div class="alert alert-danger rounded-4 border-0 shadow-sm p-3">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> Something went wrong. Please try again later.
+                </div>`;
+                })
+                .finally(() => {
+                    btn.disabled = false;
+                    btn.innerText = originalText;
+                });
+        });
+    </script>
 </body>
 
 </html>

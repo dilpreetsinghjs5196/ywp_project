@@ -18,6 +18,10 @@
                     <td>
                         <div class="fw-bold">{{ $booking->name }}</div>
                         <div class="small text-muted">{{ $booking->email }}</div>
+                        <div class="mt-1" style="font-size: 0.75rem;">
+                            <span class="badge bg-light text-dark border">{{ $booking->gender }}</span>
+                            <span class="badge bg-light text-dark border">{{ $booking->location }}</span>
+                        </div>
                     </td>
                     <td>
                         <div class="fw-bold text-primary-color">{{ $booking->therapist->name }}</div>

@@ -122,6 +122,38 @@
                         </script>
 
                         <div class="col-12 mt-4 pt-3 border-top">
+                            <h6 class="fw-bold mb-3"><i class="bi bi-calendar2-week me-2"></i> Google Calendar Integration</h6>
+                            <div class="card bg-light border-0 shadow-none mb-3">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                    <div>
+                                        @if($therapist->google_access_token)
+                                            <div class="text-success fw-bold mb-1">
+                                                <i class="bi bi-check-circle-fill me-1"></i> Connected to Google Calendar
+                                            </div>
+                                            <p class="small text-muted mb-0">Your bookings will be automatically synced to your <strong>{{ $therapist->google_calendar_id }}</strong> calendar.</p>
+                                        @else
+                                            <div class="text-warning fw-bold mb-1">
+                                                <i class="bi bi-exclamation-triangle-fill me-1"></i> Not Connected
+                                            </div>
+                                            <p class="small text-muted mb-0">Connect your Google account to sync bookings and automate your availability.</p>
+                                        @endif
+                                    </div>
+                                    <div class="ms-3">
+                                        @if($therapist->google_access_token)
+                                            <a href="{{ route('therapist.google.connect') }}" class="btn btn-sm btn-outline-primary shadow-sm">
+                                                <i class="bi bi-arrow-repeat me-1"></i> Reconnect
+                                            </a>
+                                        @else
+                                            <a href="{{ route('therapist.google.connect') }}" class="btn btn-sm btn-primary shadow-sm">
+                                                <i class="bi bi-google me-1"></i> Connect Google Calendar
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-4 pt-3 border-top">
                             <h6 class="fw-bold mb-3"><i class="bi bi-share me-2"></i> Social Media Profiles (Optional)</h6>
                             <div class="row g-3">
                                 <div class="col-md-6">

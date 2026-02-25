@@ -356,6 +356,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.settings.google') ? 'active' : '' }}"
+                            href="{{ route('admin.settings.google') }}">
+                            <i class="bi bi-calendar-range"></i> Google Calendar
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Access Control</div>
                     </li>
                     <li class="nav-item">

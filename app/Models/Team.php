@@ -30,7 +30,12 @@ class Team extends Model
         'weekly_availability',
         'office_address',
         'weekly_addresses',
-        'date_addresses'
+        'date_addresses',
+        'google_id',
+        'google_calendar_id',
+        'google_access_token',
+        'google_refresh_token',
+        'google_token_expires_at'
     ];
 
     protected $casts = [

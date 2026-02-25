@@ -191,4 +191,23 @@ class HomeController extends Controller
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+
+    public function getBusySlots(Request $request)
+    {
+        $request->validate([
+            'team_id' => 'required|exists:teams,id',
+            'date' => 'required|date'
+        ]);
+
+        $therapist = \App\Models\Team::find($request->team_id);
+
+        if (!$therapist || !$therapist->google_access_token) {
+            return response()->json(['busy_slots' => []]);
+        }
+
+        $service = new \App\Services\GoogleCalendarService();
+        $busySlots = $service->getBusySlots($therapist, $request->date);
+
+        return response()->json(['busy_slots' => $busySlots]);
+    }
 }

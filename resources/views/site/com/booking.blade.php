@@ -445,12 +445,12 @@
                 <!-- Left Sidebar -->
                 <div class="booking-steps-sidebar">
                     <!-- <div class="promo-banner">
-                                                                                                                                                                    <div class="d-flex align-items-center gap-2 mb-1">
-                                                                                                                                                                        <i class="bi bi-percent text-warning fs-5"></i>
-                                                                                                                                                                        <span class="fw-bold text-dark">20% OFF</span>
-                                                                                                                                                                    </div>
-                                                                                                                                                                    <p class="small text-muted mb-0">20% Off on Pre-Booking First Session</p>
-                                                                                                                                                                </div> -->
+                                                                                                                                                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                                                                                                                                                <i class="bi bi-percent text-warning fs-5"></i>
+                                                                                                                                                                                <span class="fw-bold text-dark">20% OFF</span>
+                                                                                                                                                                            </div>
+                                                                                                                                                                            <p class="small text-muted mb-0">20% Off on Pre-Booking First Session</p>
+                                                                                                                                                                        </div> -->
 
                     <div class="booking-steps">
                         <div class="step-item active" id="sidebar-step1">
@@ -835,9 +835,9 @@
                     }
 
                     dayDiv.innerHTML = `
-                                                                                <div class="day-name">${days[dateObj.getDay()]}</div>
-                                                                                <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
-                                                                            `;
+                                                                                        <div class="day-name">${days[dateObj.getDay()]}</div>
+                                                                                        <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
+                                                                                    `;
 
                     dayDiv.onclick = function () {
                         document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
@@ -855,41 +855,111 @@
                 }
             }
 
+            let busySlotsCache = {};
+
+            function convertTo24Hour(timeStr) {
+                let parts = timeStr.trim().split(' ');
+                if (parts.length < 2) return timeStr;
+                let [time, modifier] = parts;
+                let [hours, minutes] = time.split(':');
+                if (hours === '12') {
+                    hours = (modifier === 'AM') ? '00' : '12';
+                } else {
+                    if (modifier === 'PM') hours = parseInt(hours, 10) + 12;
+                }
+                return `${String(hours).padStart(2, '0')}:${minutes}`;
+            }
+
+            function fetchBusySlots(dateStr, callback) {
+                if (busySlotsCache[dateStr]) {
+                    callback(busySlotsCache[dateStr]);
+                    return;
+                }
+
+                $.ajax({
+                    url: "{{ route('com.therapist.busy_slots') }}",
+                    method: 'GET',
+                    data: {
+                        team_id: "{{ $team->id }}",
+                        date: dateStr
+                    },
+                    success: function (response) {
+                        busySlotsCache[dateStr] = response.busy_slots || [];
+                        callback(busySlotsCache[dateStr]);
+                    },
+                    error: function () {
+                        callback([]);
+                    }
+                });
+            }
+
             function renderTimeSlots(dateStr) {
                 if (!dateStr) {
                     slotsContainer.innerHTML = '<div class="alert alert-light text-center py-4 border">Please select an available date first.</div>';
                     return;
                 }
-                const times = getAvailableSlots(dateStr);
 
-                if (times.length === 0) {
-                    slotsContainer.innerHTML = '<div class="alert alert-light text-center py-4 border">No slots available for this day.</div>';
-                    return;
-                }
+                // Show loading state
+                slotsContainer.innerHTML = '<div class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary" role="status"></div><span class="ms-2 small text-muted">Checking sync...</span></div>';
 
-                const morning = times.filter(t => t.toUpperCase().includes('AM') || (t.includes('12:') && t.toUpperCase().includes('AM')));
-                const afternoon = times.filter(t => !morning.includes(t));
+                fetchBusySlots(dateStr, function (busySlots) {
+                    const times = getAvailableSlots(dateStr);
 
-                let html = '';
-                if (morning.length > 0) {
-                    html += `<div class="time-section-title"><i class="bi bi-brightness-high"></i> Morning</div>`;
-                    html += `<div class="time-slots">`;
-                    morning.forEach(t => { html += `<div class="time-slot" data-time="${t}">${t}</div>`; });
-                    html += '</div>';
-                }
-                if (afternoon.length > 0) {
-                    html += `<div class="time-section-title"><i class="bi bi-sun"></i> Afternoon</div>`;
-                    html += `<div class="time-slots">`;
-                    afternoon.forEach(t => { html += `<div class="time-slot" data-time="${t}">${t}</div>`; });
-                    html += '</div>';
-                }
+                    if (times.length === 0) {
+                        slotsContainer.innerHTML = '<div class="alert alert-light text-center py-4 border">No slots available for this day.</div>';
+                        return;
+                    }
 
-                slotsContainer.innerHTML = html;
-                document.querySelectorAll('.time-slot').forEach(slot => {
-                    slot.onclick = function () {
-                        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-                        slot.classList.add('selected');
-                    };
+                    // Filter out busy slots
+                    const filteredTimes = times.filter(t => {
+                        const slotStart = convertTo24Hour(t);
+                        const [sH, sM] = slotStart.split(':').map(Number);
+                        const sTotalMinutes = sH * 60 + sM;
+
+                        const durationMins = parseInt(selectedServiceDuration) || 50;
+                        const sEndTotalMinutes = sTotalMinutes + durationMins;
+
+                        return !busySlots.some(busy => {
+                            const [bSH, bSM] = busy.start.split(':').map(Number);
+                            const [bEH, bEM] = busy.end.split(':').map(Number);
+
+                            const bStartTotalMinutes = bSH * 60 + bSM;
+                            const bEndTotalMinutes = bEH * 60 + bEM;
+
+                            // Overlap condition: (StartA < EndB) && (EndA > StartB)
+                            return (sTotalMinutes < bEndTotalMinutes && sEndTotalMinutes > bStartTotalMinutes);
+                        });
+                    });
+
+                    if (filteredTimes.length === 0) {
+                        slotsContainer.innerHTML = '<div class="alert alert-warning text-center py-4 border">All slots are booked via Google Calendar. Please try another date.</div>';
+                        return;
+                    }
+
+                    const morning = filteredTimes.filter(t => t.toUpperCase().includes('AM') || (t.includes('12:') && t.toUpperCase().includes('AM')));
+                    const afternoon = filteredTimes.filter(t => !morning.includes(t));
+
+                    let html = '';
+                    if (morning.length > 0) {
+                        html += `<div class="time-section-title"><i class="bi bi-brightness-high"></i> Morning</div>`;
+                        html += `<div class="time-slots">`;
+                        morning.forEach(t => { html += `<div class="time-slot" data-time="${t}">${t}</div>`; });
+                        html += '</div>';
+                    }
+                    if (afternoon.length > 0) {
+                        html += `<div class="time-section-title"><i class="bi bi-sun"></i> Afternoon</div>`;
+                        html += `<div class="time-slots">`;
+                        afternoon.forEach(t => { html += `<div class="time-slot" data-time="${t}">${t}</div>`; });
+                        html += '</div>';
+                    }
+
+                    slotsContainer.innerHTML = html;
+                    document.querySelectorAll('.time-slot').forEach(slot => {
+                        slot.onclick = function () {
+                            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                            slot.classList.add('selected');
+                        };
+                    });
                 });
             }
 

@@ -27,6 +27,12 @@ class AdminSettingController extends Controller
         return view('admin.settings.mail', compact('settings'));
     }
 
+    public function google()
+    {
+        $settings = SiteSetting::where('group', 'google')->get();
+        return view('admin.settings.google', compact('settings'));
+    }
+
     public function update(Request $request)
     {
         $data = $request->except(['_token']);

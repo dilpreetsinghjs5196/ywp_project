@@ -13,6 +13,7 @@ Route::get('/', [HomeController::class, 'home'])->name('com.home');
 Route::get('/team', [\App\Http\Controllers\com\HomeController::class, 'team'])->name('com.team');
 Route::get('/team/{id}', [\App\Http\Controllers\com\HomeController::class, 'teamSingle'])->name('com.team.single');
 Route::get('/therapist/booking/{id}', [\App\Http\Controllers\com\HomeController::class, 'therapistBooking'])->name('com.therapist.booking');
+Route::get('/therapist/busy-slots', [\App\Http\Controllers\com\HomeController::class, 'getBusySlots'])->name('com.therapist.busy_slots');
 Route::post('/therapist/booking/initialize', [\App\Http\Controllers\com\TherapistBookingController::class, 'initializeBooking'])->name('com.therapist.booking.initialize');
 Route::post('/therapist/booking/verify', [\App\Http\Controllers\com\TherapistBookingController::class, 'verifyPayment'])->name('com.therapist.booking.verify');
 Route::get('/contact-us', [HomeController::class, 'contact'])->name('com.contact');
@@ -111,6 +112,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/settings/branding', [\App\Http\Controllers\Admin\AdminSettingController::class, 'branding'])->name('admin.settings.branding');
     Route::get('/settings/contact', [\App\Http\Controllers\Admin\AdminSettingController::class, 'contact'])->name('admin.settings.contact');
     Route::get('/settings/mail', [\App\Http\Controllers\Admin\AdminSettingController::class, 'mail'])->name('admin.settings.mail');
+    Route::get('/settings/google', [\App\Http\Controllers\Admin\AdminSettingController::class, 'google'])->name('admin.settings.google');
     Route::post('/settings/update', [\App\Http\Controllers\Admin\AdminSettingController::class, 'update'])->name('admin.settings.update');
 
     // Appointment Queries (General)
@@ -131,4 +133,8 @@ Route::prefix('therapist')->middleware(['auth', 'role:therapist'])->group(functi
     Route::get('/bookings', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'bookings'])->name('therapist.bookings');
     Route::get('/availability', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'availability'])->name('therapist.availability');
     Route::post('/availability', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'updateAvailability'])->name('therapist.availability.update');
+
+    // Google Calendar Routes
+    Route::get('/google-calendar/connect', [\App\Http\Controllers\Therapist\GoogleCalendarController::class, 'redirectToGoogle'])->name('therapist.google.connect');
+    Route::get('/google-calendar/callback', [\App\Http\Controllers\Therapist\GoogleCalendarController::class, 'handleGoogleCallback'])->name('therapist.google.callback');
 });

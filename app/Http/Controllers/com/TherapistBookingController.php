@@ -135,6 +135,38 @@ class TherapistBookingController extends Controller
 
                 // 3. Mail to User
                 Mail::to($booking->email)->send(new TherapistBookingConfirmation($booking, 'user'));
+
+                // 4. Auto-create Google Calendar Event for Therapist
+                if ($booking->therapist && $booking->therapist->google_access_token) {
+                    try {
+                        $calendarService = new \App\Services\GoogleCalendarService();
+
+                        $startTime = \Carbon\Carbon::parse($booking->booking_date . ' ' . $booking->booking_time, 'Asia/Kolkata');
+
+                        // Determine duration (extract number from e.g. "60 mins")
+                        $durationStr = DB::table('service_team')
+                            ->where('team_id', $booking->team_id)
+                            ->where('service_id', $booking->service_id)
+                            ->value('duration') ?? '60';
+
+                        $duration = (int) filter_var($durationStr, FILTER_SANITIZE_NUMBER_INT);
+                        if ($duration <= 0)
+                            $duration = 60;
+
+                        $endTime = (clone $startTime)->addMinutes($duration);
+
+                        $calendarService->createEvent($booking->therapist, [
+                            'client_name' => $booking->name,
+                            'client_email' => $booking->email,
+                            'client_phone' => $booking->phone,
+                            'start_time' => $startTime->toIso8601String(),
+                            'end_time' => $endTime->toIso8601String(),
+                            'location' => $booking->location ?? 'Online (Link will be shared)',
+                        ]);
+                    } catch (\Exception $e) {
+                        \Illuminate\Support\Facades\Log::error('Google Calendar Sync Error: ' . $e->getMessage());
+                    }
+                }
             } catch (\Exception $e) {
                 // Log the error but don't fail the request
                 \Illuminate\Support\Facades\Log::error('Booking Email Error: ' . $e->getMessage());

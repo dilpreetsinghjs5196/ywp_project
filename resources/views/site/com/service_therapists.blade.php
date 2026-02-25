@@ -90,10 +90,19 @@
                                 <!-- Info List -->
                                 <div class="info-list mb-2">
                                     @if($member->services->count() > 0)
+                                        @php
+                                            $firstSrv = $member->services->first();
+                                            $durationText = $firstSrv->pivot->duration ?? $settings['session_duration'] ?? '50 mins';
+                                        @endphp
                                         <div class="info-item d-flex align-items-center mb-1">
                                             <i class="bi bi-patch-check text-primary-color me-2"></i>
                                             <span class="text-muted small">Services: <span
                                                     class="text-dark fw-medium">{{ $member->services->pluck('title')->implode(', ') }}</span></span>
+                                        </div>
+                                        <div class="info-item d-flex align-items-center mb-1">
+                                            <i class="bi bi-clock text-primary-color me-2"></i>
+                                            <span class="text-muted small">Duration: <span
+                                                    class="text-dark fw-medium">{{ $durationText }}</span></span>
                                         </div>
                                     @endif
                                     @if($member->languages)
@@ -108,6 +117,13 @@
                                             <i class="bi bi-geo-alt text-primary-color me-2"></i>
                                             <span class="text-muted small">Mode: <span
                                                     class="text-dark fw-medium">{{ $member->mode }}</span></span>
+                                        </div>
+                                    @endif
+                                    @if($member->office_address)
+                                        <div class="info-item d-flex align-items-center mb-1">
+                                            <i class="bi bi-building text-primary-color me-2"></i>
+                                            <span class="text-muted small">Location: <span
+                                                    class="text-dark fw-medium">{{ $member->office_address }}</span></span>
                                         </div>
                                     @endif
                                 </div>

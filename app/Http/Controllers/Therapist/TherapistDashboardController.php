@@ -67,7 +67,14 @@ class TherapistDashboardController extends Controller
     {
         $therapist = Team::where('email', Auth::user()->email)->first();
         $services = \App\Models\Service::where('is_active', true)->get();
-        $assignedServices = $therapist->services->pluck('pivot.fees', 'id')->toArray();
+        $assignedServices = $therapist->services->mapWithKeys(function ($s) {
+            return [
+                $s->id => [
+                    'fees' => $s->pivot->fees,
+                    'duration' => $s->pivot->duration
+                ]
+            ];
+        })->toArray();
         return view('therapist.profile', compact('therapist', 'services', 'assignedServices'));
     }
     public function updateProfile(Request $request)
@@ -84,6 +91,7 @@ class TherapistDashboardController extends Controller
             'twitter' => 'nullable|url',
             'instagram' => 'nullable|url',
             'linkedin' => 'nullable|url',
+            'office_address' => 'nullable|string',
             'services' => 'nullable|array',
             'services.*' => 'exists:services,id',
             'service_fees' => 'nullable|array',
@@ -104,7 +112,10 @@ class TherapistDashboardController extends Controller
         if ($request->has('services')) {
             $syncData = [];
             foreach ($request->services as $serviceId) {
-                $syncData[$serviceId] = ['fees' => $request->service_fees[$serviceId] ?? null];
+                $syncData[$serviceId] = [
+                    'fees' => $request->service_fees[$serviceId] ?? null,
+                    'duration' => $request->service_durations[$serviceId] ?? null
+                ];
             }
             $therapist->services()->sync($syncData);
         } else {
@@ -154,10 +165,24 @@ class TherapistDashboardController extends Controller
         // Process Date-wise Availability
         $formattedAvailability = [];
         if ($request->has('availability')) {
-            foreach ($request->availability as $date => $times) {
-                if (!empty($times)) {
-                    $timeArray = array_map('trim', explode(',', $times));
-                    $formattedAvailability[$date] = $timeArray;
+            foreach ($request->availability as $serviceId => $dates) {
+                if (is_array($dates)) {
+                    foreach ($dates as $date => $modes) {
+                        // Initialize date entry to allow 'blocked' days (overrides)
+                        if (!isset($formattedAvailability[$serviceId][$date])) {
+                            $formattedAvailability[$serviceId][$date] = [];
+                        }
+                        if (is_array($modes)) {
+                            foreach ($modes as $mode => $times) {
+                                if (!empty($times)) {
+                                    $timeArray = array_filter(array_map('trim', explode(',', $times)));
+                                    if (!empty($timeArray)) {
+                                        $formattedAvailability[$serviceId][$date][$mode] = $timeArray;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -166,14 +191,28 @@ class TherapistDashboardController extends Controller
         // Process Weekly Availability
         $formattedWeekly = [];
         if ($request->has('weekly_availability')) {
-            foreach ($request->weekly_availability as $day => $times) {
-                if (!empty($times)) {
-                    $timeArray = array_map('trim', explode(',', $times));
-                    $formattedWeekly[$day] = $timeArray;
+            foreach ($request->weekly_availability as $serviceId => $days) {
+                if (is_array($days)) {
+                    foreach ($days as $day => $modes) {
+                        if (is_array($modes)) {
+                            foreach ($modes as $mode => $times) {
+                                if (!empty($times)) {
+                                    $timeArray = array_filter(array_map('trim', explode(',', $times)));
+                                    if (!empty($timeArray)) {
+                                        $formattedWeekly[$serviceId][$day][$mode] = $timeArray;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
         $data['weekly_availability'] = $formattedWeekly;
+
+        // Process Addresses
+        $data['weekly_addresses'] = $request->has('weekly_addresses') ? array_filter($request->weekly_addresses) : null;
+        $data['date_addresses'] = $request->has('date_addresses') ? array_filter($request->date_addresses) : null;
 
         $therapist->update($data);
 

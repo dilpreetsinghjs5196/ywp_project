@@ -27,18 +27,23 @@ class Team extends Model
         'is_active',
         'availability',
         'availability_type',
-        'weekly_availability'
+        'weekly_availability',
+        'office_address',
+        'weekly_addresses',
+        'date_addresses'
     ];
 
     protected $casts = [
         'availability' => 'array',
         'weekly_availability' => 'array',
+        'weekly_addresses' => 'array',
+        'date_addresses' => 'array',
         'is_active' => 'boolean'
     ];
 
     public function services()
     {
-        return $this->belongsToMany(Service::class, 'service_team', 'team_id', 'service_id')->withPivot('fees')->withTimestamps();
+        return $this->belongsToMany(Service::class, 'service_team', 'team_id', 'service_id')->withPivot('fees', 'duration')->withTimestamps();
     }
 
     public function reviews()

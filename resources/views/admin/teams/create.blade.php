@@ -95,11 +95,19 @@
                                 @error('qualifications')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">Session Type</label>
-                                <input type="text" name="session_type"
-                                    class="form-control @error('session_type') is-invalid @enderror"
-                                    value="{{ old('session_type') }}" placeholder="e.g. Online Video Call">
-                                @error('session_type')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Session Type</label>
+                                    <input type="text" name="session_type"
+                                        class="form-control @error('session_type') is-invalid @enderror"
+                                        value="{{ old('session_type') }}" placeholder="e.g. Online Video Call">
+                                    @error('session_type')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                </div>
+                                <div class="mb-0">
+                                    <label class="form-label fw-bold">Office Address (for In-Person)</label>
+                                    <textarea name="office_address" class="form-control @error('office_address') is-invalid @enderror"
+                                        rows="2" placeholder="Full address for in-person meetings">{{ old('office_address') }}</textarea>
+                                    @error('office_address')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                </div>
                             </div>
                         </div>
 
@@ -122,9 +130,13 @@
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    <div class="input-group input-group-sm {{ is_array(old('services')) && in_array($service->id, old('services')) ? '' : 'd-none' }}" id="fee_container_{{ $service->id }}">
+                                                    <div class="input-group input-group-sm mb-2 {{ is_array(old('services')) && in_array($service->id, old('services')) ? '' : 'd-none' }} service-details-{{ $service->id }}">
                                                         <span class="input-group-text">Fees (₹)</span>
-                                                        <input type="number" name="service_fees[{{ $service->id }}]" class="form-control" placeholder="Specific fee for this service" value="{{ old('service_fees.' . $service->id) }}">
+                                                        <input type="number" name="service_fees[{{ $service->id }}]" class="form-control" placeholder="Default: {{ $service->fees }}" value="{{ old('service_fees.' . $service->id) }}">
+                                                    </div>
+                                                    <div class="input-group input-group-sm {{ is_array(old('services')) && in_array($service->id, old('services')) ? '' : 'd-none' }} service-details-{{ $service->id }}">
+                                                        <span class="input-group-text">Duration</span>
+                                                        <input type="text" name="service_durations[{{ $service->id }}]" class="form-control" placeholder="e.g. 50 mins" value="{{ old('service_durations.' . $service->id) }}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -138,12 +150,14 @@
                             document.addEventListener('DOMContentLoaded', function() {
                                 document.querySelectorAll('.service-checkbox').forEach(checkbox => {
                                     checkbox.addEventListener('change', function() {
-                                        const feeContainer = document.getElementById('fee_container_' + this.value);
-                                        if (this.checked) {
-                                            feeContainer.classList.remove('d-none');
-                                        } else {
-                                            feeContainer.classList.add('d-none');
-                                        }
+                                        const details = document.querySelectorAll('.service-details-' + this.value);
+                                        details.forEach(el => {
+                                            if (this.checked) {
+                                                el.classList.remove('d-none');
+                                            } else {
+                                                el.classList.add('d-none');
+                                            }
+                                        });
                                     });
                                 });
                             });
@@ -187,8 +201,10 @@
                             <table class="table table-sm table-bordered align-middle">
                                 <thead class="table-light">
                                     <tr>
-                                        <th style="width: 180px;">Date</th>
-                                        <th>Available Time Slots</th>
+                                        <th style="width: 150px;">Date</th>
+                                        <th>Online Slots</th>
+                                        <th>In-person Slots</th>
+                                        <th>Location Address (Optional)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -208,9 +224,19 @@
                                                 <div class="fw-bold small">{{ $date->format('D, d M Y') }}</div>
                                             </td>
                                             <td>
-                                                <input type="text" name="availability[{{ $dateStr }}]"
+                                                <input type="text" name="availability[default][{{ $dateStr }}][Online]"
                                                     class="form-control form-control-sm" placeholder="e.g. 10:00 AM, 12:00 PM"
-                                                    value="{{ old('availability.' . $dateStr) }}">
+                                                    value="{{ old('availability.default.' . $dateStr . '.Online') }}">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="availability[default][{{ $dateStr }}][In-person]"
+                                                    class="form-control form-control-sm" placeholder="e.g. 02:00 PM, 04:00 PM"
+                                                    value="{{ old('availability.default.' . $dateStr . '.In-person') }}">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="date_addresses[{{ $dateStr }}]"
+                                                    class="form-control form-control-sm" placeholder="Specific address for this date"
+                                                    value="{{ old('date_addresses.' . $dateStr) }}">
                                             </td>
                                         </tr>
                                     @endforeach
@@ -223,8 +249,10 @@
                             <table class="table table-sm table-bordered align-middle">
                                 <thead class="table-light">
                                     <tr>
-                                        <th style="width: 180px;">Day of Week</th>
-                                        <th>Available Time Slots</th>
+                                        <th style="width: 150px;">Day of Week</th>
+                                        <th>Online Slots</th>
+                                        <th>In-person Slots</th>
+                                        <th>Location Address (Optional)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -237,9 +265,19 @@
                                                 <div class="fw-bold small">{{ $day }}</div>
                                             </td>
                                             <td>
-                                                <input type="text" name="weekly_availability[{{ $day }}]"
+                                                <input type="text" name="weekly_availability[default][{{ $day }}][Online]"
                                                     class="form-control form-control-sm" placeholder="e.g. 06:00 PM, 07:00 PM"
-                                                    value="{{ old('weekly_availability.' . $day) }}">
+                                                    value="{{ old('weekly_availability.default.' . $day . '.Online') }}">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="weekly_availability[default][{{ $day }}][In-person]"
+                                                    class="form-control form-control-sm" placeholder="e.g. 11:30 AM, 12:30 PM"
+                                                    value="{{ old('weekly_availability.default.' . $day . '.In-person') }}">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="weekly_addresses[{{ $day }}]"
+                                                    class="form-control form-control-sm" placeholder="Specific address for this day"
+                                                    value="{{ old('weekly_addresses.' . $day) }}">
                                             </td>
                                         </tr>
                                     @endforeach

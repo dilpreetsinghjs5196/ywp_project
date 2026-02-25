@@ -58,15 +58,24 @@
                                 rows="6">{{ old('description', $therapist->description) }}</textarea>
                         </div>
 
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Office Address (for In-Person Sessions)</label>
+                            <textarea name="office_address" class="form-control"
+                                rows="2" placeholder="Provide full address if you offer in-person sessions">{{ old('office_address', $therapist->office_address) }}</textarea>
+                            <small class="text-muted">This address will be shown to customers who book in-person sessions with you.</small>
+                        </div>
+
                         <div class="col-12 mt-4 pt-3 border-top">
                             <h6 class="fw-bold mb-3"><i class="bi bi-gear-fill me-2"></i> Assigned Services & Professional Fees</h6>
-                            <p class="small text-muted mb-3">Select the services you offer and specify your professional fees for each. Leaving the fee blank will use your default base fee.</p>
+                            <p class="small text-muted mb-3">Select the services you offer and specify your professional fees/duration for each. Leaving the fee blank will use your default base fee.</p>
                             
                             <div class="row g-3">
                                 @foreach($services as $service)
                                     @php
-                                        $isAssigned = isset($assignedServices[$service->id]);
-                                        $customFee = $isAssigned ? $assignedServices[$service->id] : '';
+                                        $assignment = $assignedServices[$service->id] ?? null;
+                                        $isAssigned = !is_null($assignment);
+                                        $customFee = $isAssigned ? $assignment['fees'] : '';
+                                        $customDuration = $isAssigned ? $assignment['duration'] : '';
                                     @endphp
                                     <div class="col-md-6">
                                         <div class="card h-100 border shadow-none bg-light-subtle">
@@ -80,9 +89,13 @@
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div class="input-group input-group-sm {{ $isAssigned ? '' : 'd-none' }}" id="fee_container_{{ $service->id }}">
+                                                <div class="input-group input-group-sm mb-2 {{ $isAssigned ? '' : 'd-none' }} service-details-{{ $service->id }}">
                                                     <span class="input-group-text">Fees (₹)</span>
                                                     <input type="number" name="service_fees[{{ $service->id }}]" class="form-control" placeholder="Fee for this service" value="{{ old('service_fees.' . $service->id, $customFee) }}">
+                                                </div>
+                                                <div class="input-group input-group-sm {{ $isAssigned ? '' : 'd-none' }} service-details-{{ $service->id }}">
+                                                    <span class="input-group-text">Duration</span>
+                                                    <input type="text" name="service_durations[{{ $service->id }}]" class="form-control" placeholder="e.g. 50 mins" value="{{ old('service_durations.' . $service->id, $customDuration) }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -95,12 +108,14 @@
                             document.addEventListener('DOMContentLoaded', function() {
                                 document.querySelectorAll('.service-checkbox').forEach(checkbox => {
                                     checkbox.addEventListener('change', function() {
-                                        const feeContainer = document.getElementById('fee_container_' + this.value);
-                                        if (this.checked) {
-                                            feeContainer.classList.remove('d-none');
-                                        } else {
-                                            feeContainer.classList.add('d-none');
-                                        }
+                                        const details = document.querySelectorAll('.service-details-' + this.value);
+                                        details.forEach(el => {
+                                            if (this.checked) {
+                                                el.classList.remove('d-none');
+                                            } else {
+                                                el.classList.add('d-none');
+                                            }
+                                        });
                                     });
                                 });
                             });

@@ -43,10 +43,14 @@ class UpdateTeamRequest extends FormRequest
             'availability_type' => 'required|in:date,weekly',
             'availability' => 'nullable|array',
             'weekly_availability' => 'nullable|array',
+            'weekly_addresses' => 'nullable|array',
+            'date_addresses' => 'nullable|array',
+            'office_address' => 'nullable|string',
             'password' => 'nullable|string|min:8|confirmed',
             'services' => 'nullable|array',
             'services.*' => 'exists:services,id',
             'service_fees' => 'nullable|array',
+            'service_durations' => 'nullable|array',
         ];
     }
 }

@@ -20,6 +20,6 @@ class Service extends Model
 
     public function therapists()
     {
-        return $this->belongsToMany(Team::class, 'service_team', 'service_id', 'team_id');
+        return $this->belongsToMany(Team::class, 'service_team', 'service_id', 'team_id')->withPivot('fees', 'duration')->withTimestamps();
     }
 }

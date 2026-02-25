@@ -20,91 +20,145 @@
 
                 <form action="{{ route('therapist.availability.update') }}" method="POST">
                     @csrf
-                    
+
                     <div class="d-flex align-items-center justify-content-between mb-4">
                         <h6 class="fw-bold mb-0">Availability Mode:</h6>
                         <div class="btn-group btn-group-sm" role="group">
                             <input type="radio" class="btn-check" name="availability_type" id="type_date" value="date" {{ ($therapist->availability_type ?? 'date') == 'date' ? 'checked' : '' }}>
                             <label class="btn btn-outline-primary" for="type_date">Specific Dates</label>
-                            
-                            <input type="radio" class="btn-check" name="availability_type" id="type_weekly" value="weekly" {{ ($therapist->availability_type ?? 'date') == 'weekly' ? 'checked' : '' }}>
+
+                            <input type="radio" class="btn-check" name="availability_type" id="type_weekly" value="weekly"
+                                {{ ($therapist->availability_type ?? 'date') == 'weekly' ? 'checked' : '' }}>
                             <label class="btn btn-outline-primary" for="type_weekly">Weekly Schedule</label>
                         </div>
                     </div>
 
-                    <!-- Date-wise Section -->
-                    <div id="date_availability_section" class="table-responsive" style="{{ ($therapist->availability_type ?? 'date') == 'weekly' ? 'display:none;' : '' }}">
-                        <table class="table table-hover align-middle border-top">
-                            <thead class="table-light">
-                                <tr>
-                                    <th style="width: 200px;">Date</th>
-                                    <th>Time Slots (Comma Separated)</th>
-                                    <th style="width: 150px;">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    $nextFortnight = [];
-                                    for ($i = 0; $i < 14; $i++) {
-                                        $nextFortnight[] = \Carbon\Carbon::today()->addDays($i);
-                                    }
-                                @endphp
+                    @php
+                        $availability = $therapist->availability ?? [];
+                        $weeklyAvailability = $therapist->weekly_availability ?? [];
+                        $dateAddresses = $therapist->date_addresses ?? [];
+                        $weeklyAddresses = $therapist->weekly_addresses ?? [];
+                        $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                        $nextFortnight = [];
+                        for ($i = 0; $i < 14; $i++) {
+                            $nextFortnight[] = \Carbon\Carbon::today()->addDays($i);
+                        }
+                        $serviceList = $therapist->services;
+                    @endphp
 
-                                @foreach($nextFortnight as $date)
-                                    @php
-                                        $dateStr = $date->format('Y-m-d');
-                                        $existingTimes = isset($availability[$dateStr]) ? implode(', ', $availability[$dateStr]) : '';
-                                    @endphp
-                                    <tr>
-                                        <td>
-                                            <div class="fw-bold">{{ $date->format('D, d M') }}</div>
-                                            <small class="text-muted">{{ $date->format('Y') }}</small>
-                                        </td>
-                                        <td>
-                                            <input type="text" name="availability[{{ $dateStr }}]" class="form-control"
-                                                placeholder="e.g. 10:00 AM, 12:00 PM, 04:00 PM" value="{{ $existingTimes }}">
-                                        </td>
-                                        <td>
-                                            @if($date->isToday())
-                                                <span class="badge bg-success">Today</span>
-                                            @elseif($date->isWeekend())
-                                                <span class="badge bg-light text-dark">Weekend</span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    <ul class="nav nav-pills mb-4 gap-2 border-bottom pb-3" id="availabilityTabs" role="tablist">
+                        <li class="nav-item">
+                            <button type="button" class="nav-link active btn-sm" data-bs-toggle="tab" data-bs-target="#pane-default">General Schedule</button>
+                        </li>
+                        @foreach($serviceList as $service)
+                        <li class="nav-item">
+                            <button type="button" class="nav-link btn-sm" data-bs-toggle="tab" data-bs-target="#pane-{{ $service->id }}">{{ $service->title }}</button>
+                        </li>
+                        @endforeach
+                    </ul>
 
-                    <!-- Weekly Section -->
-                    <div id="weekly_availability_section" class="table-responsive" style="{{ ($therapist->availability_type ?? 'date') == 'date' ? 'display:none;' : '' }}">
-                        <table class="table table-hover align-middle border-top">
-                            <thead class="table-light">
-                                <tr>
-                                    <th style="width: 200px;">Day of Week</th>
-                                    <th>Time Slots (Comma Separated)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                                    $weeklyAvailability = $therapist->weekly_availability ?? [];
-                                @endphp
-                                @foreach($days as $day)
-                                    @php
-                                        $existingWeeklyTimes = isset($weeklyAvailability[$day]) ? implode(', ', $weeklyAvailability[$day]) : '';
-                                    @endphp
-                                    <tr>
-                                        <td class="fw-bold">{{ $day }}</td>
-                                        <td>
-                                            <input type="text" name="weekly_availability[{{ $day }}]" class="form-control"
-                                                placeholder="e.g. 06:00 PM, 07:00 PM" value="{{ $existingWeeklyTimes }}">
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                    <div class="tab-content border-0" id="availabilityTabsContent">
+                        @foreach(['default' => (object)['id' => 'default', 'title' => 'General']] + $serviceList->keyBy('id')->all() as $sId => $sObj)
+                            @php 
+                                $sIdStr = ($sId === 'default') ? 'default' : $sId;
+                                $isDefault = ($sId === 'default');
+                                $sTitle = $isDefault ? 'General' : $sObj->title;
+                            @endphp
+                            <div class="tab-pane fade {{ $isDefault ? 'show active' : '' }}" id="pane-{{ $sIdStr }}">
+                                <p class="text-muted small mb-3">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    {{ $isDefault ? 'Set your default timings here. Other services will use these unless you override them.' : 'Set custom timings specifically for ' . $sTitle . '.' }}
+                                </p>
+
+                                <!-- Date-wise Section -->
+                                <div class="date_availability_section table-responsive" style="{{ ($therapist->availability_type ?? 'date') == 'weekly' ? 'display:none;' : '' }}">
+                                    <table class="table table-sm table-hover align-middle border-top">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th style="width: 150px;">Date</th>
+                                                <th>Online Slots</th>
+                                                <th>In-person Slots</th>
+                                                @if($isDefault) <th>Location Address (Global)</th> @endif
+                                                <th style="width: 100px;">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($nextFortnight as $date)
+                                                @php
+                                                    $dateStr = $date->format('Y-m-d');
+                                                    $existingAddress = $dateAddresses[$dateStr] ?? '';
+                                                @endphp
+                                                <tr>
+                                                    <td>
+                                                        <div class="fw-bold small">{{ $date->format('D, d M') }}</div>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" name="availability[{{ $sIdStr }}][{{ $dateStr }}][Online]" class="form-control form-control-sm"
+                                                            placeholder="10 AM, 12 PM" 
+                                                            value="{{ isset($availability[$sIdStr][$dateStr]['Online']) ? implode(', ', $availability[$sIdStr][$dateStr]['Online']) : '' }}">
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" name="availability[{{ $sIdStr }}][{{ $dateStr }}][In-person]" class="form-control form-control-sm"
+                                                            placeholder="2 PM, 4 PM" 
+                                                            value="{{ isset($availability[$sIdStr][$dateStr]['In-person']) ? implode(', ', $availability[$sIdStr][$dateStr]['In-person']) : '' }}">
+                                                    </td>
+                                                    @if($isDefault)
+                                                    <td>
+                                                        <input type="text" name="date_addresses[{{ $dateStr }}]" class="form-control form-control-sm"
+                                                            placeholder="Office address" value="{{ $existingAddress }}">
+                                                    </td>
+                                                    @endif
+                                                    <td>
+                                                        @if($date->isToday())
+                                                            <span class="badge bg-success small">Today</span>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Weekly Section -->
+                                <div class="weekly_availability_section table-responsive" style="{{ ($therapist->availability_type ?? 'date') == 'date' ? 'display:none;' : '' }}">
+                                    <table class="table table-sm table-hover align-middle border-top">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th style="width: 150px;">Day of Week</th>
+                                                <th>Online Slots</th>
+                                                <th>In-person Slots</th>
+                                                @if($isDefault) <th>Location Address (Global)</th> @endif
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($days as $day)
+                                                @php $existingWeeklyAddress = $weeklyAddresses[$day] ?? ''; @endphp
+                                                <tr>
+                                                    <td class="fw-bold small">{{ $day }}</td>
+                                                    <td>
+                                                        <input type="text" name="weekly_availability[{{ $sIdStr }}][{{ $day }}][Online]" class="form-control form-control-sm"
+                                                            placeholder="e.g. 6 PM, 7 PM" 
+                                                            value="{{ isset($weeklyAvailability[$sIdStr][$day]['Online']) ? implode(', ', $weeklyAvailability[$sIdStr][$day]['Online']) : '' }}">
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" name="weekly_availability[{{ $sIdStr }}][{{ $day }}][In-person]" class="form-control form-control-sm"
+                                                            placeholder="e.g. 11 AM, 12 PM" 
+                                                            value="{{ isset($weeklyAvailability[$sIdStr][$day]['In-person']) ? implode(', ', $weeklyAvailability[$sIdStr][$day]['In-person']) : '' }}">
+                                                    </td>
+                                                    @if($isDefault)
+                                                    <td>
+                                                        <input type="text" name="weekly_addresses[{{ $day }}]" class="form-control form-control-sm"
+                                                            placeholder="Office address"
+                                                            value="{{ $existingWeeklyAddress }}">
+                                                    </td>
+                                                    @endif
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
 
                     <div class="text-end mt-4">
@@ -115,23 +169,23 @@
                 </form>
 
                 <script>
-                    document.addEventListener('DOMContentLoaded', function() {
+                    document.addEventListener('DOMContentLoaded', function () {
                         const typeDate = document.getElementById('type_date');
                         const typeWeekly = document.getElementById('type_weekly');
-                        const dateSection = document.getElementById('date_availability_section');
-                        const weeklySection = document.getElementById('weekly_availability_section');
+                        const dateSections = document.querySelectorAll('.date_availability_section');
+                        const weeklySections = document.querySelectorAll('.weekly_availability_section');
 
-                        typeDate.addEventListener('change', function() {
+                        typeDate.addEventListener('change', function () {
                             if (this.checked) {
-                                dateSection.style.display = 'block';
-                                weeklySection.style.display = 'none';
+                                dateSections.forEach(s => s.style.display = 'block');
+                                weeklySections.forEach(s => s.style.display = 'none');
                             }
                         });
 
-                        typeWeekly.addEventListener('change', function() {
+                        typeWeekly.addEventListener('change', function () {
                             if (this.checked) {
-                                dateSection.style.display = 'none';
-                                weeklySection.style.display = 'block';
+                                dateSections.forEach(s => s.style.display = 'none');
+                                weeklySections.forEach(s => s.style.display = 'block');
                             }
                         });
                     });

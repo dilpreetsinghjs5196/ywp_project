@@ -306,30 +306,40 @@
             object-fit: cover;
         }
 
-        /* Date and Time Panel */
+        .extra-small {
+            font-size: 0.7rem;
+        }
+
         .booking-datetime-panel {
             background: #fdfdfd;
             border-left: 1px solid var(--booking-border);
-            padding: 40px 30px;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
+            width: 340px;
+            min-width: 340px;
         }
 
         .calendar-strip {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
             gap: 8px;
+            margin-bottom: 25px;
         }
 
         .calendar-day {
-            flex: 1;
             text-align: center;
-            padding: 10px 5px;
-            border-radius: 12px;
-            border: 1px solid var(--booking-border);
+            padding: 8px 4px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
             cursor: pointer;
             transition: all 0.2s ease;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 55px;
         }
 
         .calendar-day.active {
@@ -339,15 +349,15 @@
         }
 
         .calendar-day .day-name {
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             text-transform: uppercase;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
             font-weight: 600;
             opacity: 0.8;
         }
 
         .calendar-day .day-number {
-            font-size: 1rem;
+            font-size: 0.85rem;
             font-weight: 700;
         }
 
@@ -364,21 +374,28 @@
 
         .time-slots {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
             margin-bottom: 25px;
         }
 
         .time-slot {
             background: white;
             border: 1px solid var(--booking-border);
-            padding: 10px;
+            padding: 10px 5px;
             text-align: center;
             border-radius: 10px;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
+            word-break: break-word;
+        }
+
+        .time-slot i {
+            display: block;
+            margin-bottom: 2px;
+            font-size: 0.9rem;
         }
 
         .time-slot:hover {
@@ -428,12 +445,12 @@
                 <!-- Left Sidebar -->
                 <div class="booking-steps-sidebar">
                     <!-- <div class="promo-banner">
-                                            <div class="d-flex align-items-center gap-2 mb-1">
-                                                <i class="bi bi-percent text-warning fs-5"></i>
-                                                <span class="fw-bold text-dark">20% OFF</span>
-                                            </div>
-                                            <p class="small text-muted mb-0">20% Off on Pre-Booking First Session</p>
-                                        </div> -->
+                                                                                                                                                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                                                                                                                                                        <i class="bi bi-percent text-warning fs-5"></i>
+                                                                                                                                                                        <span class="fw-bold text-dark">20% OFF</span>
+                                                                                                                                                                    </div>
+                                                                                                                                                                    <p class="small text-muted mb-0">20% Off on Pre-Booking First Session</p>
+                                                                                                                                                                </div> -->
 
                     <div class="booking-steps">
                         <div class="step-item active" id="sidebar-step1">
@@ -472,6 +489,10 @@
                         $showOnline = str_contains($therapistMode, 'online') || str_contains($therapistMode, 'video') || str_contains($therapistMode, 'phone') || empty($therapistMode);
 
                         $defaultMode = $showInPerson ? 'In-person' : 'Video call';
+
+                        $firstService = $team->services->first();
+                        $initialDuration = $firstService->pivot->duration ?? $settings['session_duration'] ?? '50 mins';
+                        $initialFees = $firstService->pivot->fees ?? $team->fees ?? 1800;
                     @endphp
 
                     <!-- Step 1 Content -->
@@ -480,15 +501,20 @@
                             <h4 class="section-title">Select Service</h4>
                             <div class="row g-3 mb-4">
                                 @foreach($team->services as $service)
+                                    @php
+                                        $srvPrice = $service->pivot->fees ?? $team->fees ?? 1800;
+                                        $srvDuration = $service->pivot->duration ?? $settings['session_duration'] ?? '50 mins';
+                                    @endphp
                                     <div class="col-md-6">
                                         <div class="service-selection-card p-3 rounded-4 border {{ $loop->first ? 'active' : '' }}"
-                                            onclick="selectService(this, '{{ $service->id }}', '{{ $service->pivot->fees ?? $team->fees ?? 1800 }}', '{{ $service->title }}')">
+                                            onclick="selectService(this, '{{ $service->id }}', '{{ $srvPrice }}', '{{ $service->title }}', '{{ $srvDuration }}')">
                                             <div class="d-flex align-items-center gap-2">
                                                 <div class="service-check-circle"></div>
                                                 <div class="fw-bold text-dark">{{ $service->title }}</div>
                                             </div>
                                             <div class="text-primary-color small fw-bold mt-1">
-                                                ₹{{ number_format($service->pivot->fees ?? $team->fees ?? 1800) }} / session</div>
+                                                ₹{{ number_format($srvPrice) }} / session</div>
+                                            <div class="text-muted extra-small">{{ $srvDuration }} duration</div>
                                         </div>
                                     </div>
                                 @endforeach
@@ -512,11 +538,6 @@
                                     <i class="bi bi-camera-video"></i>
                                     <span>Video call</span>
                                 </div>
-                                <div class="mode-square {{ $defaultMode == 'Phone call' ? 'active' : '' }}"
-                                    onclick="selectMode(this, 'Phone call')">
-                                    <i class="bi bi-telephone"></i>
-                                    <span>Phone call</span>
-                                </div>
                             @endif
                         </div>
 
@@ -529,7 +550,7 @@
                                     <p class="small text-muted fw-bold mb-0">Session Location:</p>
                                 </div>
                                 <p class="mb-0 fw-semibold text-dark">
-                                    {{ $settings['booking_address'] ?? 'Address not set' }}
+                                    {{ $team->office_address ?: ($settings['booking_address'] ?? 'Address not set') }}
                                 </p>
                             </div>
                         </div>
@@ -537,9 +558,9 @@
                         <div class="duration-info-box">
                             <h4 class="duration-label">Session Duration</h4>
                             <div class="duration-details">
-                                <div class="duration-text">{{ $settings['session_duration'] ?? '50 mins' }}, 1 session</div>
+                                <div class="duration-text">{{ $initialDuration }}, 1 session</div>
                                 <div class="price-text">
-                                    <span class="price-amount">₹{{ number_format($team->fees ?? 1800) }}</span> / session
+                                    <span class="price-amount">₹{{ number_format($initialFees) }}</span> / session
                                 </div>
                             </div>
                         </div>
@@ -575,7 +596,12 @@
                                 </button>
                             </div>
 
-                            <p class="text-dark fw-bold mb-3">Ahaana Mental Health Hospital</p>
+                            <div class="mb-4">
+                                <p class="small text-muted mb-1">Session Location:</p>
+                                <p class="text-dark fw-bold mb-3" id="summary-location-name">
+                                    {{ $team->office_address ?: ($settings['booking_address'] ?? 'Address not set') }}
+                                </p>
+                            </div>
 
                             <div class="d-flex align-items-center gap-3">
                                 <div class="bg-white rounded-circle p-2 shadow-sm d-flex align-items-center justify-content-center"
@@ -585,8 +611,8 @@
                                 <div>
                                     <p class="fw-bold mb-0 text-dark" id="summary-datetime">Sat, 14 Feb 2026, 11:00 AM IST
                                     </p>
-                                    <p class="small text-muted mb-0" id="summary-mode">at In-person,
-                                        {{ $settings['session_duration'] ?? '50 mins' }}
+                                    <p class="small text-muted mb-0" id="summary-mode">at {{ $defaultMode }},
+                                        {{ $initialDuration }}
                                     </p>
                                 </div>
                             </div>
@@ -695,80 +721,170 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // 1. Initialize State Variables FIRST
+            let availability = @json($team->availability ?? []);
+            const availabilityType = @json($team->availability_type ?? 'date');
+            const weeklyAvailability = @json($team->weekly_availability ?? []);
+            let currentStep = 1;
+            let selectedDateStr = null;
+            let selectedModeName = @json($defaultMode);
+            let selectedServiceId = @json($team->services->first()->id ?? null);
+            let selectedServiceName = @json($team->services->first()->title ?? 'Therapy Session');
+            let selectedServiceDuration = @json($team->services->first()->pivot->duration ?? $settings['session_duration'] ?? '50 mins');
+
             const strip = document.getElementById('calendarStrip');
             const slotsContainer = document.querySelector('.time-slots-container');
             const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
             const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-            // Therapist Availability Data
-            let availability = @json($team->availability ?? []);
-            const availabilityType = @json($team->availability_type ?? 'date');
-            const weeklyAvailability = @json($team->weekly_availability ?? []);
+            // 2. Define Internal Helper Functions
+            function getAvailableSlots(dateOrDay) {
+                const modeKey = (selectedModeName === 'Video call') ? 'Online' : selectedModeName;
+                const dateStr = dateOrDay.match(/^\d{4}-\d{2}-\d{2}$/) ? dateOrDay : null;
 
-            let availableDates = [];
+                const getFromSource = (src, key) => {
+                    if (src && src[key] && src[key][modeKey]) {
+                        return src[key][modeKey];
+                    }
+                    return null;
+                };
 
-            if (availabilityType === 'weekly') {
-                // Clean availability for recreation
-                availability = {};
-                for (let i = 0; i < 30; i++) { // Show up to 30 days for weekly
-                    const d = new Date();
-                    d.setHours(0, 0, 0, 0);
-                    d.setDate(d.getDate() + i);
+                // 1. Check for specific DATE overrides
+                if (dateStr) {
+                    let override = getFromSource(availability[selectedServiceId], dateStr);
+                    if (override === null) override = getFromSource(availability['default'], dateStr);
+                    if (override === null) override = getFromSource(availability, dateStr);
 
-                    const dayNamesFull = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                    const dayName = dayNamesFull[d.getDay()];
-
-                    if (weeklyAvailability[dayName] && weeklyAvailability[dayName].length > 0) {
-                        const y = d.getFullYear();
-                        const m = String(d.getMonth() + 1).padStart(2, '0');
-                        const day = String(d.getDate()).padStart(2, '0');
-                        const dateStr = `${y}-${m}-${day}`;
-
-                        availableDates.push(dateStr);
-                        availability[dateStr] = weeklyAvailability[dayName];
+                    if (override !== null) {
+                        return override.filter(t => t && t.trim() !== '');
                     }
                 }
-            } else {
-                availableDates = Object.keys(availability).sort();
+
+                // 2. Standard Logic (Weekly or Date mode)
+                const source = (availabilityType === 'weekly') ? weeklyAvailability : availability;
+                let lookupKey = dateOrDay;
+
+                if (availabilityType === 'weekly' && dateStr) {
+                    const parts = dateStr.split('-');
+                    const d = new Date(parts[0], parts[1] - 1, parts[2]);
+                    lookupKey = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][d.getDay()];
+                }
+
+                let results = getFromSource(source[selectedServiceId], lookupKey);
+                if (results === null) results = getFromSource(source['default'], lookupKey);
+                if (results === null) results = getFromSource(source, lookupKey);
+
+                return (results || []).filter(t => t && t.trim() !== '');
             }
 
-            let selectedDateStr = null;
+            function getAvailableDates() {
+                let dates = [];
+                if (availabilityType === 'weekly') {
+                    for (let i = 0; i < 30; i++) {
+                        const d = new Date();
+                        d.setHours(0, 0, 0, 0);
+                        d.setDate(d.getDate() + i);
+
+                        const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                        const times = getAvailableSlots(dateStr);
+
+                        if (times && times.length > 0) {
+                            dates.push(dateStr);
+                            if (!availability[dateStr]) availability[dateStr] = {};
+                            if (!availability[dateStr][selectedModeName]) availability[dateStr][selectedModeName] = times;
+                        }
+                    }
+                } else {
+                    const allDates = new Set();
+                    if (availability['default']) Object.keys(availability['default']).forEach(d => allDates.add(d));
+                    if (availability[selectedServiceId]) Object.keys(availability[selectedServiceId]).forEach(d => allDates.add(d));
+                    Object.keys(availability).forEach(k => {
+                        if (k.match(/^\d{4}-\d{2}-\d{2}$/)) allDates.add(k);
+                    });
+
+                    const todayStr = new Date().toLocaleDateString('en-CA');
+                    dates = Array.from(allDates).filter(dateStr => {
+                        if (dateStr < todayStr) return false;
+                        const times = getAvailableSlots(dateStr);
+                        return times && times.length > 0;
+                    }).sort();
+                }
+                return dates;
+            }
+
+            function renderCalendarStrip() {
+                const availableDates = getAvailableDates();
+                strip.innerHTML = '';
+
+                if (availableDates.length === 0) {
+                    strip.innerHTML = '<div class="alert alert-light text-center w-100">No dates available for this mode.</div>';
+                    selectedDateStr = null;
+                    renderTimeSlots(null);
+                    return;
+                }
+
+                availableDates.forEach((dateStr, i) => {
+                    const parts = dateStr.split('-');
+                    const dateObj = new Date(parts[0], parts[1] - 1, parts[2]);
+                    const dayDiv = document.createElement('div');
+                    dayDiv.className = 'calendar-day' + (selectedDateStr === dateStr || (!selectedDateStr && i === 0) ? ' active' : '');
+
+                    if (i === 0 && !selectedDateStr) {
+                        selectedDateStr = dateStr;
+                        renderTimeSlots(dateStr);
+                    }
+
+                    dayDiv.innerHTML = `
+                                                                                <div class="day-name">${days[dateObj.getDay()]}</div>
+                                                                                <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
+                                                                            `;
+
+                    dayDiv.onclick = function () {
+                        document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
+                        dayDiv.classList.add('active');
+                        selectedDateStr = dateStr;
+                        renderTimeSlots(dateStr);
+                        updateDisplayAddress();
+                    };
+                    strip.appendChild(dayDiv);
+                });
+
+                if (selectedDateStr && !availableDates.includes(selectedDateStr)) {
+                    selectedDateStr = availableDates[0];
+                    renderTimeSlots(selectedDateStr);
+                }
+            }
 
             function renderTimeSlots(dateStr) {
-                const times = availability[dateStr] || [];
+                if (!dateStr) {
+                    slotsContainer.innerHTML = '<div class="alert alert-light text-center py-4 border">Please select an available date first.</div>';
+                    return;
+                }
+                const times = getAvailableSlots(dateStr);
 
                 if (times.length === 0) {
                     slotsContainer.innerHTML = '<div class="alert alert-light text-center py-4 border">No slots available for this day.</div>';
                     return;
                 }
 
-                // Split into Morning (before 12 PM) and Afternoon (12 PM onwards)
                 const morning = times.filter(t => t.toUpperCase().includes('AM') || (t.includes('12:') && t.toUpperCase().includes('AM')));
                 const afternoon = times.filter(t => !morning.includes(t));
 
                 let html = '';
-
                 if (morning.length > 0) {
                     html += `<div class="time-section-title"><i class="bi bi-brightness-high"></i> Morning</div>`;
                     html += `<div class="time-slots">`;
-                    morning.forEach(t => {
-                        html += `<div class="time-slot" data-time="${t}">${t}</div>`;
-                    });
+                    morning.forEach(t => { html += `<div class="time-slot" data-time="${t}">${t}</div>`; });
                     html += '</div>';
                 }
-
                 if (afternoon.length > 0) {
                     html += `<div class="time-section-title"><i class="bi bi-sun"></i> Afternoon</div>`;
                     html += `<div class="time-slots">`;
-                    afternoon.forEach(t => {
-                        html += `<div class="time-slot" data-time="${t}">${t}</div>`;
-                    });
+                    afternoon.forEach(t => { html += `<div class="time-slot" data-time="${t}">${t}</div>`; });
                     html += '</div>';
                 }
 
                 slotsContainer.innerHTML = html;
-
-                // Re-bind click events
                 document.querySelectorAll('.time-slot').forEach(slot => {
                     slot.onclick = function () {
                         document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
@@ -777,58 +893,57 @@
                 });
             }
 
-            if (availableDates.length > 0) {
-                availableDates.forEach((dateStr, i) => {
-                    const dateObj = new Date(dateStr);
-                    const dayDiv = document.createElement('div');
-                    dayDiv.className = 'calendar-day' + (i === 0 ? ' active' : '');
+            function getAddressForDate(dateStr) {
+                const dateAddresses = @json($team->date_addresses ?? []);
+                const weeklyAddresses = @json($team->weekly_addresses ?? []);
+                const defaultAddress = @json($team->office_address ?: ($settings['booking_address'] ?? 'Address not set'));
 
-                    if (i === 0) {
-                        selectedDateStr = dateStr;
-                        renderTimeSlots(dateStr);
-                    }
+                if (!dateStr) return defaultAddress;
+                if (dateAddresses[dateStr]) return dateAddresses[dateStr];
 
-                    dayDiv.innerHTML = `
-                                                    <div class="day-name">${days[dateObj.getDay()]}</div>
-                                                    <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
-                                                `;
+                const date = new Date(dateStr);
+                const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][date.getDay()];
+                if (weeklyAddresses[dayName]) return weeklyAddresses[dayName];
 
-                    dayDiv.onclick = function () {
-                        document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
-                        dayDiv.classList.add('active');
-                        selectedDateStr = dateStr;
-                        renderTimeSlots(dateStr);
-                    };
-
-                    strip.appendChild(dayDiv);
-                });
-            } else {
-                strip.innerHTML = '<div class="alert alert-warning small w-100 text-center">No availability set by therapist.</div>';
-                slotsContainer.innerHTML = '';
+                return defaultAddress;
             }
 
-            let currentStep = 1;
-            let selectedModeName = @json($defaultMode);
-            let selectedServiceId = @json($team->services->first()->id ?? null);
-            let selectedServiceName = @json($team->services->first()->title ?? 'Therapy Session');
+            function updateDisplayAddress() {
+                const addressEl = document.querySelector('#addressSection .fw-semibold');
+                const addr = getAddressForDate(selectedDateStr);
+                if (addressEl) addressEl.innerText = addr;
+            }
 
-            window.selectService = function (element, id, price, name) {
+            // 3. Define Window-Level Functions (must be attached to window for HTML onclicks)
+            window.selectService = function (element, id, price, name, duration) {
                 selectedServiceId = id;
                 selectedServiceName = name;
+                selectedServiceDuration = duration;
                 document.querySelectorAll('.service-selection-card').forEach(c => c.classList.remove('active'));
                 element.classList.add('active');
-
-                // Update price display
                 document.querySelector('.price-amount').innerText = '₹' + parseInt(price).toLocaleString();
+                document.querySelector('.duration-text').innerText = `${duration}, 1 session`;
+                renderCalendarStrip();
             };
+
+            window.selectMode = function (element, mode) {
+                selectedModeName = mode;
+                document.querySelectorAll('.mode-square').forEach(s => s.classList.remove('active'));
+                element.classList.add('active');
+                const addressSection = document.getElementById('addressSection');
+                if (mode === 'In-person') {
+                    addressSection.style.display = 'block';
+                    updateDisplayAddress();
+                } else {
+                    addressSection.style.display = 'none';
+                }
+                renderCalendarStrip();
+            };
+
             window.goToStep = function (step) {
                 currentStep = step;
-
-                // Update sidebar
                 document.querySelectorAll('.step-item').forEach(s => s.classList.remove('active'));
                 document.getElementById(`sidebar-step${step}`).classList.add('active');
-
-                // Update panels
                 document.getElementById('center-step1').style.display = (step === 1 ? 'block' : 'none');
                 document.getElementById('center-step2').style.display = (step === 2 ? 'block' : 'none');
                 document.getElementById('right-step1').style.display = (step === 1 ? 'block' : 'none');
@@ -836,28 +951,14 @@
             };
 
             window.goBack = function () {
-                if (currentStep > 1) {
-                    goToStep(currentStep - 1);
-                } else {
-                    history.back();
-                }
+                if (currentStep > 1) goToStep(currentStep - 1);
+                else history.back();
             };
 
-            // Mode Selection Logic
-            window.selectMode = function (element, mode) {
-                selectedModeName = mode;
-                document.querySelectorAll('.mode-square').forEach(s => s.classList.remove('active'));
-                element.classList.add('active');
+            // 4. Initial Trigger
+            renderCalendarStrip();
 
-                const addressSection = document.getElementById('addressSection');
-                if (mode === 'In-person') {
-                    addressSection.style.display = 'block';
-                } else {
-                    addressSection.style.display = 'none';
-                }
-            };
-
-            // Continue button logic
+            // 5. Form & Button Handlers
             document.getElementById('continueBooking').onclick = function () {
                 const selectedDateNode = document.querySelector('.calendar-day.active .day-number');
                 const selectedDayNode = document.querySelector('.calendar-day.active .day-name');
@@ -868,13 +969,14 @@
                     return;
                 }
 
-                // Populate Step 2 Summary
                 const dateText = selectedDateNode.innerText;
                 const dayText = selectedDayNode.innerText;
                 const currentYear = new Date().getFullYear();
+                const officeAddress = getAddressForDate(selectedDateStr);
 
                 document.getElementById('summary-datetime').innerText = `${dayText}, ${dateText} ${currentYear}, ${selectedTime} IST`;
-                document.getElementById('summary-mode').innerText = `at ${selectedModeName}, {{ $settings['session_duration'] ?? '50 mins' }}`;
+                document.getElementById('summary-mode').innerText = `${selectedModeName}, ${selectedServiceDuration}`;
+                document.getElementById('summary-location-name').innerText = selectedModeName === 'In-person' ? officeAddress : 'Online (Link will be shared)';
 
                 goToStep(2);
             };

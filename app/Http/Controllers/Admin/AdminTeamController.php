@@ -55,10 +55,18 @@ class AdminTeamController extends Controller
 
         if ($request->has('availability')) {
             $formattedAvailability = [];
-            foreach ($request->availability as $date => $times) {
-                if (!empty($times)) {
-                    $timeArray = array_map('trim', explode(',', $times));
-                    $formattedAvailability[$date] = $timeArray;
+            foreach ($request->availability as $serviceId => $dates) {
+                if (is_array($dates)) {
+                    foreach ($dates as $date => $modes) {
+                        if (is_array($modes)) {
+                            foreach ($modes as $mode => $times) {
+                                if (!empty($times)) {
+                                    $timeArray = array_map('trim', explode(',', $times));
+                                    $formattedAvailability[$serviceId][$date][$mode] = $timeArray;
+                                }
+                            }
+                        }
+                    }
                 }
             }
             $data['availability'] = $formattedAvailability;
@@ -66,13 +74,29 @@ class AdminTeamController extends Controller
 
         if ($request->has('weekly_availability')) {
             $formattedWeekly = [];
-            foreach ($request->weekly_availability as $day => $times) {
-                if (!empty($times)) {
-                    $timeArray = array_map('trim', explode(',', $times));
-                    $formattedWeekly[$day] = $timeArray;
+            foreach ($request->weekly_availability as $serviceId => $days) {
+                if (is_array($days)) {
+                    foreach ($days as $day => $modes) {
+                        if (is_array($modes)) {
+                            foreach ($modes as $mode => $times) {
+                                if (!empty($times)) {
+                                    $timeArray = array_map('trim', explode(',', $times));
+                                    $formattedWeekly[$serviceId][$day][$mode] = $timeArray;
+                                }
+                            }
+                        }
+                    }
                 }
             }
             $data['weekly_availability'] = $formattedWeekly;
+        }
+
+        if ($request->has('weekly_addresses')) {
+            $data['weekly_addresses'] = array_filter($request->weekly_addresses);
+        }
+
+        if ($request->has('date_addresses')) {
+            $data['date_addresses'] = array_filter($request->date_addresses);
         }
 
         $team = Team::create($data);
@@ -80,7 +104,10 @@ class AdminTeamController extends Controller
         if ($request->has('services')) {
             $syncData = [];
             foreach ($request->services as $serviceId) {
-                $syncData[$serviceId] = ['fees' => $request->service_fees[$serviceId] ?? null];
+                $syncData[$serviceId] = [
+                    'fees' => $request->service_fees[$serviceId] ?? null,
+                    'duration' => $request->service_durations[$serviceId] ?? null
+                ];
             }
             $team->services()->sync($syncData);
         }
@@ -94,7 +121,14 @@ class AdminTeamController extends Controller
     public function edit(Team $team)
     {
         $services = \App\Models\Service::where('is_active', true)->get();
-        $assignedServices = $team->services->pluck('pivot.fees', 'id')->toArray();
+        $assignedServices = $team->services->mapWithKeys(function ($s) {
+            return [
+                $s->id => [
+                    'fees' => $s->pivot->fees,
+                    'duration' => $s->pivot->duration
+                ]
+            ];
+        })->toArray();
         return view('admin.teams.edit', compact('team', 'services', 'assignedServices'));
     }
 
@@ -116,10 +150,24 @@ class AdminTeamController extends Controller
 
         if ($request->has('availability')) {
             $formattedAvailability = [];
-            foreach ($request->availability as $date => $times) {
-                if (!empty($times)) {
-                    $timeArray = array_map('trim', explode(',', $times));
-                    $formattedAvailability[$date] = $timeArray;
+            foreach ($request->availability as $serviceId => $dates) {
+                if (is_array($dates)) {
+                    foreach ($dates as $date => $modes) {
+                        // Initialize date entry to allow 'blocked' days (overrides)
+                        if (!isset($formattedAvailability[$serviceId][$date])) {
+                            $formattedAvailability[$serviceId][$date] = [];
+                        }
+                        if (is_array($modes)) {
+                            foreach ($modes as $mode => $times) {
+                                if (!empty($times)) {
+                                    $timeArray = array_filter(array_map('trim', explode(',', $times)));
+                                    if (!empty($timeArray)) {
+                                        $formattedAvailability[$serviceId][$date][$mode] = $timeArray;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             $data['availability'] = $formattedAvailability;
@@ -129,10 +177,20 @@ class AdminTeamController extends Controller
 
         if ($request->has('weekly_availability')) {
             $formattedWeekly = [];
-            foreach ($request->weekly_availability as $day => $times) {
-                if (!empty($times)) {
-                    $timeArray = array_map('trim', explode(',', $times));
-                    $formattedWeekly[$day] = $timeArray;
+            foreach ($request->weekly_availability as $serviceId => $days) {
+                if (is_array($days)) {
+                    foreach ($days as $day => $modes) {
+                        if (is_array($modes)) {
+                            foreach ($modes as $mode => $times) {
+                                if (!empty($times)) {
+                                    $timeArray = array_filter(array_map('trim', explode(',', $times)));
+                                    if (!empty($timeArray)) {
+                                        $formattedWeekly[$serviceId][$day][$mode] = $timeArray;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             $data['weekly_availability'] = $formattedWeekly;
@@ -140,12 +198,27 @@ class AdminTeamController extends Controller
             $data['weekly_availability'] = null;
         }
 
+        if ($request->has('weekly_addresses')) {
+            $data['weekly_addresses'] = array_filter($request->weekly_addresses);
+        } else {
+            $data['weekly_addresses'] = null;
+        }
+
+        if ($request->has('date_addresses')) {
+            $data['date_addresses'] = array_filter($request->date_addresses);
+        } else {
+            $data['date_addresses'] = null;
+        }
+
         $team->update($data);
 
         if ($request->has('services')) {
             $syncData = [];
             foreach ($request->services as $serviceId) {
-                $syncData[$serviceId] = ['fees' => $request->service_fees[$serviceId] ?? null];
+                $syncData[$serviceId] = [
+                    'fees' => $request->service_fees[$serviceId] ?? null,
+                    'duration' => $request->service_durations[$serviceId] ?? null
+                ];
             }
             $team->services()->sync($syncData);
         } else {

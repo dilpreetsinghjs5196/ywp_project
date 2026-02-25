@@ -104,6 +104,28 @@
                                 </div>
                             </div>
                         @endif
+                        @if($team->office_address || !empty($team->weekly_addresses))
+                            <div class="col-12">
+                                <div class="bg-light p-3 rounded-4 border-start border-primary border-4 mb-3">
+                                    <div class="fw-bold small text-muted text-uppercase mb-2"><i class="bi bi-geo-alt-fill me-1"></i> Session Locations</div>
+                                    @if($team->office_address)
+                                        <div class="fw-semibold text-dark fs-6 mb-1">Primary: {{ $team->office_address }}</div>
+                                    @endif
+                                    @if(!empty($team->weekly_addresses))
+                                        <div class="mt-2 text-dark">
+                                            <p class="small fw-bold text-muted mb-1">Weekly Schedule:</p>
+                                            <ul class="list-unstyled small mb-0">
+                                                @foreach($team->weekly_addresses as $day => $addr)
+                                                    @if($addr)
+                                                        <li><span class="text-primary fw-bold">{{ $day }}:</span> {{ $addr }}</li>
+                                                    @endif
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
                         @if($team->specialization)
                             <div class="col-12">
                                 <div>
@@ -115,8 +137,17 @@
                         @if($team->services->count() > 0)
                             <div class="col-12">
                                 <div>
-                                    <div class="fw-bold small text-muted text-uppercase">Services</div>
-                                    <div class="fw-semibold text-dark fs-5">{{ $team->services->pluck('title')->implode(', ') }}</div>
+                                    <div class="fw-bold small text-muted text-uppercase">Services & Durations</div>
+                                    <div class="fw-semibold text-dark fs-5">
+                                        @foreach($team->services as $service)
+                                            <span class="d-inline-block me-3 mb-1">
+                                                <i class="bi bi-check2-circle text-primary me-1"></i>
+                                                {{ $service->title }} 
+                                                <small class="text-muted">({{ $service->pivot->duration ?? $settings['session_duration'] ?? '50 mins' }})</small>
+                                                @if(!$loop->last) <span class="text-muted-subtle ms-1">|</span> @endif
+                                            </span>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
                         @endif

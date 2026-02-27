@@ -4,10 +4,17 @@
     <div class="d-flex justify-content-between align-items-center text-white px-3">
       <div class="d-flex align-items-center">
         <div class="pe-3 border-end">
-          <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#joinUsModal"
-             class="text-white text-decoration-none fw-bold small d-flex align-items-center bg-primary-color px-3 py-1 rounded-pill" style="cursor: pointer;">
-            <i class="bi bi-person-plus-fill me-2"></i> JOIN US
-          </a>
+          @if(!empty($settings['therapist_application_url']))
+            <a href="{{ $settings['therapist_application_url'] }}" target="_blank"
+               class="text-white text-decoration-none fw-bold small d-flex align-items-center bg-primary-color px-3 py-1 rounded-pill">
+              <i class="bi bi-person-plus-fill me-2"></i> JOIN US
+            </a>
+          @else
+            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#joinUsModal"
+               class="text-white text-decoration-none fw-bold small d-flex align-items-center bg-primary-color px-3 py-1 rounded-pill" style="cursor: pointer;">
+              <i class="bi bi-person-plus-fill me-2"></i> JOIN US
+            </a>
+          @endif
         </div>
         <div class="ps-3">
           <p class="my-1 py-1 small">{{ $settings['office_address'] ?? '123 Serenity Lane, Blissfield, CA 90210' }}</p>

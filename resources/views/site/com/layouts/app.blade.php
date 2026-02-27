@@ -87,68 +87,76 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4 p-md-5">
-                    <div class="text-center mb-4">
-                        <h2 class="fw-bold font-1">Join Our Growing Team</h2>
-                        <p class="text-muted small">Are you a compassionate mental health professional? We should talk.
-                        </p>
-                    </div>
-
-                    <form id="globalTherapistJoinForm">
-                        @csrf
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold text-muted text-uppercase">Full Name*</label>
-                                <input type="text" name="name"
-                                    class="form-control py-2 rounded-3 border-secondary-subtle" required
-                                    placeholder="Joy Doe">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold text-muted text-uppercase">Email Address*</label>
-                                <input type="email" name="email"
-                                    class="form-control py-2 rounded-3 border-secondary-subtle" required
-                                    placeholder="joy@example.com">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold text-muted text-uppercase">Phone Number*</label>
-                                <input type="tel" name="phone"
-                                    class="form-control py-2 rounded-3 border-secondary-subtle" required
-                                    placeholder="+91 XXXXX XXXXX">
-                            </div>
-                            <div class="col-md-6">
-                                <label
-                                    class="form-label small fw-bold text-muted text-uppercase">Specialization*</label>
-                                <input type="text" name="specialization"
-                                    class="form-control py-2 rounded-3 border-secondary-subtle" required
-                                    placeholder="Clinical Psychology, CBT, etc.">
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label small fw-bold text-muted text-uppercase">Years of
-                                    Experience*</label>
-                                <select name="experience" class="form-select py-2 rounded-3 border-secondary-subtle"
-                                    required>
-                                    <option value="" disabled selected>Select experience</option>
-                                    <option value="0-2 years">0-2 years</option>
-                                    <option value="2-5 years">2-5 years</option>
-                                    <option value="5-10 years">5-10 years</option>
-                                    <option value="10+ years">10+ years</option>
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label small fw-bold text-muted text-uppercase">Short
-                                    Bio/Message</label>
-                                <textarea name="message" class="form-control rounded-3 border-secondary-subtle" rows="4"
-                                    placeholder="Tell us about yourself..."></textarea>
-                            </div>
-                            <div class="col-12 mt-4">
-                                <button type="submit"
-                                    class="btn btn-primary w-100 py-3 rounded-pill fw-bold text-uppercase"
-                                    style="background-color: var(--primary-color); border: none;">
-                                    Submit Application
-                                </button>
-                            </div>
+                    @if(empty($settings['therapist_application_url']))
+                        <div class="text-center py-4">
+                            <i class="bi bi-exclamation-triangle-fill text-danger display-1 mb-4"></i>
+                            <h3 class="fw-bold">Broken Link</h3>
+                            <p class="text-muted fs-5">Google forms link is broken please check.</p>
                         </div>
-                    </form>
-                    <div id="globalJoinResponse" class="mt-4" style="display: none;"></div>
+                    @else
+                        <div class="text-center mb-4">
+                            <h2 class="fw-bold font-1">Join Our Growing Team</h2>
+                            <p class="text-muted small">Are you a compassionate mental health professional? We should talk.
+                            </p>
+                        </div>
+
+                        <form id="globalTherapistJoinForm">
+                            @csrf
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted text-uppercase">Full Name*</label>
+                                    <input type="text" name="name"
+                                        class="form-control py-2 rounded-3 border-secondary-subtle" required
+                                        placeholder="Joy Doe">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted text-uppercase">Email Address*</label>
+                                    <input type="email" name="email"
+                                        class="form-control py-2 rounded-3 border-secondary-subtle" required
+                                        placeholder="joy@example.com">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted text-uppercase">Phone Number*</label>
+                                    <input type="tel" name="phone"
+                                        class="form-control py-2 rounded-3 border-secondary-subtle" required
+                                        placeholder="+91 XXXXX XXXXX">
+                                </div>
+                                <div class="col-md-6">
+                                    <label
+                                        class="form-label small fw-bold text-muted text-uppercase">Specialization*</label>
+                                    <input type="text" name="specialization"
+                                        class="form-control py-2 rounded-3 border-secondary-subtle" required
+                                        placeholder="Clinical Psychology, CBT, etc.">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-muted text-uppercase">Years of
+                                        Experience*</label>
+                                    <select name="experience" class="form-select py-2 rounded-3 border-secondary-subtle"
+                                        required>
+                                        <option value="" disabled selected>Select experience</option>
+                                        <option value="0-2 years">0-2 years</option>
+                                        <option value="2-5 years">2-5 years</option>
+                                        <option value="5-10 years">5-10 years</option>
+                                        <option value="10+ years">10+ years</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-muted text-uppercase">Short
+                                        Bio/Message</label>
+                                    <textarea name="message" class="form-control rounded-3 border-secondary-subtle" rows="4"
+                                        placeholder="Tell us about yourself..."></textarea>
+                                </div>
+                                <div class="col-12 mt-4">
+                                    <button type="submit"
+                                        class="btn btn-primary w-100 py-3 rounded-pill fw-bold text-uppercase"
+                                        style="background-color: var(--primary-color); border: none;">
+                                        Submit Application
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <div id="globalJoinResponse" class="mt-4" style="display: none;"></div>
+                    @endif
                 </div>
             </div>
         </div>

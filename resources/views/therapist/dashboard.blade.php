@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="row g-4 mb-4">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card p-4 border-0 shadow-sm bg-primary text-white h-100">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
@@ -19,7 +19,7 @@
                 <p class="mt-3 mb-0 small text-white-50">Completed session revenue</p>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card p-4 border-0 shadow-sm h-100">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
@@ -33,7 +33,7 @@
                 <p class="mt-3 mb-0 small text-muted">All-time bookings count</p>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card p-4 border-0 shadow-sm h-100">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
@@ -47,6 +47,28 @@
                 <a href="{{ route('therapist.profile') }}"
                     class="mt-3 mb-0 small text-primary text-decoration-none d-block">Modify rates <i
                         class="bi bi-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-4 border-0 shadow-sm h-100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted">Patient Reviews</h6>
+                        <h3 class="fw-bold mb-0">{{ $approvedReviewsCount }}</h3>
+                    </div>
+                    <div class="bg-light rounded p-3 text-warning">
+                        <i class="bi bi-star-fill fs-3"></i>
+                    </div>
+                </div>
+                <div class="mt-3 d-flex align-items-center gap-2">
+                    <div class="text-warning small">
+                        @for($i = 1; $i <= 5; $i++)
+                            <i class="bi bi-star{{ $i <= round($averageRating) ? '-fill' : '' }}"></i>
+                        @endfor
+                    </div>
+                    <a href="{{ route('therapist.reviews') }}" class="small text-primary text-decoration-none">View
+                        Feedback</a>
+                </div>
             </div>
         </div>
     </div>
@@ -75,7 +97,8 @@
                                     </td>
                                     <td>
                                         <div class="small fw-bold">
-                                            {{ \Carbon\Carbon::parse($booking->booking_date)->format('D, d M Y') }}</div>
+                                            {{ \Carbon\Carbon::parse($booking->booking_date)->format('D, d M Y') }}
+                                        </div>
                                         <div class="text-muted small">{{ $booking->booking_time }}</div>
                                     </td>
                                     <td>
@@ -125,7 +148,13 @@
                     <img src="{{ Str::startsWith($therapist->image, 'image/') ? asset($therapist->image) : asset('storage/' . $therapist->image) }}"
                         class="rounded-circle mb-3 border p-1" style="width: 100px; height: 100px; object-fit: cover;">
                     <h6 class="fw-bold mb-0">{{ $therapist->name }}</h6>
-                    <p class="text-muted small">{{ $therapist->designation }}</p>
+                    <p class="text-muted small mb-1">{{ $therapist->designation }}</p>
+                    <div class="text-warning small">
+                        @for($i = 1; $i <= 5; $i++)
+                            <i class="bi bi-star{{ $i <= round($averageRating) ? '-fill' : '' }}"></i>
+                        @endfor
+                        <span class="text-muted ms-1">({{ number_format($averageRating, 1) }})</span>
+                    </div>
                 </div>
             </div>
         </div>

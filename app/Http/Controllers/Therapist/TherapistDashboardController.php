@@ -34,7 +34,10 @@ class TherapistDashboardController extends Controller
         $totalClients = TherapistBooking::where('therapist_id', $therapist->id)
             ->count();
 
-        return view('therapist.dashboard', compact('therapist', 'bookings', 'totalEarnings', 'totalClients'));
+        $approvedReviewsCount = $therapist->approvedReviews()->count();
+        $averageRating = $therapist->reviews()->where('status', 'approved')->avg('rating') ?: 0;
+
+        return view('therapist.dashboard', compact('therapist', 'bookings', 'totalEarnings', 'totalClients', 'approvedReviewsCount', 'averageRating'));
     }
 
     public function bookings(Request $request)
@@ -145,6 +148,15 @@ class TherapistDashboardController extends Controller
         }
 
         return view('therapist.clients.index', compact('clients'));
+    }
+    public function reviews(Request $request)
+    {
+        $therapist = Team::where('email', Auth::user()->email)->first();
+        $reviews = \App\Models\Review::where('team_id', $therapist->id)
+            ->orderBy('id', 'desc')
+            ->paginate(10);
+
+        return view('therapist.reviews', compact('reviews'));
     }
 
     public function availability()

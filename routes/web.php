@@ -133,6 +133,7 @@ Route::prefix('therapist')->middleware(['auth', 'role:therapist'])->group(functi
     Route::get('/bookings', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'bookings'])->name('therapist.bookings');
     Route::get('/availability', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'availability'])->name('therapist.availability');
     Route::post('/availability', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'updateAvailability'])->name('therapist.availability.update');
+    Route::get('/reviews', [\App\Http\Controllers\Therapist\TherapistDashboardController::class, 'reviews'])->name('therapist.reviews');
 
     // Google Calendar Routes
     Route::get('/google-calendar/connect', [\App\Http\Controllers\Therapist\GoogleCalendarController::class, 'redirectToGoogle'])->name('therapist.google.connect');

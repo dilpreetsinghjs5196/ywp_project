@@ -121,6 +121,12 @@
                         <i class="bi bi-person-circle"></i> Profile & Rates
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('therapist.reviews') ? 'active' : '' }}"
+                        href="{{ route('therapist.reviews') }}">
+                        <i class="bi bi-star"></i> Reviews
+                    </a>
+                </li>
             </ul>
             <div class="p-4 border-top border-secondary">
                 <a href="#" class="nav-link p-0 text-white opacity-75"

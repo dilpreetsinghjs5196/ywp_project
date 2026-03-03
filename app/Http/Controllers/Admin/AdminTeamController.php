@@ -48,6 +48,7 @@ class AdminTeamController extends Controller
     public function store(StoreTeamRequest $request)
     {
         $data = $request->except(['image', 'availability']);
+        $data['commission_percentage'] = $request->commission_percentage ?? 0;
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('uploads/teams', 'public');
@@ -139,6 +140,7 @@ class AdminTeamController extends Controller
     {
         $data = $request->except(['image', 'availability']);
         $data['is_active'] = $request->has('is_active');
+        $data['commission_percentage'] = $request->commission_percentage ?? 0;
 
         if ($request->hasFile('image')) {
             // Delete old image if not a default one

@@ -58,13 +58,50 @@ class TherapistBookingController extends Controller
                 'payment_status' => 'pending',
             ]);
 
+            // 1. Initialize Razorpay API
+            $api = new \Razorpay\Api\Api(config('services.razorpay.key_id'), config('services.razorpay.key_secret'));
+
+            // 2. Prepare Order Data
+            $orderData = [
+                'receipt' => 'rcpt_' . $booking->id,
+                'amount' => (int) round($amount * 100), // in paise, cast to int to avoid decimals
+                'currency' => 'INR',
+                'payment_capture' => 1 // auto capture
+            ];
+
+            // 3. Handle Split Payment (Razorpay Route) if Therapist Account ID exists
+            if ($therapist->razorpay_account_id) {
+                // Calculate therapist share: Amount * (100 - Commission) / 100
+                $commission = (float) ($therapist->commission_percentage ?? 0);
+                $therapistSharePaise = (int) round(($amount * (100 - $commission) / 100) * 100);
+
+                if ($therapistSharePaise > 0) {
+                    $orderData['transfers'] = [
+                        [
+                            'account' => $therapist->razorpay_account_id,
+                            'amount' => $therapistSharePaise,
+                            'currency' => 'INR',
+                        ]
+                    ];
+                }
+            }
+
+            // 4. Create Razorpay Order
+            $razorpayOrder = $api->order->create($orderData);
+
+            // 5. Update booking with Order ID
+            $booking->update([
+                'razorpay_order_id' => $razorpayOrder->id
+            ]);
+
             DB::commit();
 
             return response()->json([
                 'success' => true,
                 'booking_id' => $booking->id,
+                'razorpay_order_id' => $razorpayOrder->id,
                 'razorpay_key' => config('services.razorpay.key_id'),
-                'amount' => $amount * 100, // Razorpay works in paise
+                'amount' => $amount * 100,
                 'customer' => [
                     'name' => $request->name,
                     'email' => $request->email,
@@ -74,6 +111,7 @@ class TherapistBookingController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            \Illuminate\Support\Facades\Log::error('Razorpay Order Error: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Error initializing booking: ' . $e->getMessage()
@@ -85,15 +123,25 @@ class TherapistBookingController extends Controller
     {
         $booking = TherapistBooking::with('therapist')->findOrFail($request->booking_id);
 
-        if ($request->razorpay_payment_id) {
+        try {
+            // 1. Verify Signature using Razorpay SDK
+            $api = new \Razorpay\Api\Api(config('services.razorpay.key_id'), config('services.razorpay.key_secret'));
+
+            $attributes = [
+                'razorpay_order_id' => $request->razorpay_order_id,
+                'razorpay_payment_id' => $request->razorpay_payment_id,
+                'razorpay_signature' => $request->razorpay_signature
+            ];
+
+            $api->utility->verifyPaymentSignature($attributes);
+
+            // 2. If verification successful, update booking
             $booking->update([
                 'razorpay_payment_id' => $request->razorpay_payment_id,
-                'razorpay_order_id' => $request->razorpay_order_id,
                 'razorpay_signature' => $request->razorpay_signature,
                 'payment_status' => 'paid'
             ]);
 
-            // Send Emails
             // Send Emails
             $emailStatus = 'sent';
             try {
@@ -179,9 +227,9 @@ class TherapistBookingController extends Controller
                 'email_status' => $emailStatus
             ]);
 
-
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Razorpay Verification Error: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Payment verification failed: ' . $e->getMessage()], 400);
         }
-
-        return response()->json(['success' => false, 'message' => 'Payment verification failed'], 400);
     }
 }

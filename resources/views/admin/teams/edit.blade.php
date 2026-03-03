@@ -31,18 +31,31 @@
                         </div>
 
                         <div class="row mb-3">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="form-label fw-bold">Designation</label>
                                 <input type="text" name="designation"
                                     class="form-control @error('designation') is-invalid @enderror"
                                     value="{{ old('designation', $team->designation) }}" required>
                                 @error('designation')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-2">
                                 <label class="form-label fw-bold">Session Fees (₹)</label>
                                 <input type="number" name="fees" class="form-control @error('fees') is-invalid @enderror"
                                     value="{{ old('fees', $team->fees) }}" required placeholder="e.g. 1800">
                                 @error('fees')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold">Commission (%)</label>
+                                <input type="number" step="0.01" name="commission_percentage" class="form-control @error('commission_percentage') is-invalid @enderror"
+                                    value="{{ old('commission_percentage', $team->commission_percentage) }}" placeholder="e.g. 10">
+                                @error('commission_percentage')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Razorpay Account ID</label>
+                                <input type="text" name="razorpay_account_id" class="form-control @error('razorpay_account_id') is-invalid @enderror"
+                                    value="{{ old('razorpay_account_id', $team->razorpay_account_id) }}" placeholder="acc_XXXXXXXXXXXX">
+                                <div class="form-text small">Required for split payments.</div>
+                                @error('razorpay_account_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                         </div>
 

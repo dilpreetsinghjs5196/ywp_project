@@ -362,6 +362,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.settings.payment') ? 'active' : '' }}"
+                            href="{{ route('admin.settings.payment') }}">
+                            <i class="bi bi-credit-card"></i> Payment Gateway
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Access Control</div>
                     </li>
                     <li class="nav-item">

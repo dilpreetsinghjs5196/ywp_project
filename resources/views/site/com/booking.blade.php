@@ -445,12 +445,12 @@
                 <!-- Left Sidebar -->
                 <div class="booking-steps-sidebar">
                     <!-- <div class="promo-banner">
-                                                                                                                                                                            <div class="d-flex align-items-center gap-2 mb-1">
-                                                                                                                                                                                <i class="bi bi-percent text-warning fs-5"></i>
-                                                                                                                                                                                <span class="fw-bold text-dark">20% OFF</span>
-                                                                                                                                                                            </div>
-                                                                                                                                                                            <p class="small text-muted mb-0">20% Off on Pre-Booking First Session</p>
-                                                                                                                                                                        </div> -->
+                                                                                                                                                                                <div class="d-flex align-items-center gap-2 mb-1">
+                                                                                                                                                                                    <i class="bi bi-percent text-warning fs-5"></i>
+                                                                                                                                                                                    <span class="fw-bold text-dark">20% OFF</span>
+                                                                                                                                                                                </div>
+                                                                                                                                                                                <p class="small text-muted mb-0">20% Off on Pre-Booking First Session</p>
+                                                                                                                                                                            </div> -->
 
                     <div class="booking-steps">
                         <div class="step-item active" id="sidebar-step1">
@@ -835,9 +835,9 @@
                     }
 
                     dayDiv.innerHTML = `
-                                                                                        <div class="day-name">${days[dateObj.getDay()]}</div>
-                                                                                        <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
-                                                                                    `;
+                                                                                            <div class="day-name">${days[dateObj.getDay()]}</div>
+                                                                                            <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
+                                                                                        `;
 
                     dayDiv.onclick = function () {
                         document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
@@ -1090,6 +1090,7 @@
                                 "name": "YWP Therapy",
                                 "description": "Session Booking Fees",
                                 "image": "{{ asset('image/logo-ywp.png') }}",
+                                "order_id": response.razorpay_order_id,
                                 "handler": function (payResponse) {
                                     // 3. Verify Payment
                                     $.ajax({

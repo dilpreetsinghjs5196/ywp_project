@@ -33,6 +33,12 @@ class AdminSettingController extends Controller
         return view('admin.settings.google', compact('settings'));
     }
 
+    public function payment()
+    {
+        $settings = SiteSetting::where('group', 'razorpay')->get();
+        return view('admin.settings.payment', compact('settings'));
+    }
+
     public function update(Request $request)
     {
         $data = $request->except(['_token']);

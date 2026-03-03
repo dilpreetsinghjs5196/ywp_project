@@ -51,6 +51,8 @@ class UpdateTeamRequest extends FormRequest
             'services.*' => 'exists:services,id',
             'service_fees' => 'nullable|array',
             'service_durations' => 'nullable|array',
+            'commission_percentage' => 'nullable|numeric|min:0|max:100',
+            'razorpay_account_id' => 'nullable|string|max:255',
         ];
     }
 }

@@ -35,7 +35,9 @@ class Team extends Model
         'google_calendar_id',
         'google_access_token',
         'google_refresh_token',
-        'google_token_expires_at'
+        'google_token_expires_at',
+        'commission_percentage',
+        'razorpay_account_id'
     ];
 
     protected $casts = [

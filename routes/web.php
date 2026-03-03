@@ -113,6 +113,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/settings/contact', [\App\Http\Controllers\Admin\AdminSettingController::class, 'contact'])->name('admin.settings.contact');
     Route::get('/settings/mail', [\App\Http\Controllers\Admin\AdminSettingController::class, 'mail'])->name('admin.settings.mail');
     Route::get('/settings/google', [\App\Http\Controllers\Admin\AdminSettingController::class, 'google'])->name('admin.settings.google');
+    Route::get('/settings/payment', [\App\Http\Controllers\Admin\AdminSettingController::class, 'payment'])->name('admin.settings.payment');
     Route::post('/settings/update', [\App\Http\Controllers\Admin\AdminSettingController::class, 'update'])->name('admin.settings.update');
 
     // Appointment Queries (General)

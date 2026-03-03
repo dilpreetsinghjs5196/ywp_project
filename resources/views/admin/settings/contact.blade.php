@@ -13,7 +13,12 @@
                     <div class="row g-3">
                         @foreach($settings->where('group', 'contact') as $setting)
                             <div class="col-12">
-                                <label class="form-label fw-bold">{{ str_replace('_', ' ', ucfirst($setting->key)) }}</label>
+                                <label class="form-label fw-bold">
+                                    {{ str_replace('_', ' ', ucfirst($setting->key)) }}
+                                    @if($setting->key === 'workplace_email')
+                                        (Admin)
+                                    @endif
+                                </label>
                                 <input type="text" name="{{ $setting->key }}" value="{{ $setting->value }}"
                                     class="form-control">
                             </div>

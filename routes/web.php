@@ -97,9 +97,11 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     // Brand Management
     Route::resource('brands', \App\Http\Controllers\Admin\AdminBrandController::class, ['as' => 'admin']);
 
-    // Blog Management
+    // Blog & Video Management
     Route::resource('blog-themes', \App\Http\Controllers\Admin\AdminBlogThemeController::class, ['as' => 'admin']);
+    Route::resource('video-themes', \App\Http\Controllers\Admin\AdminVideoThemeController::class, ['as' => 'admin']);
     Route::resource('blogs', \App\Http\Controllers\Admin\AdminBlogController::class, ['as' => 'admin']);
+    Route::resource('blog-videos', \App\Http\Controllers\Admin\AdminBlogVideoController::class, ['as' => 'admin']);
     Route::post('/ckeditor/upload', [\App\Http\Controllers\Admin\CKEditorController::class, 'upload'])->name('admin.ckeditor.upload');
 
     // Review Management

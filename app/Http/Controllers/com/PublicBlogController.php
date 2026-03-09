@@ -22,7 +22,16 @@ class PublicBlogController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        return view('site.com.blogs.index', compact('settings', 'themes'));
+        $videoThemes = \App\Models\VideoTheme::with([
+            'videos' => function ($query) {
+                $query->where('is_active', true)->orderBy('sort_order');
+            }
+        ])
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get();
+
+        return view('site.com.blogs.index', compact('settings', 'themes', 'videoThemes'));
     }
 
     public function show($slug)

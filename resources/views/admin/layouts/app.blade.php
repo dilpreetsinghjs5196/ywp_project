@@ -268,12 +268,25 @@
                             <i class="bi bi-collection"></i> Blog Themes
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item ps-3">
                         <a class="nav-link {{ request()->routeIs('admin.blogs.*') ? 'active' : '' }}"
                             href="{{ route('admin.blogs.index') }}">
                             <i class="bi bi-journal-text"></i> Blog Posts
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.video-themes.*') ? 'active' : '' }}"
+                            href="{{ route('admin.video-themes.index') }}">
+                            <i class="bi bi-tags"></i> Video Themes
+                        </a>
+                    </li>
+                    <li class="nav-item ps-3">
+                        <a class="nav-link {{ request()->routeIs('admin.blog-videos.*') ? 'active' : '' }}"
+                            href="{{ route('admin.blog-videos.index') }}">
+                            <i class="bi bi-play-btn"></i> Blog Videos
+                        </a>
+                    </li>
+                   
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.testimonials.*') ? 'active' : '' }}"
                             href="{{ route('admin.testimonials.index') }}">

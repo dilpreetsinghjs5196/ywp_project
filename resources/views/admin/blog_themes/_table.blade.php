@@ -4,6 +4,7 @@
             <tr>
                 <th class="ps-4">Name</th>
                 <th>Slug</th>
+                <th>Stats</th>
                 <th>Order</th>
                 <th>Status</th>
                 <th class="text-end pe-4">Actions</th>
@@ -16,6 +17,11 @@
                         <div class="fw-bold">{{ $theme->name }}</div>
                     </td>
                     <td><code>{{ $theme->slug }}</code></td>
+                    <td>
+                        <span
+                            class="badge bg-info-subtle text-info border border-info-subtle">{{ $theme->blogs_count ?? $theme->blogs()->count() }}
+                            Blogs</span>
+                    </td>
                     <td>{{ $theme->sort_order }}</td>
                     <td>
                         @if($theme->is_active)

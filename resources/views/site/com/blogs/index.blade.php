@@ -158,7 +158,7 @@
                                     if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $video->video_url, $match)) {
                                         $videoId = $match[1];
                                     }
-                                    $thumbnailUrl = $video->thumbnail ? asset('storage/' . $video->thumbnail) : ($videoId ? "https://img.youtube.com/vi/{$videoId}/maxresdefault.jpg" : asset('image/Place-Holder-1920x1280.jpg'));
+                                    $thumbnailUrl = $video->thumbnail ? asset('storage/' . $video->thumbnail) : ($videoId ? "https://img.youtube.com/vi/{$videoId}/hqdefault.jpg" : asset('image/Place-Holder-1920x1280.jpg'));
                                 @endphp
                                 <div class="swiper-slide h-auto mb-4 px-1">
                                     <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden blog-entry-card">

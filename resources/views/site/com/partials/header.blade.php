@@ -84,7 +84,7 @@
                   Wellness Hub
                 </a>
                 <ul class="dropdown-menu shadow-sm" aria-labelledby="wellnessDropdown">
-                  <li><a class="dropdown-item" href="service-detail.html">Free Mental Health Tests</a></li>
+                  <!-- <li><a class="dropdown-item" href="service-detail.html">Free Mental Health Tests</a></li> -->
                   <li><a class="dropdown-item" href="{{ route('com.blogs.index') }}">Blog</a></li>
                 </ul>
               </li>

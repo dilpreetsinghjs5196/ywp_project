@@ -16,67 +16,25 @@
 
     $backgroundStyle = "background: url('$bgFullUrl');";
   @endphp
-  <section class="section hero-section d-flex align-items-center pb-0"
-    style="{{ $backgroundStyle }} background-size: cover; background-position: center;">
+  <section class="section hero-section d-flex align-items-center py-5"
+    style="{{ $backgroundStyle }} background-size: cover; background-position: center; min-height: 80vh;">
     <div class="b-container px-3 px-sm-4 px-md-0">
-      <div class="row row-cols-1 row-cols-lg-2 g-4 align-items-center text-white">
-        <!-- Left Content -->
-        <div class="col mt-md-5 text-center text-lg-start d-flex flex-column align-items-center align-items-lg-start"
+      <div class="row justify-content-center text-white">
+        <!-- Centered Content -->
+        <div class="col-12 col-lg-10 col-xl-8 text-center d-flex flex-column align-items-center"
           data-aos="fade-up" data-aos-easing="linear" data-aos-delay="500" data-aos-duration="1000">
-          <h6 class="text-primary-color fw-semibold">FIND BALANCE, EMBRACE LIFE</h6>
-          <h1 class="display-md-4 lh-sm font-1" style="font-weight: 900;">
+          <h6 class="text-primary-color fw-semibold mb-3 tracking-widest text-uppercase">Find Balance, Embrace Life</h6>
+          <h1 class="display-3 lh-sm font-1 mb-4" style="font-weight: 900;">
             {!! str_replace('Inner', '<span class="text-primary-color">Inner</span>', $contents['hero']['main_title'] ?? 'Caring for Your Inner Peace') !!}
           </h1>
-          <hr class="border border-white border-2 opacity-75 w-75 my-4 mx-auto mx-lg-0">
-          <p class="fs-5 my-4">
+          <div class="bg-white opacity-75 my-4" style="height: 3px; width: 100px; border-radius: 2px;"></div>
+          <p class="fs-4 my-4 opacity-90 mx-auto" style="max-width: 700px;">
             {{ $contents['hero']['subtitle'] ?? 'Discover clarity, confidence, and emotional wellness through guided support.' }}
           </p>
-          <div class="d-flex gap-3 align-items-center my-4 flex-nowrap justify-content-lg-start justify-content-center">
-            <a href="appointment.html" role="button" class="btn btn-primary-solid">Start A Checkup
-              Now</a>
-            <button class="btn btn-secondary-solid rounded-circle fs-2 p-2 btn-play" type="button"
-              style="width: 60px; height: 60px;" onclick="showVideoOverlay()">
-              <i class="bi bi-play-fill"></i>
-            </button>
-          </div>
-        </div>
-        <!-- Video Overlay -->
-        <div id="videoOverlay" class="video-overlay d-none mt-0">
-          <button type="button" class="position-absolute top-0 end-0 m-3 text-white fs-2 border-0 bg-transparent"
-            onclick="hideVideoOverlay()" aria-label="Close">
-            <i class="bi bi-x-lg"></i>
-          </button>
-          <div class="video-box">
-            <div class="ratio ratio-16x9">
-              <iframe id="youtubeFrame" src="https://www.youtube.com/embed/N3Te3HeEFoA?si=YT6iTnj0qgbxYQ-H"
-                title="YouTube video" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-            </div>
-          </div>
-        </div>
-        <!-- #video end -->
-
-        <!-- Right Image -->
-        <div class="col position-relative text-center pt-lg-4 pt-xl-3">
-          <img src="{{ $heroFullUrl }}" alt="Hero Talent" class="img-fluid position-relative" style="z-index: 2;">
-          <!-- Badge Review -->
-          <div
-            class="badge-cta position-absolute top-50 start-0 translate-middle-y bg-secondary-color py-3 px-4 rounded-5 text-white text-center d-none d-md-block"
-            style="z-index: 3;">
-            <h3 class="mb-0 font-1 fw-bolder count-up" data-count="4.9" data-suffix=" /5">0</h3>
-            <p class="mb-0">Review on Google</p>
-          </div>
-          <!-- Badge Phone -->
-          <div
-            class="badge-cta position-absolute top-0 end-0 bg-primary-color py-3 px-4 rounded-5 d-flex align-items-center gap-3 justify-content-start"
-            style=" z-index: 1;">
-            <div class=" d-flex align-items-center justify-content-center rounded-circle bg-white"
-              style="width: 60px; height: 60px;">
-              <i class=" bi bi-telephone-fill text-primary-color fs-2"></i>
-            </div>
-            <div class="justify-content-start">
-              <p class="mb-0">Call us anytime</p>
-              <h3 class="font-1 fw-bolder">{{ $settings['contact_phone'] ?? '(555) 123-4567' }}</h3>
-            </div>
+          <div class="d-flex gap-3 align-items-center mt-4">
+            <a href="{{ route('com.team') }}" role="button" class="btn btn-primary-solid px-5 py-3 shadow-lg" target="_blank">
+              Start A Checkup Now
+            </a>
           </div>
         </div>
       </div>
@@ -636,18 +594,18 @@
                     </p>
                   </div>
 
-                  <div class="d-flex align-items-center gap-3 justify-content-start" data-aos="fade-left"
-                    data-aos-easing="ease-out-cubic" data-aos-delay="250" data-aos-duration="1000">
-                    <div
-                      class="d-flex align-items-center justify-content-center rounded-circle border-white bg-secondary-color flex-shrink-0"
-                      style="width: 65px; height: 65px; border: 2px solid white;">
-                      <i class="bi bi-telephone-fill fs-2 text-white"></i>
-                    </div>
-                    <div class="ms-2 font-1 py-2">
-                      <p class="fw-bold text-primary-color mb-0">Call us anytime</p>
-                      <h5 class="fw-bold">{{ $contents['get_in_touch']['phone'] ?? '(555) 123-4567' }}</h5>
-                    </div>
-                  </div>
+                  <!-- <div class="d-flex align-items-center gap-3 justify-content-start" data-aos="fade-left"
+                      data-aos-easing="ease-out-cubic" data-aos-delay="250" data-aos-duration="1000">
+                      <div
+                        class="d-flex align-items-center justify-content-center rounded-circle border-white bg-secondary-color flex-shrink-0"
+                        style="width: 65px; height: 65px; border: 2px solid white;">
+                        <i class="bi bi-telephone-fill fs-2 text-white"></i>
+                      </div>
+                      <div class="ms-2 font-1 py-2">
+                        <p class="fw-bold text-primary-color mb-0">Call us anytime</p>
+                        <h5 class="fw-bold">{{ $contents['get_in_touch']['phone'] ?? '(555) 123-4567' }}</h5>
+                      </div>
+                    </div> -->
                   <div class="d-flex align-items-center gap-3 justify-content-start mt-3" data-aos="fade-left"
                     data-aos-easing="ease-out-cubic" data-aos-delay="500" data-aos-duration="1000">
                     <div

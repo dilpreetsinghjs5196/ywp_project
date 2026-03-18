@@ -170,14 +170,14 @@ class TherapistBookingController extends Controller
                     ]);
                 }
 
-                $adminEmail = SiteSetting::where('key', 'workplace_email')->first()->value ?? 'dilpreetsingh5196@gmail.com';
-                $therapistEmail = $booking->therapist->email ?? $adminEmail;
+                // $adminEmail = SiteSetting::where('key', 'workplace_email')->first()->value ?? 'dilpreetsingh5196@gmail.com';
+                // $therapistEmail = $booking->therapist->email ?? $adminEmail;
 
-                // 1. Mail to Admin
-                Mail::to($adminEmail)->send(new TherapistBookingConfirmation($booking, 'admin'));
+                // // 1. Mail to Admin
+                // Mail::to($adminEmail)->send(new TherapistBookingConfirmation($booking, 'admin'));
 
                 // 2. Mail to Therapist
-                if ($booking->therapist->email) {
+                if ($booking->therapist && $booking->therapist->email) {
                     Mail::to($booking->therapist->email)->send(new TherapistBookingConfirmation($booking, 'therapist'));
                 }
 

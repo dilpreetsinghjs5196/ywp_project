@@ -13,11 +13,11 @@
           {{ $settings['footer_about'] ?? 'Professional, responsive, and soothing design for therapists, counselors, and life coaches.' }}
         </p>
         <div class="social-box d-flex justify-content-lg-start justify-content-center w-100">
-          <a href="https://www.facebook.com" class="rounded-5 py-2" style="width: 40px; height: 40px;"><i
+          <a href="https://www.facebook.com/yourewonderfulproject" class="rounded-5 py-2" style="width: 40px; height: 40px;" target="_blank"><i
               class="bi bi-facebook text-white"></i></a>
-          <a href="https://x.com" class="rounded-5 py-2" style="width: 40px; height: 40px;"><i
-              class="bi bi-twitter-x text-white"></i></a>
-          <a href="https://www.linkedin.com" class="rounded-5 py-2" style="width: 40px; height: 40px;"><i
+          <a href="https://www.instagram.com/yourewonderfulproject/?hl=en" class="rounded-5 py-2" style="width: 40px; height: 40px;" target="_blank"><i
+              class="bi bi-instagram text-white"></i></a>
+          <a href="https://www.linkedin.com/company/ywpindia/" class="rounded-5 py-2" style="width: 40px; height: 40px;" target="_blank"><i
               class="bi bi-linkedin text-white"></i></a>
         </div>
       </div>

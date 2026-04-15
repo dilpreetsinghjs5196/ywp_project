@@ -79,7 +79,9 @@
                   href="{{ route('com.corporate') }}">Corporate Well-Being</a>
               </li>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="wellnessDropdown" role="button" data-bs-toggle="dropdown"
+                <a class="nav-link dropdown-toggle {{ request()->routeIs('com.blogs.*') ? 'active' : '' }}" 
+                  {{ request()->routeIs('com.blogs.*') ? 'aria-current="page"' : '' }}
+                  href="{{ route('com.blogs.index') }}" id="wellnessDropdown" role="button" data-bs-toggle="dropdown"
                   data-bs-display="static" aria-expanded="false" data-bs-auto-close="outside">
                   Wellness Hub
                 </a>
@@ -147,6 +149,17 @@
 <style>
   .no-caret::after { display: none !important; }
   #userMenu:hover, #guestMenu:hover { background-color: var(--primary-color); color: white; }
+
+  /* Show dropdown on hover for desktop */
+  @media (min-width: 992px) {
+    .nav-item.dropdown:hover .dropdown-menu {
+      display: block;
+      margin-top: 0;
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+  }
 </style>
 
 <script>
@@ -195,6 +208,12 @@
               menu.classList.add('show');
               this.classList.add('show');
             }
+          }
+        } else {
+          // On desktop, navigate to the link if it has a valid href
+          const href = this.getAttribute('href');
+          if (href && href !== '#' && href !== 'javascript:void(0)') {
+            window.location.href = href;
           }
         }
       });

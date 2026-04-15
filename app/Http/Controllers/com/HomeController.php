@@ -42,7 +42,7 @@ class HomeController extends Controller
     //     return view('site.com.about', compact('settings', 'contents', 'teams'));
     // }
 
-    public function team()
+    public function team(Request $request)
     {
         $settings = SiteSetting::all()->pluck('value', 'key');
         $contents = PageContent::where('page', 'team')
@@ -52,9 +52,68 @@ class HomeController extends Controller
                 return $section->pluck('value', 'key');
             });
 
-        $teams = \App\Models\Team::with('services')->where('is_active', true)->orderBy('sort_order')->get();
+        $query = \App\Models\Team::with('services')->where('is_active', true);
 
-        return view('site.com.team', compact('settings', 'contents', 'teams'));
+        // Filter by Concern (Specialization/Specialties)
+        if ($request->filled('concern')) {
+            $query->where(function($q) use ($request) {
+                $q->where('specialization', 'like', '%' . $request->concern . '%')
+                  ->orWhere('specialties', 'like', '%' . $request->concern . '%');
+            });
+        }
+
+        // Filter by Language
+        if ($request->filled('language')) {
+            $query->where('languages', 'like', '%' . $request->language . '%');
+        }
+
+        // Filter by Mode
+        if ($request->filled('mode')) {
+            $query->where('mode', 'like', '%' . $request->mode . '%');
+        }
+
+        $allTeams = \App\Models\Team::where('is_active', true)->get();
+        
+        // Extract unique languages
+        $languages = $allTeams->pluck('languages')
+            ->flatMap(function($item) {
+                return explode(',', $item);
+            })
+            ->map(fn($s) => trim($s))
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values();
+
+        // Extract unique modes
+        $modes = $allTeams->pluck('mode')
+            ->flatMap(function($item) {
+                return explode(',', $item);
+            })
+            ->map(fn($s) => trim($s))
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values();
+
+        // Extract unique concerns
+        $concerns = $allTeams->flatMap(function($member) {
+            $specs = $member->specialties ? explode(',', $member->specialties) : ($member->specialization ? explode(',', $member->specialization) : []);
+            return $specs;
+        })
+        ->map(fn($s) => trim($s))
+        ->filter()
+        ->unique()
+        ->sort()
+        ->values();
+
+        $teams = $query->orderBy('sort_order')->get();
+
+        if ($request->ajax()) {
+            return view('site.com.partials._team_list', compact('teams'))->render();
+        }
+
+        return view('site.com.team', compact('settings', 'contents', 'teams', 'languages', 'modes', 'concerns'));
     }
 
     public function teamSingle($id)

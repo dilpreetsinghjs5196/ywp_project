@@ -21,9 +21,9 @@
         </div>
       </div>
       <div class="social-box">
-        <a href="#" class="fs-5"><i class="bi bi-facebook text-white"></i></a>
-        <a href="#" class="fs-5"><i class="bi bi-twitter-x text-white"></i></a>
-        <a href="#" class="fs-5"><i class="bi bi-linkedin text-white"></i></a>
+        <a href="https://www.facebook.com/yourewonderfulproject" class="fs-5" target="_blank"><i class="bi bi-facebook text-white"></i></a>
+        <a href="https://www.instagram.com/yourewonderfulproject/?hl=en" class="fs-5" target="_blank"><i class="bi bi-instagram text-white"></i></a>
+        <a href="https://www.linkedin.com/company/ywpindia/" class="fs-5" target="_blank"><i class="bi bi-linkedin text-white"></i></a>
       </div>
     </div>
   </div>

@@ -303,7 +303,7 @@
                 </button>
               </h2>
               <div id="faq-1" class="accordion-collapse collapse" data-bs-parent="#accordionFaqs">
-                <div class="accordion-body text-white-50">
+                <div class="accordion-body">
                   {{ $contents['faqs']['faq_1_answer'] ?? 'Standard individual therapy sessions are 50 minutes long. Couples sessions may range from 60 to 90 minutes.' }}
                 </div>
               </div>
@@ -316,7 +316,7 @@
                 </button>
               </h2>
               <div id="faq-2" class="accordion-collapse collapse" data-bs-parent="#accordionFaqs">
-                <div class="accordion-body text-white-50">
+                <div class="accordion-body">
                   {{ $contents['faqs']['faq_2_answer'] ?? 'We provide both online (via video call) and in-person sessions depending on your location and preference.' }}
                 </div>
               </div>
@@ -329,7 +329,7 @@
                 </button>
               </h2>
               <div id="faq-3" class="accordion-collapse collapse" data-bs-parent="#accordionFaqs">
-                <div class="accordion-body text-white-50">
+                <div class="accordion-body">
                   {{ $contents['faqs']['faq_3_answer'] ?? 'Payments can be made securely through our website at the time of booking using various payment modes like UPI, Credit/Debit cards, etc.' }}
                 </div>
               </div>

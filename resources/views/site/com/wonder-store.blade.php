@@ -110,32 +110,36 @@
                 // Category filter
                 $(document).on('click', '.category-link', function (e) {
                     e.preventDefault();
-                    const url = new URL($(this).attr('href'));
-                    const category = url.searchParams.get('category');
+                    const href = $(this).attr('href');
+                    const url = new URL(href, window.location.origin);
+                    const category = url.searchParams.get('category') || ''; // Default to empty string for 'All Products'
 
                     // Update active state
                     categoryLinks.removeClass('bg-primary-color text-white').addClass('text-secondary');
                     $(this).addClass('bg-primary-color text-white').removeClass('text-secondary');
 
-                    // Update hidden input if exists or use URL
-                    fetchProducts(category);
-
-                    // Update browser URL without reload
+                    // Update browser URL without reload FIRST
                     window.history.pushState({}, '', url);
+
+                    // Fetch products with the explicit category
+                    fetchProducts(category);
                 });
 
                 // Handle pagination clicks
                 $(document).on('click', '.pagination a', function (e) {
                     e.preventDefault();
                     const url = $(this).attr('href');
-                    fetchProducts(null, url);
                     window.history.pushState({}, '', url);
+                    fetchProducts(null, url);
                 });
 
                 function fetchProducts(category = null, customUrl = null) {
                     const search = searchInput.val();
-                    const currentUrl = new URL(window.location.href);
-                    const activeCategory = category || currentUrl.searchParams.get('category') || '';
+                    const currentUrl = new URL(customUrl || window.location.href);
+                    
+                    // If category is null (e.g. from pagination), try to get it from the URL
+                    // Otherwise use the explicitly provided category (which could be '')
+                    const activeCategory = (category !== null) ? category : (currentUrl.searchParams.get('category') || '');
 
                     const url = customUrl || "{{ route('com.store') }}";
 
@@ -263,6 +267,25 @@
             background-color: #033a66 !important;
             color: #ffffff !important;
             opacity: 1 !important;
+        }
+
+        .category-section h2 {
+            color: #044A80;
+            text-transform: capitalize;
+            letter-spacing: 0.5px;
+            font-size: 2rem;
+        }
+
+        .category-section h2 span {
+            transition: width 0.3s ease;
+        }
+
+        .category-section:hover h2 span {
+            width: 80% !important;
+        }
+
+        .category-section {
+            scroll-margin-top: 120px;
         }
 
         .transition-all {

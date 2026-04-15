@@ -15,54 +15,71 @@
     </div>
 </div>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
-    @forelse($products as $product)
-        <div class="col" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden product-card scale-hover">
-                <div class="position-relative overflow-hidden" style="height: 250px;">
-                    <img src="{{ asset('storage/' . $product->product_image) }}"
-                        class="w-100 h-100 object-fit-cover transition-all" alt="Product">
-                    <div class="position-absolute top-0 end-0 m-3">
-                        <span class="badge bg-white text-primary-color rounded-pill px-3 py-2 shadow-sm fw-bold">
-                            {{ $product->category->category_name }}
-                        </span>
-                    </div>
-                    <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-3 opacity-0 transition-all">
-                        @if(isset($cart[$product->id]))
-                            <a href="{{ route('com.cart') }}" class="btn btn-success w-100 rounded-pill shadow">
-                                <i class="bi bi-cart-check me-2"></i> In Cart
-                            </a>
-                        @else
-                            <button class="btn btn-primary-solid w-100 rounded-pill shadow add-to-cart-btn"
-                                data-id="{{ $product->id }}">
-                                <i class="bi bi-cart-plus me-2"></i> Add to Cart
-                            </button>
-                        @endif
+@php
+    $items = $products instanceof \Illuminate\Pagination\LengthAwarePaginator ? $products->getCollection() : $products;
+    $groupedProducts = $items->groupBy(function ($item) {
+        return $item->category->category_name;
+    });
+@endphp
+
+@forelse($groupedProducts as $categoryName => $categoryItems)
+    <div class="category-section mb-5" data-aos="fade-up">
+        <h2 class="font-1 fw-bold mb-4 position-relative d-inline-block">
+            {{ $categoryName }}
+            <span class="position-absolute start-0 bottom-0 w-50 bg-primary-color" style="height: 3px; margin-bottom: -5px;"></span>
+        </h2>
+        
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+            @foreach($categoryItems as $product)
+                <div class="col" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden product-card scale-hover">
+                        <div class="position-relative overflow-hidden" style="height: 250px;">
+                            <img src="{{ asset('storage/' . $product->product_image) }}"
+                                class="w-100 h-100 object-fit-cover transition-all" alt="Product">
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge bg-white text-primary-color rounded-pill px-3 py-2 shadow-sm fw-bold">
+                                    {{ $product->category->category_name }}
+                                </span>
+                            </div>
+                            <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-3 opacity-0 transition-all">
+                                @if(isset($cart[$product->id]))
+                                    <a href="{{ route('com.cart') }}" class="btn btn-success w-100 rounded-pill shadow">
+                                        <i class="bi bi-cart-check me-2"></i> In Cart
+                                    </a>
+                                @else
+                                    <button class="btn btn-primary-solid w-100 rounded-pill shadow add-to-cart-btn"
+                                        data-id="{{ $product->id }}">
+                                        <i class="bi bi-cart-plus me-2"></i> Add to Cart
+                                    </button>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="card-body p-4 text-center">
+                            <h5 class="font-1 fw-bold mb-2">{{ $product->category->category_name }} Item</h5>
+                            <p class="text-muted small mb-3 text-truncate-2">
+                                {{ $product->product_description ?? 'High-quality wellness product designed to support your journey.' }}
+                            </p>
+                            <div class="fs-4 fw-bold text-primary-color font-1">
+                                Rs.{{ number_format($product->product_price, 2) }}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="card-body p-4 text-center">
-                    <h5 class="font-1 fw-bold mb-2">{{ $product->category->category_name }} Item</h5>
-                    <p class="text-muted small mb-3 text-truncate-2">
-                        {{ $product->product_description ?? 'High-quality wellness product designed to support your journey.' }}
-                    </p>
-                    <div class="fs-4 fw-bold text-primary-color font-1">
-                        Rs.{{ number_format($product->product_price, 2) }}
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
-    @empty
-        <div class="col-12 py-5 text-center">
-            <div class="display-1 text-muted opacity-25 mb-4">
-                <i class="bi bi-shop"></i>
-            </div>
-            <h3 class="font-1 fw-bold">No products found</h3>
-            <p class="text-muted">We couldn't find any products matching your current filters.</p>
-            <a href="{{ route('com.store') }}" class="btn btn-primary-solid rounded-pill px-5 mt-3">View All
-                Products</a>
+    </div>
+@empty
+    <div class="col-12 py-5 text-center">
+        <div class="display-1 text-muted opacity-25 mb-4">
+            <i class="bi bi-shop"></i>
         </div>
-    @endforelse
-</div>
+        <h3 class="font-1 fw-bold">No products found</h3>
+        <p class="text-muted">We couldn't find any products matching your current filters.</p>
+        <a href="{{ route('com.store') }}" class="btn btn-primary-solid rounded-pill px-5 mt-3">View All
+            Products</a>
+    </div>
+@endforelse
+
 
 <!-- Pagination -->
 @if($products->hasPages())

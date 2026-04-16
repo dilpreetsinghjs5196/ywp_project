@@ -90,39 +90,33 @@
             {{ $contents['about_us']['description'] ?? 'Every small step toward better mental health is a significant achievement in our lives.' }}
           </p>
 
-          <div class="row d-flex flex-column flex-md-row my-4 justify-content-center justify-content-xl-start gap-md-5">
-            <div class="col-auto d-flex justify-content-start">
-              <ul class="list-unstyled font-1 mb-0">
-                <li class="d-flex align-items-start fw-bolder mb-2">
-                  <div class="d-flex align-items-center" style="height: 1.7rem;">
-                    <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
-                  </div>
-                  <span class="fw-bolder mb-0" style="font-size: 1.2rem; line-height: 1.4;">{{ $contents['about_us']['list_item_1'] ?? 'Free Consultation' }}</span>
-                </li>
-                <li class="d-flex align-items-start fw-bolder mb-2">
-                  <div class="d-flex align-items-center" style="height: 1.7rem;">
-                    <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
-                  </div>
-                  <span class="fw-bolder mb-0" style="font-size: 1.2rem; line-height: 1.4;">{{ $contents['about_us']['list_item_2'] ?? 'Emergency Service' }}</span>
-                </li>
-              </ul>
-            </div>
-            <div class="col-auto d-flex justify-content-start">
-              <ul class="list-unstyled font-1 mb-0">
-                <li class="d-flex align-items-start fw-bolder mb-2">
-                  <div class="d-flex align-items-center" style="height: 1.7rem;">
-                    <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
-                  </div>
-                  <span class="fw-bolder mb-0" style="font-size: 1.2rem; line-height: 1.4;">{{ $contents['about_us']['list_item_3'] ?? 'Mental Satisfaction' }}</span>
-                </li>
-                <li class="d-flex align-items-start fw-bolder mb-2">
-                  <div class="d-flex align-items-center" style="height: 1.7rem;">
-                    <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
-                  </div>
-                  <span class="fw-bolder mb-0" style="font-size: 1.2rem; line-height: 1.4;">{{ $contents['about_us']['list_item_4'] ?? 'Psychologists Services' }}</span>
-                </li>
-              </ul>
-            </div>
+          <div class="d-flex justify-content-center justify-content-xl-start my-4">
+            <ul class="list-unstyled font-1 mb-0 row row-cols-2 row-cols-md-2 g-3 g-md-4 text-start w-100" style="max-width: 500px;">
+              <li class="col d-flex align-items-start fw-bolder">
+                <div class="d-flex align-items-center" style="height: 1.7rem;">
+                  <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
+                </div>
+                <span class="fw-bolder mb-0" style="font-size: 1.1rem; line-height: 1.4;">{{ $contents['about_us']['list_item_1'] ?? 'Free Consultation' }}</span>
+              </li>
+              <li class="col d-flex align-items-start fw-bolder">
+                <div class="d-flex align-items-center" style="height: 1.7rem;">
+                  <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
+                </div>
+                <span class="fw-bolder mb-0" style="font-size: 1.1rem; line-height: 1.4;">{{ $contents['about_us']['list_item_3'] ?? 'Mental Satisfaction' }}</span>
+              </li>
+              <li class="col d-flex align-items-start fw-bolder">
+                <div class="d-flex align-items-center" style="height: 1.7rem;">
+                  <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
+                </div>
+                <span class="fw-bolder mb-0" style="font-size: 1.1rem; line-height: 1.4;">{{ $contents['about_us']['list_item_2'] ?? 'Emergency Service' }}</span>
+              </li>
+              <li class="col d-flex align-items-start fw-bolder">
+                <div class="d-flex align-items-center" style="height: 1.7rem;">
+                  <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
+                </div>
+                <span class="fw-bolder mb-0" style="font-size: 1.1rem; line-height: 1.4;">{{ $contents['about_us']['list_item_4'] ?? 'Psychologists Services' }}</span>
+              </li>
+            </ul>
           </div>
 
           <p class="fst-italic fw-bold mb-4" style="font-size: large;">

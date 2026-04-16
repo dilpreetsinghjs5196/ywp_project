@@ -63,14 +63,14 @@
         <div class="b-container">
             <div class="row align-items-center g-5">
                 <!-- Text Content -->
-                <div class="col-lg-7" data-aos="fade-right" data-aos-duration="1200" data-aos-delay="200">
-                    <h1 class="display-md-4 lh-sm font-1 my-4" style="font-weight: 900 !important;">
+                <div class="col-lg-7 text-center text-lg-start d-flex flex-column align-items-center align-items-lg-start" data-aos="fade-right" data-aos-duration="1200" data-aos-delay="200">
+                    <h1 class="display-3 display-md-4 lh-sm font-1 my-4" style="font-weight: 900 !important; font-size: calc(1.5rem + 3.3vw);">
                         {!! $heroTitle !!}
                     </h1>
                     <p class="fs-5 my-4">
                         {{ $heroDesc }}
                     </p>
-                    <div class="d-flex flex-wrap gap-4">
+                    <div class="d-flex flex-wrap gap-4 justify-content-center justify-content-lg-start">
                         <a href="{{ route('com.contact') }}" class="btn btn-modify px-5 py-3 fs-5">
                             Get In Touch
                         </a>
@@ -82,10 +82,9 @@
                 </div>
 
                 <!-- Circular Image -->
-                <div class="col-lg-5 text-center" data-aos="zoom-in" data-aos-duration="1200" data-aos-delay="400">
-                    <div class="position-relative d-inline-block">
-                        <div class="rounded-circle overflow-hidden shadow-lg border border-5 border-white"
-                            style="width: 450px; height: 450px;">
+                <div class="col-lg-5 text-center mt-5 mt-lg-0" data-aos="zoom-in" data-aos-duration="1200" data-aos-delay="400">
+                    <div class="position-relative d-inline-block w-100" style="max-width: 450px;">
+                        <div class="rounded-circle overflow-hidden shadow-lg border border-5 border-white ratio ratio-1x1 mx-auto">
                             <img src="{{ $heroImageUrl }}" alt="Corporate Well Being" class="w-100 h-100 object-fit-cover">
                         </div>
                     </div>
@@ -444,26 +443,34 @@
                     <p class="mb-4" style="font-size: large;">
                         {{ $contents['appointment']['description'] ?? 'Through consistent care and compassionate guidance...' }}
                     </p>
-                    <ul class="list-unstyled font-1 text-center text-xl-start">
-                        <li class="d-flex flex-row justify-content-center justify-content-xl-start mb-3">
-                            <i class="bi bi-check-circle-fill text-primary-color fs-4 mb-2 mb-xl-0 me-2"></i>
-                            <h5 class="fw-bolder py-1">
-                                {{ $contents['appointment']['list_item_1'] ?? 'Compassionate & Experienced Professionals' }}
-                            </h5>
-                        </li>
-                        <li class="d-flex flex-row justify-content-center justify-content-xl-start mb-3">
-                            <i class="bi bi-check-circle-fill text-primary-color fs-4 mb-2 mb-xl-0 me-2"></i>
-                            <h5 class="fw-bolder py-1">
-                                {{ $contents['appointment']['list_item_2'] ?? 'Holistic Approach To Well-Being' }}
-                            </h5>
-                        </li>
-                        <li class="d-flex flex-row justify-content-center justify-content-xl-start mb-3">
-                            <i class="bi bi-check-circle-fill text-primary-color fs-4 mb-2 mb-xl-0 me-2"></i>
-                            <h5 class="fw-bolder py-1">
-                                {{ $contents['appointment']['list_item_3'] ?? 'Safe & Supportive Environment' }}
-                            </h5>
-                        </li>
-                    </ul>
+                    <div class="d-flex justify-content-center justify-content-xl-start">
+                        <ul class="list-unstyled font-1 text-start d-inline-block text-xl-start mb-4">
+                            <li class="d-flex align-items-start mb-3">
+                                <div class="d-flex align-items-center" style="height: 1.75rem;">
+                                    <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
+                                </div>
+                                <span class="fw-bolder mb-0" style="font-size: 1.25rem; line-height: 1.4;">
+                                    {{ $contents['appointment']['list_item_1'] ?? 'Compassionate & Experienced Professionals' }}
+                                </span>
+                            </li>
+                            <li class="d-flex align-items-start mb-3">
+                                <div class="d-flex align-items-center" style="height: 1.75rem;">
+                                    <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
+                                </div>
+                                <span class="fw-bolder mb-0" style="font-size: 1.25rem; line-height: 1.4;">
+                                    {{ $contents['appointment']['list_item_2'] ?? 'Holistic Approach To Well-Being' }}
+                                </span>
+                            </li>
+                            <li class="d-flex align-items-start mb-3">
+                                <div class="d-flex align-items-center" style="height: 1.75rem;">
+                                    <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
+                                </div>
+                                <span class="fw-bolder mb-0" style="font-size: 1.25rem; line-height: 1.4;">
+                                    {{ $contents['appointment']['list_item_3'] ?? 'Safe & Supportive Environment' }}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
                     <a href="{{ route('com.home') }}" class="btn btn-primary-solid mb-5">Make An Appointment</a>
                 </div>
 

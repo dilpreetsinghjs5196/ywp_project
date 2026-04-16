@@ -90,28 +90,36 @@
             {{ $contents['about_us']['description'] ?? 'Every small step toward better mental health is a significant achievement in our lives.' }}
           </p>
 
-          <div class="row d-flex flex-column flex-md-row my-4">
-            <div class="col d-flex justify-content-center justify-content-lg-start">
-              <ul class="list-unstyled font-1">
+          <div class="row d-flex flex-column flex-md-row my-4 justify-content-center justify-content-xl-start gap-md-5">
+            <div class="col-auto d-flex justify-content-start">
+              <ul class="list-unstyled font-1 mb-0">
                 <li class="d-flex align-items-start fw-bolder mb-2">
-                  <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2"></i>
-                  <h5 class="fw-bolder py-1">{{ $contents['about_us']['list_item_1'] ?? 'Free Consultation' }}</h5>
+                  <div class="d-flex align-items-center" style="height: 1.7rem;">
+                    <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
+                  </div>
+                  <span class="fw-bolder mb-0" style="font-size: 1.2rem; line-height: 1.4;">{{ $contents['about_us']['list_item_1'] ?? 'Free Consultation' }}</span>
                 </li>
                 <li class="d-flex align-items-start fw-bolder mb-2">
-                  <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2"></i>
-                  <h5 class="fw-bolder py-1">{{ $contents['about_us']['list_item_2'] ?? 'Emergency Service' }}</h5>
+                  <div class="d-flex align-items-center" style="height: 1.7rem;">
+                    <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
+                  </div>
+                  <span class="fw-bolder mb-0" style="font-size: 1.2rem; line-height: 1.4;">{{ $contents['about_us']['list_item_2'] ?? 'Emergency Service' }}</span>
                 </li>
               </ul>
             </div>
-            <div class="col d-flex justify-content-center justify-content-lg-start">
-              <ul class="list-unstyled font-1">
+            <div class="col-auto d-flex justify-content-start">
+              <ul class="list-unstyled font-1 mb-0">
                 <li class="d-flex align-items-start fw-bolder mb-2">
-                  <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2"></i>
-                  <h5 class="fw-bolder py-1">{{ $contents['about_us']['list_item_3'] ?? 'Mental Satisfaction' }}</h5>
+                  <div class="d-flex align-items-center" style="height: 1.7rem;">
+                    <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
+                  </div>
+                  <span class="fw-bolder mb-0" style="font-size: 1.2rem; line-height: 1.4;">{{ $contents['about_us']['list_item_3'] ?? 'Mental Satisfaction' }}</span>
                 </li>
                 <li class="d-flex align-items-start fw-bolder mb-2">
-                  <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2"></i>
-                  <h5 class="fw-bolder py-1">{{ $contents['about_us']['list_item_4'] ?? 'Psychologists Services' }}</h5>
+                  <div class="d-flex align-items-center" style="height: 1.7rem;">
+                    <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
+                  </div>
+                  <span class="fw-bolder mb-0" style="font-size: 1.2rem; line-height: 1.4;">{{ $contents['about_us']['list_item_4'] ?? 'Psychologists Services' }}</span>
                 </li>
               </ul>
             </div>
@@ -150,25 +158,34 @@
           <p class="mb-4" style="font-size: large;">
             {{ $contents['appointment']['description'] ?? 'Through consistent care and compassionate guidance...' }}
           </p>
-          <ul class="list-unstyled font-1 text-center text-xl-start">
-            <li class="d-flex flex-row justify-content-center justify-content-xl-start mb-3">
-              <i class="bi bi-check-circle-fill text-primary-color fs-4 mb-2 mb-xl-0 me-2"></i>
-              <h5 class="fw-bolder py-1">
-                {{ $contents['appointment']['list_item_1'] ?? 'Compassionate & Experienced Professionals' }}
-              </h5>
-            </li>
-            <li class="d-flex flex-row justify-content-center justify-content-xl-start mb-3">
-              <i class="bi bi-check-circle-fill text-primary-color fs-4 mb-2 mb-xl-0 me-2"></i>
-              <h5 class="fw-bolder py-1">
-                {{ $contents['appointment']['list_item_2'] ?? 'Holistic Approach To Well-Being' }}
-              </h5>
-            </li>
-            <li class="d-flex flex-row justify-content-center justify-content-xl-start mb-3">
-              <i class="bi bi-check-circle-fill text-primary-color fs-4 mb-2 mb-xl-0 me-2"></i>
-              <h5 class="fw-bolder py-1">{{ $contents['appointment']['list_item_3'] ?? 'Safe & Supportive Environment' }}
-              </h5>
-            </li>
-          </ul>
+          <div class="d-flex justify-content-center justify-content-xl-start">
+            <ul class="list-unstyled font-1 text-start d-inline-block text-xl-start mb-4">
+              <li class="d-flex align-items-start mb-3">
+                <div class="d-flex align-items-center" style="height: 1.75rem;">
+                  <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
+                </div>
+                <span class="fw-bolder mb-0" style="font-size: 1.25rem; line-height: 1.4;">
+                  {{ $contents['appointment']['list_item_1'] ?? 'Compassionate & Experienced Professionals' }}
+                </span>
+              </li>
+              <li class="d-flex align-items-start mb-3">
+                <div class="d-flex align-items-center" style="height: 1.75rem;">
+                  <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
+                </div>
+                <span class="fw-bolder mb-0" style="font-size: 1.25rem; line-height: 1.4;">
+                  {{ $contents['appointment']['list_item_2'] ?? 'Holistic Approach To Well-Being' }}
+                </span>
+              </li>
+              <li class="d-flex align-items-start mb-3">
+                <div class="d-flex align-items-center" style="height: 1.75rem;">
+                  <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
+                </div>
+                <span class="fw-bolder mb-0" style="font-size: 1.25rem; line-height: 1.4;">
+                  {{ $contents['appointment']['list_item_3'] ?? 'Safe & Supportive Environment' }}
+                </span>
+              </li>
+            </ul>
+          </div>
           <a href="{{ route('com.home') }}" class="btn btn-primary-solid mb-5">Make An Appointment</a>
         </div>
 

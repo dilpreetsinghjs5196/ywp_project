@@ -21,8 +21,8 @@
     <div class="b-container px-3 px-sm-4 px-md-0">
       <div class="row justify-content-center text-white">
         <!-- Centered Content -->
-        <div class="col-12 col-lg-10 col-xl-8 text-center d-flex flex-column align-items-center"
-          data-aos="fade-up" data-aos-easing="linear" data-aos-delay="500" data-aos-duration="1000">
+        <div class="col-12 col-lg-10 col-xl-8 text-center d-flex flex-column align-items-center" data-aos="fade-up"
+          data-aos-easing="linear" data-aos-delay="500" data-aos-duration="1000">
           <h6 class="text-primary-color fw-semibold mb-3 tracking-widest text-uppercase">Find Balance, Embrace Life</h6>
           <h1 class="display-3 lh-sm font-1 mb-4" style="font-weight: 900;">
             {!! str_replace('Inner', '<span class="text-primary-color">Inner</span>', $contents['hero']['main_title'] ?? 'Caring for Your Inner Peace') !!}
@@ -32,7 +32,8 @@
             {{ $contents['hero']['subtitle'] ?? 'Discover clarity, confidence, and emotional wellness through guided support.' }}
           </p>
           <div class="d-flex gap-3 align-items-center mt-4">
-            <a href="{{ route('com.team') }}" role="button" class="btn btn-primary-solid px-5 py-3 shadow-lg" target="_blank">
+            <a href="{{ route('com.team') }}" role="button" class="btn btn-primary-solid px-5 py-3 shadow-lg"
+              target="_blank">
               Start A Checkup Now
             </a>
           </div>
@@ -91,30 +92,35 @@
           </p>
 
           <div class="d-flex justify-content-center justify-content-xl-start my-4">
-            <ul class="list-unstyled font-1 mb-0 row row-cols-2 row-cols-md-2 g-3 g-md-4 text-start w-100" style="max-width: 500px;">
+            <ul class="list-unstyled font-1 mb-0 row row-cols-2 row-cols-md-2 g-3 g-md-4 text-start w-100"
+              style="max-width: 500px;">
               <li class="col d-flex align-items-start fw-bolder">
                 <div class="d-flex align-items-center" style="height: 1.7rem;">
                   <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
                 </div>
-                <span class="fw-bolder mb-0" style="font-size: 1.1rem; line-height: 1.4;">{{ $contents['about_us']['list_item_1'] ?? 'Free Consultation' }}</span>
+                <span class="fw-bolder mb-0"
+                  style="font-size: 1.1rem; line-height: 1.4;">{{ $contents['about_us']['list_item_1'] ?? 'Free Consultation' }}</span>
               </li>
               <li class="col d-flex align-items-start fw-bolder">
                 <div class="d-flex align-items-center" style="height: 1.7rem;">
                   <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
                 </div>
-                <span class="fw-bolder mb-0" style="font-size: 1.1rem; line-height: 1.4;">{{ $contents['about_us']['list_item_3'] ?? 'Mental Satisfaction' }}</span>
+                <span class="fw-bolder mb-0"
+                  style="font-size: 1.1rem; line-height: 1.4;">{{ $contents['about_us']['list_item_3'] ?? 'Mental Satisfaction' }}</span>
               </li>
               <li class="col d-flex align-items-start fw-bolder">
                 <div class="d-flex align-items-center" style="height: 1.7rem;">
                   <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
                 </div>
-                <span class="fw-bolder mb-0" style="font-size: 1.1rem; line-height: 1.4;">{{ $contents['about_us']['list_item_2'] ?? 'Emergency Service' }}</span>
+                <span class="fw-bolder mb-0"
+                  style="font-size: 1.1rem; line-height: 1.4;">{{ $contents['about_us']['list_item_2'] ?? 'Emergency Service' }}</span>
               </li>
               <li class="col d-flex align-items-start fw-bolder">
                 <div class="d-flex align-items-center" style="height: 1.7rem;">
                   <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
                 </div>
-                <span class="fw-bolder mb-0" style="font-size: 1.1rem; line-height: 1.4;">{{ $contents['about_us']['list_item_4'] ?? 'Psychologists Services' }}</span>
+                <span class="fw-bolder mb-0"
+                  style="font-size: 1.1rem; line-height: 1.4;">{{ $contents['about_us']['list_item_4'] ?? 'Psychologists Services' }}</span>
               </li>
             </ul>
           </div>
@@ -467,13 +473,13 @@
                   </div>
                   <p class="fw-bold">"{{ $item->feedback }}"</p>
                   <div class="d-flex align-items-center mt-auto pt-3">
-                    <img
+                    {{-- <img
                       src="{{ $item->client_image ? (Str::startsWith($item->client_image, 'image/') ? asset($item->client_image) : asset('storage/' . $item->client_image)) : asset('image/default-user.jpg') }}"
                       alt="{{ $item->client_name }}" class="rounded-circle me-3"
-                      style="width: 64px; height: 64px; object-fit: cover;">
+                      style="width: 64px; height: 64px; object-fit: cover;"> --}}
                     <div class="mt-2">
                       <h5 class="font-1 fw-bold text-primary-color mb-0">{{ $item->client_name }}</h5>
-                      <p class="text-muted-color mb-0">{{ $item->designation }}</p>
+                      {{-- <p class="text-muted-color mb-0">{{ $item->designation }}</p> --}}
                     </div>
                   </div>
                 </div>
@@ -606,17 +612,17 @@
                   </div>
 
                   <!-- <div class="d-flex align-items-center gap-3 justify-content-start" data-aos="fade-left"
-                      data-aos-easing="ease-out-cubic" data-aos-delay="250" data-aos-duration="1000">
-                      <div
-                        class="d-flex align-items-center justify-content-center rounded-circle border-white bg-secondary-color flex-shrink-0"
-                        style="width: 65px; height: 65px; border: 2px solid white;">
-                        <i class="bi bi-telephone-fill fs-2 text-white"></i>
-                      </div>
-                      <div class="ms-2 font-1 py-2">
-                        <p class="fw-bold text-primary-color mb-0">Call us anytime</p>
-                        <h5 class="fw-bold">{{ $contents['get_in_touch']['phone'] ?? '(555) 123-4567' }}</h5>
-                      </div>
-                    </div> -->
+                          data-aos-easing="ease-out-cubic" data-aos-delay="250" data-aos-duration="1000">
+                          <div
+                            class="d-flex align-items-center justify-content-center rounded-circle border-white bg-secondary-color flex-shrink-0"
+                            style="width: 65px; height: 65px; border: 2px solid white;">
+                            <i class="bi bi-telephone-fill fs-2 text-white"></i>
+                          </div>
+                          <div class="ms-2 font-1 py-2">
+                            <p class="fw-bold text-primary-color mb-0">Call us anytime</p>
+                            <h5 class="fw-bold">{{ $contents['get_in_touch']['phone'] ?? '(555) 123-4567' }}</h5>
+                          </div>
+                        </div> -->
                   <div class="d-flex align-items-center gap-3 justify-content-start mt-3" data-aos="fade-left"
                     data-aos-easing="ease-out-cubic" data-aos-delay="500" data-aos-duration="1000">
                     <div

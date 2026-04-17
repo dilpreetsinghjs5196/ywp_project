@@ -41,7 +41,7 @@
             $blackLogoUrl = Str::startsWith($blackLogo, 'image/') ? asset($blackLogo) : asset('storage/' . $blackLogo);
           @endphp
           <a href="{{ route('com.home') }}" class="navbar-brand">
-            <img src="{{ $blackLogoUrl }}" alt="Logo" width="160"></a>
+            <img src="{{ $blackLogoUrl }}" alt="Logo" style="width: auto;"></a>
         </div>
         <button class="navbar-toggler bg-primary-color border-0" type="button" data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">

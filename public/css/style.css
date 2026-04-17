@@ -272,7 +272,8 @@ img {
 } */
 
 .logo-box img {
-  max-height: 63px;
+  max-height: 110px;
+  object-fit: contain;
 }
 
 .navbar-toggler:focus {
@@ -969,7 +970,8 @@ img {
   }
 
   .logo-box img {
-    max-height: 86px;
+    max-height: 100px;
+    object-fit: contain;
   }
 
   .logo-drawer img {

@@ -51,10 +51,10 @@
   /* body */
   --accent-color: #0a5fa0;
   /* lighter blue */
-  --accent-color-2: #ffe08a;
-  /* soft yellow */
+  --accent-color-2: #ffbf00;
+  /* Changed from soft yellow to Branding Secondary Yellow */
   --accent-color-3: #fff4cc;
-  /* very light yellow */
+  /* very light yellow (branding-aligned wash) */
 }
 
 
@@ -97,20 +97,19 @@ body {
 }
 
 .bg-gradient-secondary {
-  background: linear-gradient(45deg, #8BACEE, #F7D3DA);
-  /* background: var(--gray-light); */
+  background: linear-gradient(45deg, var(--primary-color), var(--accent-color-3));
 }
 
 .bg-half-gradient {
-  background: linear-gradient(to bottom, white 0%, white 60%, #F8DAE0 60%, #F7D9DF 100%);
+  background: linear-gradient(to bottom, white 0%, white 60%, var(--accent-color-3) 60%, var(--accent-color-3) 100%);
 }
 
 .bg-half-gradient-about {
-  background: linear-gradient(to bottom, #ededed 0%, #ededed 60%, #F8DAE0 60%, #F7D9DF 100%);
+  background: linear-gradient(to bottom, var(--gray-light) 0%, var(--gray-light) 60%, var(--accent-color-3) 60%, var(--accent-color-3) 100%);
 }
 
 .bg-grey-gradient {
-  background: linear-gradient(to bottom, white 0%, white 60%, #b1aeaf54 60%, #f7d9df8f 100%);
+  background: linear-gradient(to bottom, white 0%, white 60%, var(--gray-light) 60%, var(--gray-light) 100%);
 }
 
 .text-primary-color {
@@ -587,7 +586,7 @@ img {
 }
 
 .bg-overlay-secondary {
-  background: linear-gradient(45deg, rgba(59, 103, 191, 0.9), rgba(247, 211, 218, 0.8));
+  background: linear-gradient(45deg, rgba(4, 74, 128, 0.9), rgba(255, 191, 0, 0.3));
   position: absolute;
   width: 100%;
   height: 100%;
@@ -747,7 +746,7 @@ img {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, rgba(58, 95, 169, 0.9), rgba(244, 197, 206, 0.8));
+  background: linear-gradient(45deg, rgba(4, 74, 128, 0.9), rgba(3, 32, 76, 0.8));
   opacity: 0.9;
   z-index: 1;
   /* place in-front of content */
@@ -855,8 +854,8 @@ img {
 }
 
 .accordion .accordion-button:not(.collapsed) {
-  background-color: var(--accent-color-2);
-  /* Pink for expanded */
+  background-color: var(--secondary-color);
+  /* Branding Yellow for expanded */
   color: #000;
 }
 
@@ -896,7 +895,7 @@ img {
 }
 
 .error-code span:nth-child(2) {
-  background: linear-gradient(180deg, var(--primary-color), #FFC2B3);
+  background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
   color: white;
   padding: 20px 0;
   border-radius: 1.5rem;

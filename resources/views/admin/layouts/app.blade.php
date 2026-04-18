@@ -218,6 +218,12 @@
                             <i class="bi bi-house"></i> Home Page
                         </a>
                     </li>
+                    <li class="nav-item ps-3">
+                        <a class="nav-link {{ request()->routeIs('admin.home-hero-slides.*') ? 'active' : '' }}"
+                            href="{{ route('admin.home-hero-slides.index') }}">
+                            <i class="bi bi-images"></i> Hero Slides
+                        </a>
+                    </li>
                     <!-- <li class="nav-item">
                         <a class="nav-link"
                             href="">

@@ -6,42 +6,74 @@
 
   <!-- Hero Section -->
   @php
-    // Logic for background image path
-    $bgImagePath = $contents['hero']['hero_bg_image'] ?? 'image/Homehero.png';
-    $bgFullUrl = Str::startsWith($bgImagePath, 'image/') ? asset($bgImagePath) : asset('storage/' . $bgImagePath);
-
-    // Logic for foreground image path
-    $heroImagePath = $contents['hero']['hero_image'] ?? 'image/hero-img.png';
-    $heroFullUrl = Str::startsWith($heroImagePath, 'image/') ? asset($heroImagePath) : asset('storage/' . $heroImagePath);
-
-    $backgroundStyle = "background: url('$bgFullUrl');";
+    // If no slides, create a default one from database content or static values
+    if($heroSlides->isEmpty()) {
+        $defaultSlide = new \App\Models\HomeHeroSlide();
+        $defaultSlide->image = $contents['hero']['hero_bg_image'] ?? 'image/Homehero.png';
+        $defaultSlide->title = $contents['hero']['main_title'] ?? 'Caring for Your Inner Peace';
+        $defaultSlide->subtitle = $contents['hero']['subtitle'] ?? 'Discover clarity, confidence, and emotional wellness through guided support.';
+        $defaultSlide->button_text = 'Start A Checkup Now';
+        $defaultSlide->button_link = route('com.team');
+        $heroSlides = collect([$defaultSlide]);
+    }
   @endphp
-  <section class="section hero-section d-flex align-items-center py-5"
-    style="{{ $backgroundStyle }} background-size: cover; background-position: center; min-height: 80vh;">
-    <div class="b-container px-3 px-sm-4 px-md-0">
-      <div class="row justify-content-center text-white">
-        <!-- Centered Content -->
-        <div class="col-12 col-lg-10 col-xl-8 text-center d-flex flex-column align-items-center" data-aos="fade-up"
-          data-aos-easing="linear" data-aos-delay="500" data-aos-duration="1000">
-          <h6 class="text-primary-color fw-semibold mb-3 tracking-widest text-uppercase">Find Balance, Embrace Life</h6>
-          <h1 class="display-3 lh-sm font-1 mb-4" style="font-weight: 900;">
-            {!! str_replace('Inner', '<span class="text-primary-color">Inner</span>', $contents['hero']['main_title'] ?? 'Caring for Your Inner Peace') !!}
-          </h1>
-          <div class="bg-white opacity-75 my-4" style="height: 3px; width: 100px; border-radius: 2px;"></div>
-          <p class="fs-4 my-4 opacity-90 mx-auto" style="max-width: 700px;">
-            {{ $contents['hero']['subtitle'] ?? 'Discover clarity, confidence, and emotional wellness through guided support.' }}
-          </p>
-          <div class="d-flex gap-3 align-items-center mt-4">
-            <a href="{{ route('com.team') }}" role="button" class="btn btn-primary-solid px-5 py-3 shadow-lg"
-              target="_blank">
-              Start A Checkup Now
-            </a>
+
+  <section class="hero-carousel-wrapper">
+    <div class="swiper-container hero-slider" style="overflow: hidden;">
+      <div class="swiper-wrapper">
+        @foreach($heroSlides as $slide)
+          <div class="swiper-slide d-flex align-items-center py-5" 
+               style="background: url('{{ Str::startsWith($slide->image, 'image/') ? asset($slide->image) : asset('storage/' . $slide->image) }}'); background-size: cover; background-position: center; min-height: 80vh; position: relative;">
+            
+            <!-- Subtle Overlay for readability -->
+            <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.15);"></div>
+
+            <div class="b-container px-3 px-sm-4 px-md-0 w-100 position-relative z-1">
+              <div class="row justify-content-center text-white">
+                <div class="col-12 col-lg-10 col-xl-9 text-center d-flex flex-column align-items-center" data-aos="fade-up" data-aos-duration="1200">
+                  
+                  {{-- <h6 class="text-primary-color fw-bold mb-3 tracking-widest text-uppercase py-2 px-3 rounded-2 shadow-sm" style="background: rgba(255,255,255,0.9); font-size: 0.85rem;">
+                    {{ $contents['hero']['small_heading'] ?? 'Find Balance, Embrace Life' }}
+                  </h6> --}}
+
+                  @if($slide->title)
+                    <h1 class="display-2 lh-sm font-1 mb-4" style="font-weight: 850; text-shadow: 2px 2px 15px rgba(0,0,0,0.2);">
+                      {!! str_replace('Inner', '<span class="text-primary-color">Inner</span>', $slide->title) !!}
+                    </h1>
+                    <div class="bg-white opacity-75 my-3" style="height: 3px; width: 100px; border-radius: 2px;"></div>
+                  @endif
+
+                  @if($slide->subtitle)
+                    <p class="fs-4 my-4 opacity-100 mx-auto fw-medium" style="max-width: 800px; line-height: 1.4;">
+                      {{ $slide->subtitle }}
+                    </p>
+                  @endif
+
+                  @if($slide->button_text)
+                    <div class="d-flex gap-3 align-items-center mt-4">
+                      <a href="{{ $slide->button_link ?? '#' }}" role="button" class="btn btn-primary-solid px-5 py-3 shadow-lg scale-hover">
+                        {{ $slide->button_text }}
+                      </a>
+                    </div>
+                  @endif
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        @endforeach
       </div>
+
+      @if($heroSlides->count() > 1)
+        <!-- Pagination -->
+        <div class="swiper-pagination hero-pagination"></div>
+        <!-- Navigation -->
+        <div class="swiper-button-next hero-next text-white d-none d-md-flex"></div>
+        <div class="swiper-button-prev hero-prev text-white d-none d-md-flex"></div>
+      @endif
     </div>
   </section>
   <!-- #hero end -->
+
 
   <!-- About Section -->
   <section class=" section pb-5 my-5">
@@ -681,6 +713,24 @@
 @push('js')
   <script>
     $(document).ready(function () {
+      new Swiper('.hero-slider', {
+        slidesPerView: 1,
+        spaceBetween: 0,
+        loop: true,
+        autoplay: {
+          delay: 5000,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: '.hero-pagination',
+          clickable: true,
+        },
+        navigation: {
+          nextEl: '.hero-next',
+          prevEl: '.hero-prev',
+        },
+      });
+
       new Swiper('.services-slider', {
         slidesPerView: 1,
         spaceBetween: 30,

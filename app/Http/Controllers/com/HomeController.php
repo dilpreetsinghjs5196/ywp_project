@@ -23,8 +23,9 @@ class HomeController extends Controller
         $services = \App\Models\Service::where('is_active', true)->orderBy('sort_order')->get();
         $teams = \App\Models\Team::where('is_active', true)->orderBy('sort_order')->get();
         $testimonials = \App\Models\Testimonial::where('is_active', true)->orderBy('sort_order')->get();
+        $heroSlides = \App\Models\HomeHeroSlide::orderBy('order', 'asc')->get();
 
-        return view('site.com.home', compact('settings', 'contents', 'services', 'teams', 'testimonials'));
+        return view('site.com.home', compact('settings', 'contents', 'services', 'teams', 'testimonials', 'heroSlides'));
     }
 
     // public function about()

@@ -272,7 +272,7 @@ img {
 } */
 
 .logo-box img {
-  max-height: 130px;
+  max-height: 110px;
   object-fit: contain;
 }
 

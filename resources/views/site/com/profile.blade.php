@@ -66,6 +66,13 @@
                                     <span>Store Orders</span>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link rounded-pill px-4 py-2 d-flex align-items-center gap-3 fw-bold text-muted" 
+                                   href="#my-reviews" style="transition: all 0.3s ease;">
+                                    <i class="bi bi-chat-left-text fs-5"></i>
+                                    <span>My Reviews</span>
+                                </a>
+                            </li>
                             <li class="nav-item mt-3 pt-3 border-top">
                                 <a class="nav-link text-danger rounded-pill px-4 py-2 d-flex align-items-center gap-3 fw-bold" 
                                    href="{{ route('com.logout') }}">
@@ -296,10 +303,119 @@
                             </div>
                         @endif
                     </div>
+                    <!-- Section 4: My Reviews -->
+                    <div id="my-reviews" class="user-dashboard-section pt-4 d-none">
+                        <h4 class="font-1 fw-bold mb-4 d-flex align-items-center gap-3">
+                            <i class="bi bi-chat-left-text-fill text-primary"></i> My Submitted Reviews
+                        </h4>
+                        @if($reviews->count() > 0)
+                            <div class="row g-4">
+                                @foreach($reviews as $review)
+                                    <div class="col-12">
+                                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                                            <div class="card-body p-4">
+                                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                                    <div>
+                                                        <h6 class="mb-1 fw-bold text-dark">
+                                                            Review for {{ $review->team->name ?? 'Therapist' }}
+                                                        </h6>
+                                                        <div class="text-warning small">
+                                                            @for($i = 1; $i <= 5; $i++)
+                                                                <i class="bi bi-star{{ $i <= $review->rating ? '-fill' : '' }}"></i>
+                                                            @endfor
+                                                        </div>
+                                                    </div>
+                                                    <span class="badge rounded-pill {{ $review->status == 'approved' ? 'bg-success-subtle text-success border border-success' : 'bg-warning-subtle text-warning border border-warning' }} px-3 py-2 fw-bold small uppercase">
+                                                        {{ strtoupper($review->status) }}
+                                                    </span>
+                                                </div>
+                                                <p class="text-muted small mb-3 italic">"{{ $review->comment }}"</p>
+                                                <div class="d-flex justify-content-between align-items-center border-top pt-3">
+                                                    <span class="text-muted extra-small">
+                                                        <i class="bi bi-clock me-1"></i> Submitted on {{ $review->created_at->format('M d, Y') }}
+                                                    </span>
+                                                    <div class="d-flex gap-2">
+                                                        <button class="btn btn-sm btn-outline-primary rounded-pill px-3 edit-review-btn" 
+                                                                data-id="{{ $review->id }}" 
+                                                                data-rating="{{ $review->rating }}" 
+                                                                data-comment="{{ $review->comment }}"
+                                                                data-anonymous="{{ $review->is_anonymous ? '1' : '0' }}">
+                                                            <i class="bi bi-pencil-square me-1"></i> Edit
+                                                        </button>
+                                                        <form action="{{ route('com.review.delete', $review->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this review?')">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                                                                <i class="bi bi-trash me-1"></i> Delete
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white">
+                                <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-4 shadow-sm" style="width: 80px; height: 80px;">
+                                    <i class="bi bi-chat-left-dots display-5 text-muted"></i>
+                                </div>
+                                <h6 class="text-muted fw-bold">You haven't submitted any reviews yet.</h6>
+                                <p class="small text-muted">Your feedback helps others find the right support.</p>
+                            </div>
+                        @endif
+                    </div>
+
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Edit Review Modal -->
+    <div class="modal fade" id="editReviewModal" tabindex="-1" aria-labelledby="editReviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-5 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title font-1 fw-bold" id="editReviewModalLabel">Update Your Review</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="editReviewForm" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="mb-4 text-center">
+                            <label class="form-label fw-bold d-block mb-3">Rate Your Session</label>
+                            <div class="rating-stars d-flex justify-content-center gap-3">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <input type="radio" name="rating" value="{{ $i }}" id="edit-star{{ $i }}" class="d-none">
+                                    <label for="edit-star{{ $i }}" class="cursor-pointer text-warning fs-2 edit-rating-star-label transition-all" data-value="{{ $i }}">
+                                        <i class="bi bi-star"></i>
+                                    </label>
+                                @endfor
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <textarea name="comment" id="edit-comment" class="form-control rounded-4 border-0 bg-light px-4" style="height: 120px" required placeholder="Write your review here..."></textarea>
+                            <label for="edit-comment" class="ps-4">How was your experience?</label>
+                        </div>
+
+                        <div class="form-check form-switch d-flex align-items-center gap-3 mb-4 bg-light p-3 rounded-4 px-5">
+                            <input class="form-check-input ms-0" type="checkbox" name="is_anonymous" id="edit-is_anonymous" value="1" style="width: 3em; height: 1.5em; cursor: pointer;">
+                            <label class="form-check-label fw-semibold text-dark mb-0 fs-6 cursor-pointer" for="edit-is_anonymous">
+                                Keep my review anonymous
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary-solid btn-lg w-100 rounded-pill fw-bold shadow transition-hover py-3">
+                            Update Review
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <style>
         .profile-nav .nav-link:hover {
@@ -336,7 +452,6 @@
                         sections.forEach(section => {
                             if (section.getAttribute('id') === targetId) {
                                 section.classList.remove('d-none');
-                                // Animation/fade effect
                                 section.style.opacity = '0';
                                 setTimeout(() => {
                                     section.style.transition = 'opacity 0.4s ease';
@@ -347,7 +462,7 @@
                             }
                         });
 
-                        // 3. Optional: Scroll to top of content area on mobile
+                        // 3. Scroll to top on mobile
                         if (window.innerWidth < 992) {
                             window.scrollTo({
                                 top: document.querySelector('.col-lg-9').offsetTop - 100,
@@ -357,6 +472,65 @@
                     }
                 });
             });
+
+            // Handle Review Editing
+            const editModalElement = document.getElementById('editReviewModal');
+            if (editModalElement) {
+                const editModal = new bootstrap.Modal(editModalElement);
+                const editForm = document.getElementById('editReviewForm');
+                const editComment = document.getElementById('edit-comment');
+                const editAnonymous = document.getElementById('edit-is_anonymous');
+                const editStarLabels = document.querySelectorAll('.edit-rating-star-label');
+
+                document.querySelectorAll('.edit-review-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        const rating = parseInt(this.dataset.rating);
+                        const comment = this.dataset.comment;
+                        const anonymous = this.dataset.anonymous === '1';
+
+                        // Set form action
+                        editForm.action = `/review/${id}`;
+                        
+                        // Set fields
+                        editComment.value = comment;
+                        editAnonymous.checked = anonymous;
+                        
+                        // Set star rating
+                        const radio = document.getElementById(`edit-star${rating}`);
+                        if (radio) radio.checked = true;
+                        updateEditStars(rating);
+
+                        editModal.show();
+                    });
+                });
+
+                editStarLabels.forEach(label => {
+                    label.addEventListener('click', function() {
+                        const val = parseInt(this.dataset.value);
+                        updateEditStars(val);
+                    });
+                });
+
+                function updateEditStars(rating) {
+                    editStarLabels.forEach(label => {
+                        const val = parseInt(label.dataset.value);
+                        const icon = label.querySelector('i');
+                        if (val <= rating) {
+                            icon.className = 'bi bi-star-fill';
+                        } else {
+                            icon.className = 'bi bi-star';
+                        }
+                    });
+                }
+            }
+
+            // Handle URL Hash on Load
+            const hash = window.location.hash;
+            if (hash) {
+                const targetLink = document.querySelector(`.profile-nav .nav-link[href="${hash}"]`);
+                if (targetLink) targetLink.click();
+            }
         });
     </script>
 @endsection

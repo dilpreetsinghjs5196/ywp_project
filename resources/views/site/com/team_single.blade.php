@@ -214,13 +214,14 @@
         <div class="b-container">
             <div class="row g-5">
                 <!-- Display Reviews -->
-                <div class="col-lg-7" data-aos="fade-right">
-                    <h3 class="font-1 fw-bold mb-4 text-white">Patient Reviews</h3>
+                <div class="{{ auth()->check() ? 'col-lg-7' : 'col-lg-12' }}" data-aos="fade-right">
+                    <h3 class="font-1 fw-bold mb-4 text-white {{ auth()->check() ? '' : 'text-center' }}">Patient Reviews</h3>
                     @if($reviews->count() > 0)
-                        <div class="reviews-list">
+                        <div class="reviews-list {{ auth()->check() ? '' : 'd-flex flex-wrap gap-4 justify-content-center' }}">
                             @foreach($reviews as $review)
                                 <div
-                                    class="card border-0 shadow-lg rounded-4 p-4 mb-4 bg-white transition-hover position-relative overflow-hidden">
+                                    class="card border-0 shadow-lg rounded-4 p-4 mb-4 bg-white transition-hover position-relative overflow-hidden {{ auth()->check() ? '' : 'flex-grow-1' }}"
+                                    style="{{ auth()->check() ? '' : 'min-width: 300px; max-width: 450px;' }}">
 
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <div>
@@ -248,93 +249,100 @@
                             class="text-center py-5 bg-white bg-opacity-10 rounded-5 border border-white border-opacity-25 shadow-sm">
                             <i class="bi bi-chat-dots-fill fs-1 text-white opacity-50 mb-3 d-block"></i>
                             <p class="text-white mb-0 fs-5">No reviews yet. Be the first to share your experience!</p>
+                            {{-- @guest
+                                <div class="mt-4">
+                                    <a href="{{ route('login') }}" class="btn btn-outline-light rounded-pill px-4 fw-bold">Login to be the first</a>
+                                </div>
+                            @endguest --}}
                         </div>
                     @endif
                 </div>
 
-                <!-- Add Review Form -->
-                <div class="col-lg-5" data-aos="fade-left">
-                    <div class="card border-0 shadow-lg rounded-5 p-5 bg-white sticky-top" style="top: 120px; z-index: 1;">
-                        <div class="text-center mb-4">
-                            <i class="bi bi-pencil-square text-primary-color display-6 mb-2 d-block"></i>
-                            <h4 class="font-1 fw-bold mb-0">Share Your Experience</h4>
-                            <p class="small text-muted">Your feedback helps others find the right support.</p>
+                @auth
+                    <!-- Add Review Form -->
+                    <div class="col-lg-5" data-aos="fade-left">
+                        <div class="card border-0 shadow-lg rounded-5 p-5 bg-white sticky-top" style="top: 120px; z-index: 1;">
+                            <div class="text-center mb-4">
+                                <i class="bi bi-pencil-square text-primary-color display-6 mb-2 d-block"></i>
+                                <h4 class="font-1 fw-bold mb-0">Share Your Experience</h4>
+                                <p class="small text-muted">Your feedback helps others find the right support.</p>
+                            </div>
+
+                            @if(session('success'))
+                                <div class="alert alert-success alert-dismissible fade show rounded-4 mb-4" role="alert">
+                                    <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @endif
+
+                            <form action="{{ route('review.submit') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="team_id" value="{{ $team->id }}">
+
+                                <div class="mb-4 text-center">
+                                    <label class="form-label fw-bold d-block mb-3">Rate Your Session</label>
+                                    <div class="rating-stars d-flex justify-content-center gap-3">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <input type="radio" name="rating" value="{{ $i }}" id="star{{ $i }}" class="d-none" {{ $i == 5 ? 'checked' : '' }}>
+                                            <label for="star{{ $i }}"
+                                                class="cursor-pointer text-warning fs-2 rating-star-label transition-all"
+                                                data-value="{{ $i }}">
+                                                <i class="bi bi-star{{ $i <= 5 ? '-fill' : '' }}"></i>
+                                            </label>
+                                        @endfor
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-12 text-start">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" name="name" id="name"
+                                                class="form-control rounded-4 border-0 bg-light px-4" required
+                                                placeholder="Full Name" value="{{ auth()->user()->name }}">
+                                            <label for="name" class="ps-4">Full Name</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 text-start">
+                                        <div class="form-floating mb-3">
+                                            <input type="email" name="email" id="email"
+                                                class="form-control rounded-4 border-0 bg-light px-4" required
+                                                placeholder="Email Address" value="{{ auth()->user()->email }}" readonly>
+                                            <label for="email" class="ps-4">Email Address</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 text-start">
+                                        <div class="form-floating mb-3">
+                                            <textarea name="comment" id="comment"
+                                                class="form-control rounded-4 border-0 bg-light px-4" style="height: 120px"
+                                                required placeholder="Write your review here..."></textarea>
+                                            <label for="comment" class="ps-4">How was your experience?</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Anonymous Review Toggle -->
+                                    <div class="col-12">
+                                        <div
+                                            class="form-check form-switch d-flex align-items-center gap-3 mb-4 bg-light p-3 rounded-4 px-5">
+                                            <input class="form-check-input ms-0" type="checkbox" name="is_anonymous"
+                                                id="is_anonymous" value="1" style="width: 3em; height: 1.5em; cursor: pointer;">
+                                            <label class="form-check-label fw-semibold text-dark mb-0 fs-6 cursor-pointer"
+                                                for="is_anonymous">
+                                                Keep my review anonymous
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="submit"
+                                    class="btn btn-primary-solid btn-lg w-100 rounded-pill fw-bold shadow transition-hover py-3">
+                                    <i class="bi bi-send-fill me-2"></i> Submit Review
+                                </button>
+                            </form>
                         </div>
-
-                        @if(session('success'))
-                            <div class="alert alert-success alert-dismissible fade show rounded-4 mb-4" role="alert">
-                                <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        <form action="{{ route('review.submit') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="team_id" value="{{ $team->id }}">
-
-                            <div class="mb-4 text-center">
-                                <label class="form-label fw-bold d-block mb-3">Rate Your Session</label>
-                                <div class="rating-stars d-flex justify-content-center gap-3">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        <input type="radio" name="rating" value="{{ $i }}" id="star{{ $i }}" class="d-none" {{ $i == 5 ? 'checked' : '' }}>
-                                        <label for="star{{ $i }}"
-                                            class="cursor-pointer text-warning fs-2 rating-star-label transition-all"
-                                            data-value="{{ $i }}">
-                                            <i class="bi bi-star{{ $i <= 5 ? '-fill' : '' }}"></i>
-                                        </label>
-                                    @endfor
-                                </div>
-                            </div>
-
-                            <div class="row g-3">
-                                <div class="col-12">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" name="name" id="name"
-                                            class="form-control rounded-4 border-0 bg-light px-4" required
-                                            placeholder="Full Name">
-                                        <label for="name" class="ps-4">Full Name</label>
-                                    </div>
-                                </div>
-
-                                <div class="col-12">
-                                    <div class="form-floating mb-3">
-                                        <input type="email" name="email" id="email"
-                                            class="form-control rounded-4 border-0 bg-light px-4" required
-                                            placeholder="Email Address">
-                                        <label for="email" class="ps-4">Email Address</label>
-                                    </div>
-                                </div>
-
-                                <div class="col-12">
-                                    <div class="form-floating mb-3">
-                                        <textarea name="comment" id="comment"
-                                            class="form-control rounded-4 border-0 bg-light px-4" style="height: 120px"
-                                            required placeholder="Write your review here..."></textarea>
-                                        <label for="comment" class="ps-4">How was your experience?</label>
-                                    </div>
-                                </div>
-
-                                <!-- Anonymous Review Toggle -->
-                                <div class="col-12">
-                                    <div
-                                        class="form-check form-switch d-flex align-items-center gap-3 mb-4 bg-light p-3 rounded-4 px-5">
-                                        <input class="form-check-input ms-0" type="checkbox" name="is_anonymous"
-                                            id="is_anonymous" value="1" style="width: 3em; height: 1.5em; cursor: pointer;">
-                                        <label class="form-check-label fw-semibold text-dark mb-0 fs-6 cursor-pointer"
-                                            for="is_anonymous">
-                                            Keep my review anonymous
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button type="submit"
-                                class="btn btn-primary-solid btn-lg w-100 rounded-pill fw-bold shadow transition-hover py-3">
-                                <i class="bi bi-send-fill me-2"></i> Submit Review
-                            </button>
-                        </form>
                     </div>
-                </div>
+                @endauth
             </div>
         </div>
     </section>

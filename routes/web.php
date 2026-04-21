@@ -53,6 +53,10 @@ Route::get('/logout', [\App\Http\Controllers\com\AuthController::class, 'logout'
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [\App\Http\Controllers\com\ProfileController::class, 'index'])->name('com.profile');
     Route::post('/profile/update', [\App\Http\Controllers\com\ProfileController::class, 'update'])->name('com.profile.update');
+    
+    // Review Management
+    Route::put('/review/{review}', [\App\Http\Controllers\com\ReviewController::class, 'update'])->name('com.review.update');
+    Route::delete('/review/{review}', [\App\Http\Controllers\com\ReviewController::class, 'destroy'])->name('com.review.delete');
 });
 
 // Guest Admin Routes

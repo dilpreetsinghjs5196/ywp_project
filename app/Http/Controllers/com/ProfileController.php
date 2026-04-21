@@ -8,6 +8,7 @@ use App\Models\SiteSetting;
 use App\Models\PageContent;
 use App\Models\Order;
 use App\Models\TherapistBooking;
+use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
@@ -20,6 +21,10 @@ class ProfileController extends Controller
             ->with(['therapist', 'service'])
             ->latest()
             ->get();
+        $reviews = Review::where('user_id', $user->id)
+            ->with('team')
+            ->latest()
+            ->get();
         $settings = SiteSetting::all()->pluck('value', 'key');
 
         $contents = PageContent::where('page', 'wonder_store')
@@ -29,7 +34,7 @@ class ProfileController extends Controller
                 return $section->pluck('value', 'key');
             });
 
-        return view('site.com.profile', compact('user', 'orders', 'bookings', 'settings', 'contents'));
+        return view('site.com.profile', compact('user', 'orders', 'bookings', 'reviews', 'settings', 'contents'));
     }
 
     public function update(Request $request)

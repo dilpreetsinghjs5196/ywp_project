@@ -8,6 +8,9 @@ use App\Models\Team;
 use App\Models\TherapistBooking;
 use App\Models\SiteSetting;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TherapistBookingConfirmation;
 
@@ -15,7 +18,7 @@ class TherapistBookingController extends Controller
 {
     public function initializeBooking(Request $request)
     {
-        $request->validate([
+        $rules = [
             'team_id' => 'required|exists:teams,id',
             'service_id' => 'required|exists:services,id',
             'name' => 'required|string|max:255',
@@ -27,7 +30,15 @@ class TherapistBookingController extends Controller
             'gender' => 'required|string',
             'location' => 'required|string',
             'message' => 'nullable|string',
-        ]);
+        ];
+
+        if (!Auth::check()) {
+            $rules['create_account'] = 'required|accepted';
+            $rules['password'] = 'required|min:8|confirmed';
+            $rules['email'] = 'required|email|max:255|unique:users,email';
+        }
+
+        $request->validate($rules);
 
         $therapist = Team::findOrFail($request->team_id);
 
@@ -41,7 +52,30 @@ class TherapistBookingController extends Controller
 
         DB::beginTransaction();
         try {
+            $user_id = Auth::id();
+
+            // Handle user registration for guests
+            if (!$user_id && $request->has('create_account')) {
+                $user = User::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                    'city' => $request->location, // Assuming location is city for now as per User model fillable
+                    'password' => Hash::make($request->password),
+                ]);
+                
+                // Assign 'user' role
+                $userRole = \App\Models\Role::where('slug', 'user')->first();
+                if ($userRole) {
+                    $user->roles()->attach($userRole->id);
+                }
+
+                Auth::login($user);
+                $user_id = $user->id;
+            }
+
             $booking = TherapistBooking::create([
+                'user_id' => $user_id,
                 'team_id' => $request->team_id,
                 'service_id' => $request->service_id,
                 'therapist_id' => $request->team_id,

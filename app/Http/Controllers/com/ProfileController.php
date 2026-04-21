@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\SiteSetting;
 use App\Models\PageContent;
 use App\Models\Order;
+use App\Models\TherapistBooking;
 use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
@@ -14,7 +15,11 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $orders = Order::where('user_id', $user->id)->with('items')->latest()->get();
+        $orders = Order::where('user_id', $user->id)->with('items.product')->latest()->get();
+        $bookings = TherapistBooking::where('user_id', $user->id)
+            ->with(['therapist', 'service'])
+            ->latest()
+            ->get();
         $settings = SiteSetting::all()->pluck('value', 'key');
 
         $contents = PageContent::where('page', 'wonder_store')
@@ -24,7 +29,7 @@ class ProfileController extends Controller
                 return $section->pluck('value', 'key');
             });
 
-        return view('site.com.profile', compact('user', 'orders', 'settings', 'contents'));
+        return view('site.com.profile', compact('user', 'orders', 'bookings', 'settings', 'contents'));
     }
 
     public function update(Request $request)

@@ -665,7 +665,7 @@
                             <div class="mb-3">
                                 <label class="form-label small fw-bold text-muted">FULL NAME*</label>
                                 <input type="text" name="name" class="form-control rounded-3 py-2 border-secondary-subtle"
-                                    required placeholder="Enter full name">
+                                    required placeholder="Enter full name" value="{{ auth()->user()->name ?? '' }}">
                             </div>
 
                             <div class="mb-3">
@@ -699,8 +699,32 @@
                             <div class="mb-3">
                                 <label class="form-label small fw-bold text-muted">EMAIL ADDRESS*</label>
                                 <input type="email" name="email" class="form-control rounded-3 py-2 border-secondary-subtle"
-                                    required placeholder="name@example.com">
+                                    required placeholder="name@example.com" value="{{ auth()->user()->email ?? '' }}">
                             </div>
+
+                            @guest
+                                <div class="mb-3">
+                                    <div class="form-check d-flex align-items-center gap-2 mb-3">
+                                        <input class="form-check-input mt-0" type="checkbox" name="create_account" id="createAccount"
+                                            checked required style="width: 20px; height: 20px;">
+                                        <label class="form-check-label fw-bold text-dark" for="createAccount" style="padding-top: 2px;">
+                                            Create an account? <span class="text-danger small">(Mandatory to complete order)</span>
+                                        </label>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label extra-small fw-bold text-muted">ACCOUNT PASSWORD*</label>
+                                        <input type="password" name="password"
+                                            class="form-control rounded-3 py-2 border-secondary-subtle" required
+                                            placeholder="Password">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label extra-small fw-bold text-muted">CONFIRM PASSWORD*</label>
+                                        <input type="password" name="password_confirmation"
+                                            class="form-control rounded-3 py-2 border-secondary-subtle" required
+                                            placeholder="Confirm Password">
+                                    </div>
+                                </div>
+                            @endguest
 
                             <div class="mb-4">
                                 <label class="form-label small fw-bold text-muted">ANY MESSAGE (OPTIONAL)</label>
@@ -1072,7 +1096,10 @@
                     message: this.elements['message'].value,
                     date: selectedDateStr,
                     time: document.querySelector('.time-slot.selected')?.dataset.time,
-                    mode: selectedModeName
+                    mode: selectedModeName,
+                    create_account: this.elements['create_account'] ? (this.elements['create_account'].checked ? 1 : 0) : 0,
+                    password: this.elements['password'] ? this.elements['password'].value : null,
+                    password_confirmation: this.elements['password_confirmation'] ? this.elements['password_confirmation'].value : null
                 };
 
                 // 1. Initialize Booking

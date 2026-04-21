@@ -10,6 +10,7 @@ class TherapistBooking extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'team_id',
         'service_id',
         'therapist_id',
@@ -28,6 +29,11 @@ class TherapistBooking extends Model
         'razorpay_order_id',
         'razorpay_signature'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function therapist()
     {

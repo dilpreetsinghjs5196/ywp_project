@@ -9,6 +9,9 @@
         @method('PUT')
 
         @foreach($contents as $section => $items)
+            @if($slug === 'home' && $section === 'hero')
+                @continue
+            @endif
             <div class="card mb-5">
                 <div class="card-header bg-light py-3">
                     <h5 class="mb-0 text-primary fw-bold text-uppercase small">{{ str_replace('_', ' ', $section) }} SECTION

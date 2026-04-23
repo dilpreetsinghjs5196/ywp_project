@@ -81,6 +81,12 @@
 
                 <div class="row g-5">
                     <!-- Shipping & Billing Details -->
+                    @php
+                        $fullName = auth()->user()->name ?? '';
+                        $nameParts = explode(' ', trim($fullName), 2);
+                        $firstName = $nameParts[0] ?? '';
+                        $lastName = $nameParts[1] ?? '';
+                    @endphp
                     <div class="col-lg-7">
                         <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
                             <h5 class="font-1 fw-bold mb-4">Contact Information</h5>
@@ -88,11 +94,12 @@
                                 <div class="col-md-6">
                                     <label class="form-label small text-muted">First Name</label>
                                     <input type="text" name="first_name" class="form-control rounded-pill px-4"
-                                        value="{{ auth()->user()->name ?? '' }}" required>
+                                        value="{{ $firstName }}" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small text-muted">Last Name</label>
-                                    <input type="text" name="last_name" class="form-control rounded-pill px-4" required>
+                                    <input type="text" name="last_name" class="form-control rounded-pill px-4"
+                                        value="{{ $lastName }}" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small text-muted">Email Address</label>

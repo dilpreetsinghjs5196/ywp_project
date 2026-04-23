@@ -7,14 +7,14 @@
   <!-- Hero Section -->
   @php
     // If no slides, create a default one from database content or static values
-    if($heroSlides->isEmpty()) {
-        $defaultSlide = new \App\Models\HomeHeroSlide();
-        $defaultSlide->image = $contents['hero']['hero_bg_image'] ?? 'image/Homehero.png';
-        $defaultSlide->title = $contents['hero']['main_title'] ?? 'Caring for Your Inner Peace';
-        $defaultSlide->subtitle = $contents['hero']['subtitle'] ?? 'Discover clarity, confidence, and emotional wellness through guided support.';
-        $defaultSlide->button_text = 'Start A Checkup Now';
-        $defaultSlide->button_link = route('com.team');
-        $heroSlides = collect([$defaultSlide]);
+    if ($heroSlides->isEmpty()) {
+      $defaultSlide = new \App\Models\HomeHeroSlide();
+      $defaultSlide->image = $contents['hero']['hero_bg_image'] ?? 'image/Homehero.png';
+      $defaultSlide->title = $contents['hero']['main_title'] ?? 'Caring for Your Inner Peace';
+      $defaultSlide->subtitle = $contents['hero']['subtitle'] ?? 'Discover clarity, confidence, and emotional wellness through guided support.';
+      $defaultSlide->button_text = 'Start A Checkup Now';
+      $defaultSlide->button_link = route('com.team');
+      $heroSlides = collect([$defaultSlide]);
     }
   @endphp
 
@@ -22,22 +22,26 @@
     <div class="swiper-container hero-slider" style="overflow: hidden;">
       <div class="swiper-wrapper">
         @foreach($heroSlides as $slide)
-          <div class="swiper-slide d-flex align-items-center py-5" 
-               style="background: url('{{ Str::startsWith($slide->image, 'image/') ? asset($slide->image) : asset('storage/' . $slide->image) }}'); background-size: cover; background-position: center; min-height: 80vh; position: relative;">
-            
+          <div class="swiper-slide d-flex align-items-center py-5"
+            style="background: url('{{ Str::startsWith($slide->image, 'image/') ? asset($slide->image) : asset('storage/' . $slide->image) }}'); background-size: cover; background-position: center; min-height: 80vh; position: relative;">
+
             <!-- Subtle Overlay for readability -->
             <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.15);"></div>
 
             <div class="b-container px-3 px-sm-4 px-md-0 w-100 position-relative z-1">
               <div class="row justify-content-center text-white">
-                <div class="col-12 col-lg-10 col-xl-9 text-center d-flex flex-column align-items-center" data-aos="fade-up" data-aos-duration="1200">
-                  
-                  {{-- <h6 class="text-primary-color fw-bold mb-3 tracking-widest text-uppercase py-2 px-3 rounded-2 shadow-sm" style="background: rgba(255,255,255,0.9); font-size: 0.85rem;">
+                <div class="col-12 col-lg-10 col-xl-9 text-center d-flex flex-column align-items-center" data-aos="fade-up"
+                  data-aos-duration="1200">
+
+                  {{-- <h6
+                    class="text-primary-color fw-bold mb-3 tracking-widest text-uppercase py-2 px-3 rounded-2 shadow-sm"
+                    style="background: rgba(255,255,255,0.9); font-size: 0.85rem;">
                     {{ $contents['hero']['small_heading'] ?? 'Find Balance, Embrace Life' }}
                   </h6> --}}
 
                   @if($slide->title)
-                    <h1 class="display-2 lh-sm font-1 mb-4" style="font-weight: 850; text-shadow: 2px 2px 15px rgba(0,0,0,0.2);">
+                    <h1 class="display-2 lh-sm font-1 mb-4"
+                      style="font-weight: 850; text-shadow: 2px 2px 15px rgba(0,0,0,0.2);">
                       {!! str_replace('Inner', '<span class="text-primary-color">Inner</span>', $slide->title) !!}
                     </h1>
                     <div class="bg-white opacity-75 my-3" style="height: 3px; width: 100px; border-radius: 2px;"></div>
@@ -51,7 +55,8 @@
 
                   @if($slide->button_text)
                     <div class="d-flex gap-3 align-items-center mt-4">
-                      <a href="{{ $slide->button_link ?? '#' }}" role="button" class="btn btn-primary-solid px-5 py-3 shadow-lg scale-hover">
+                      <a href="{{ $slide->button_link ?? '#' }}" role="button"
+                        class="btn btn-primary-solid px-5 py-3 shadow-lg scale-hover">
                         {{ $slide->button_text }}
                       </a>
                     </div>
@@ -180,7 +185,7 @@
     <div class="b-container">
       <div class="row align-items-center g-4 pt-5">
         <!-- Left content -->
-        <div class="col-12 col-xl-5 order-1 order-md-3 order-xl-1 text-white mt-5 text-center text-xl-start">
+        <div class="col-12 col-xl-8 text-white mt-5 text-center text-xl-start">
           <p class="text-uppercase text-primary-color fs-5 fw-semibold mb-2">
             {{ $contents['appointment']['small_heading'] ?? 'Why Choose Us ?' }}
           </p>
@@ -221,20 +226,9 @@
           <a href="{{ route('com.home') }}" class="btn btn-primary-solid mb-5">Make An Appointment</a>
         </div>
 
-        <!-- Middle content -->
-        <div class="col-12 col-md-7 col-xl-5 order-2 order-md-1">
-          <div class="ratio ratio-1x1">
-            @php
-              $chooseImagePath = $contents['appointment']['main_image'] ?? 'image/choose.jpg';
-              $chooseImageUrl = Str::startsWith($chooseImagePath, 'image/') ? asset($chooseImagePath) : asset('storage/' . $chooseImagePath);
-            @endphp
-            <img src="{{ $chooseImageUrl }}" class="w-100 h-100 object-fit-cover position-absolute rounded-5"
-              alt="Appointment" data-aos="fade-up" data-aos-easing="linear" data-aos-delay="750" data-aos-duration="1000">
-          </div>
-        </div>
         <!-- Right content -->
-        <div class="col-12 col-md-5 col-xl-2 d-flex flex-column gap-3 order-3 order-md-2 order-xl-3">
-          <div class="card bg-primary-color rounded-4 border-0" data-aos="fade-left" data-aos-easing="linear"
+        <div class="col-12 col-xl-4 d-flex flex-column gap-3">
+          <div class="card bg-primary-color rounded-4 border-0 p-2" data-aos="fade-left" data-aos-easing="linear"
             data-aos-delay="500" data-aos-duration="1000">
             <div class="card-body text-center text-white p-3 font-1">
               <div class="display-5"><i class="bi bi-emoji-smile-fill accent-secondary-color"></i></div>
@@ -644,17 +638,17 @@
                   </div>
 
                   <!-- <div class="d-flex align-items-center gap-3 justify-content-start" data-aos="fade-left"
-                          data-aos-easing="ease-out-cubic" data-aos-delay="250" data-aos-duration="1000">
-                          <div
-                            class="d-flex align-items-center justify-content-center rounded-circle border-white bg-secondary-color flex-shrink-0"
-                            style="width: 65px; height: 65px; border: 2px solid white;">
-                            <i class="bi bi-telephone-fill fs-2 text-white"></i>
-                          </div>
-                          <div class="ms-2 font-1 py-2">
-                            <p class="fw-bold text-primary-color mb-0">Call us anytime</p>
-                            <h5 class="fw-bold">{{ $contents['get_in_touch']['phone'] ?? '(555) 123-4567' }}</h5>
-                          </div>
-                        </div> -->
+                            data-aos-easing="ease-out-cubic" data-aos-delay="250" data-aos-duration="1000">
+                            <div
+                              class="d-flex align-items-center justify-content-center rounded-circle border-white bg-secondary-color flex-shrink-0"
+                              style="width: 65px; height: 65px; border: 2px solid white;">
+                              <i class="bi bi-telephone-fill fs-2 text-white"></i>
+                            </div>
+                            <div class="ms-2 font-1 py-2">
+                              <p class="fw-bold text-primary-color mb-0">Call us anytime</p>
+                              <h5 class="fw-bold">{{ $contents['get_in_touch']['phone'] ?? '(555) 123-4567' }}</h5>
+                            </div>
+                          </div> -->
                   <div class="d-flex align-items-center gap-3 justify-content-start mt-3" data-aos="fade-left"
                     data-aos-easing="ease-out-cubic" data-aos-delay="500" data-aos-duration="1000">
                     <div

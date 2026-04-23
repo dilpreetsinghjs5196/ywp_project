@@ -20,6 +20,9 @@
                 <div class="card-body p-4">
                     <div class="row g-4">
                         @foreach($items as $item)
+                            @if($slug === 'home' && $section === 'appointment' && $item->key === 'main_image')
+                                @continue
+                            @endif
                             <div class="col-12">
                                 <label class="form-label fw-bold">{{ str_replace('_', ' ', ucfirst($item->key)) }}</label>
 

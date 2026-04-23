@@ -206,11 +206,28 @@ class CartController extends Controller
             session()->forget('cart');
 
             if ($request->payment_method === 'online') {
+                // Initialize Razorpay API (Directly from DB to avoid cache issues)
+                $razorpayKeyId = \App\Models\SiteSetting::where('key', 'razorpay_key_id')->value('value') ?? config('services.razorpay.key_id');
+                $razorpayKeySecret = \App\Models\SiteSetting::where('key', 'razorpay_key_secret')->value('value') ?? config('services.razorpay.key_secret');
+
+                $api = new \Razorpay\Api\Api($razorpayKeyId, $razorpayKeySecret);
+                
+                // Create Razorpay Order
+                $razorpayOrder = $api->order->create([
+                    'receipt' => 'order_' . $order->id,
+                    'amount' => (int) round($total * 100),
+                    'currency' => config('services.razorpay.currency'),
+                    'payment_capture' => 1
+                ]);
+
                 return response()->json([
                     'success' => true,
                     'require_payment' => true,
-                    'razorpay_key' => config('services.razorpay.key_id'),
+                    'razorpay_key' => $razorpayKeyId,
+                    'razorpay_order_id' => $razorpayOrder->id,
+                    'currency' => config('services.razorpay.currency'),
                     'amount' => $total * 100, // Razorpay works in paise
+                    'new_token' => csrf_token(),
                     'order_id' => $order->id,
                     'customer' => [
                         'name' => $request->first_name . ' ' . $request->last_name,
@@ -395,18 +412,33 @@ class CartController extends Controller
     {
         $order = Order::findOrFail($request->order_id);
 
-        // In a real production app, you would verify the signature here using Razorpay SDK
-        // For testing purposes, we'll mark it as paid if the payment_id is provided
-        if ($request->razorpay_payment_id) {
+        try {
+            // 1. Initialize Razorpay API (Directly from DB)
+            $razorpayKeyId = \App\Models\SiteSetting::where('key', 'razorpay_key_id')->value('value') ?? config('services.razorpay.key_id');
+            $razorpayKeySecret = \App\Models\SiteSetting::where('key', 'razorpay_key_secret')->value('value') ?? config('services.razorpay.key_secret');
+            
+            $api = new \Razorpay\Api\Api($razorpayKeyId, $razorpayKeySecret);
+
+            $attributes = [
+                'razorpay_order_id' => $request->razorpay_order_id,
+                'razorpay_payment_id' => $request->razorpay_payment_id,
+                'razorpay_signature' => $request->razorpay_signature
+            ];
+
+            // 2. Verify Signature
+            $api->utility->verifyPaymentSignature($attributes);
+
+            // 3. Update Order
             $order->update([
                 'razorpay_payment_id' => $request->razorpay_payment_id,
                 'razorpay_order_id' => $request->razorpay_order_id,
-                'status' => 'processing' // Mark as paid/processing
+                'status' => 'processing'
             ]);
 
             return response()->json(['success' => true, 'redirect' => route('com.order.success', $order->id)]);
-        }
 
-        return response()->json(['success' => false, 'message' => 'Payment verification failed'], 400);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Payment verification failed: ' . $e->getMessage()], 400);
+        }
     }
 }

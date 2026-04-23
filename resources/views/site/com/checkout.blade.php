@@ -502,17 +502,17 @@
                                 var options = {
                                     "key": response.razorpay_key,
                                     "amount": response.amount,
-                                    "currency": "INR",
+                                    "currency": response.currency,
                                     "name": "Wonder Store",
                                     "description": "Order Payment",
-                                    "order_id": response.razorpay_order_id, // Use if you generate order id from backend
+                                    "order_id": response.razorpay_order_id,
                                     "handler": function (payResponse) {
                                         // Verify payment on backend
                                         $.ajax({
                                             url: "{{ route('razorpay.verify') }}",
                                             method: "POST",
                                             data: {
-                                                _token: "{{ csrf_token() }}",
+                                                _token: response.new_token || "{{ csrf_token() }}",
                                                 order_id: response.order_id,
                                                 razorpay_payment_id: payResponse.razorpay_payment_id,
                                                 razorpay_order_id: payResponse.razorpay_order_id,

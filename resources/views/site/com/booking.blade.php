@@ -1113,7 +1113,7 @@
                             const options = {
                                 "key": response.razorpay_key,
                                 "amount": response.amount,
-                                "currency": "INR",
+                                "currency": response.currency,
                                 "name": "YWP Therapy",
                                 "description": "Session Booking Fees",
                                 "image": "{{ asset('image/logo-ywp.png') }}",
@@ -1124,7 +1124,7 @@
                                         url: "{{ route('com.therapist.booking.verify') }}",
                                         method: 'POST',
                                         data: {
-                                            _token: "{{ csrf_token() }}",
+                                            _token: response.new_token || "{{ csrf_token() }}",
                                             booking_id: response.booking_id,
                                             razorpay_payment_id: payResponse.razorpay_payment_id,
                                             razorpay_order_id: payResponse.razorpay_order_id,
@@ -1149,7 +1149,8 @@
                                         },
                                         error: function (xhr) {
                                             console.error('Verification Error:', xhr);
-                                            alert('Server error during verification. Please contact support with your Payment ID: ' + payResponse.razorpay_payment_id);
+                                            let errorMsg = xhr.responseJSON?.message || 'Server error during verification.';
+                                            alert(errorMsg + '\n\nPayment ID: ' + payResponse.razorpay_payment_id);
                                             submitBtn.disabled = false;
                                             submitBtn.innerText = originalText;
                                         }
@@ -1179,8 +1180,9 @@
                         }
                     },
                     error: function (xhr) {
+                        console.error('Initialization Error:', xhr);
+                        let msg = xhr.responseJSON?.message || 'Error initializing booking.';
                         const errors = xhr.responseJSON?.errors;
-                        let msg = 'Error initializing booking.';
                         if (errors) {
                             msg = Object.values(errors).flat().join('\n');
                         }

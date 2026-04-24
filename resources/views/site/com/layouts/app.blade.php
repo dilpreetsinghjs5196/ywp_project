@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', 'Mental Health & Therapy')</title>
 
@@ -162,7 +163,96 @@
         </div>
     </div>
 
+    <!-- Login Modal (Compact Dark Theme) -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered" style="max-width: 400px;">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h4 class="modal-title font-1 mb-0" id="loginModalLabel">Login to YWP</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="loginModalAlert"
+                        class="alert alert-danger d-none rounded-3 small py-2 border-0 bg-danger text-white mb-3"
+                        role="alert">
+                        <i class="bi bi-exclamation-circle me-2"></i> <span></span>
+                    </div>
+
+                    <form id="ajaxLoginForm">
+                        @csrf
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" placeholder="your@email.com" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="remember" id="rememberMe">
+                                <label class="form-check-label small" for="rememberMe">Remember</label>
+                            </div>
+                            <a href="#" class="small text-decoration-none">Forgot?</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary-solid w-100">
+                            Sign In
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <p class="small text-white-50 mb-0">No account?
+                            <a href="{{ route('com.register') }}"
+                                class="text-white fw-bold text-decoration-none border-bottom border-white border-opacity-25">Register</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @stack('js')
+
+    <script>
+        // AJAX Login Handling
+        document.getElementById('ajaxLoginForm')?.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const form = this;
+            const btn = form.querySelector('button[type="submit"]');
+            const alert = document.getElementById('loginModalAlert');
+            const formData = new FormData(form);
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Logging in...';
+            alert.classList.add('d-none');
+
+            fetch("{{ route('login.ajax') }}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.reload();
+                    } else {
+                        alert.querySelector('span').innerText = data.message || 'Login failed. Please check your credentials.';
+                        alert.classList.remove('d-none');
+                    }
+                })
+                .catch(error => {
+                    alert.querySelector('span').innerText = 'Something went wrong. Please try again.';
+                    alert.classList.remove('d-none');
+                })
+                .finally(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Sign In';
+                });
+        });
+    </script>
 
     <script>
         document.getElementById('globalTherapistJoinForm')?.addEventListener('submit', function (e) {

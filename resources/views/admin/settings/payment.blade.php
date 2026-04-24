@@ -51,6 +51,7 @@
                         <li>Navigate to <strong>Settings -> API Keys</strong>.</li>
                         <li>Copy your <strong>Key ID</strong> and <strong>Key Secret</strong>.</li>
                         <li>Ensure <strong>Route</strong> is activated in your account.</li>
+                        <li>To accept payments from outside India, you <strong>must</strong> enable <strong>International Payments</strong> in your <a href="https://dashboard.razorpay.com/app/settings/account" target="_blank">Razorpay Account Settings</a>.</li>
                     </ol>
                     <div class="alert alert-info p-2 small mb-0">
                         <i class="bi bi-shield-check me-1"></i> Credentials are stored securely.

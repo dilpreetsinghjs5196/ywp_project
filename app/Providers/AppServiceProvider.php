@@ -55,6 +55,7 @@ class AppServiceProvider extends ServiceProvider
             config([
                 'services.razorpay.key_id' => $settings->get('razorpay_key_id') ?? config('services.razorpay.key_id'),
                 'services.razorpay.key_secret' => $settings->get('razorpay_key_secret') ?? config('services.razorpay.key_secret'),
+                'services.razorpay.currency' => $settings->get('razorpay_currency') ?? config('services.razorpay.currency'),
             ]);
         }
     }

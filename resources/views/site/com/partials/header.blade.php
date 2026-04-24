@@ -40,10 +40,22 @@
             $blackLogo = $settings['site_logo_black'] ?? 'image/black-logo.png';
             $blackLogoUrl = Str::startsWith($blackLogo, 'image/') ? asset($blackLogo) : asset('storage/' . $blackLogo);
           @endphp
-          <a href="{{ route('com.home') }}" class="navbar-brand">
-            <img src="{{ $blackLogoUrl }}" alt="Logo" style="width: auto;"></a>
+          <a href="{{ route('com.home') }}" class="navbar-brand me-0">
+            <img src="{{ $blackLogoUrl }}" alt="Logo" class="main-logo"></a>
         </div>
-        <button class="navbar-toggler bg-primary-color border-0" type="button" data-bs-toggle="offcanvas"
+        
+        <!-- Mobile/Tablet Login Button (Center) -->
+        <div class="d-lg-none flex-grow-1 text-center">
+          @auth
+            <a href="{{ route('com.profile') }}" class="btn btn-outline-primary rounded-pill px-3 py-1 small fw-bold">
+              Profile
+            </a>
+          @else
+            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#loginModal" class="btn btn-primary rounded-pill px-3 py-1 small fw-bold">Login</a>
+          @endguest
+        </div>
+
+        <button class="navbar-toggler bg-primary-color border-0 ms-auto" type="button" data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
           <span class="bi bi-list text-white fs-2"></span>
         </button>
@@ -100,7 +112,7 @@
               @auth
               <div class="dropdown">
                 <button class="btn btn-outline-primary position-relative rounded-pill px-3 py-2 border-2 dropdown-toggle no-caret" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="bi bi-person-circle fs-5"></i>
+                  <i class="bi bi-person-circle fs-5 me-1"></i> Profile
                   @if(request()->routeIs('com.store'))
                     <span id="cart-badge-main" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm" style="display: none; padding: 0.35em 0.65em; font-size: 0.7rem; z-index: 10;">
                       0
@@ -128,6 +140,9 @@
                 </ul>
               </div>
               @else
+              <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#loginModal" class="btn btn-primary rounded-pill px-4 py-2 fw-bold text-uppercase d-none d-lg-inline-flex me-2">
+                Login
+              </a>
               @if(request()->routeIs('com.store'))
                 <a href="{{ route('com.cart') }}" class="btn btn-outline-primary position-relative rounded-pill px-3 py-2 border-2 {{ request()->routeIs('com.cart') ? 'active' : '' }}" title="Shopping Cart">
                   <i class="bi bi-cart3 fs-5"></i>
@@ -190,26 +205,11 @@
     
     updateCartBadge();
 
-    // Mobile dropdown toggle fix for offcanvas
-    const dropdownToggles = document.querySelectorAll('.offcanvas-body .dropdown-toggle');
+    // Dropdown handling: Mobile toggle & Desktop navigation
+    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
     dropdownToggles.forEach(toggle => {
       toggle.addEventListener('click', function(e) {
-        if (window.innerWidth < 992) {
-          e.preventDefault();
-          e.stopPropagation();
-          const menu = this.nextElementSibling;
-          if (menu && menu.classList.contains('dropdown-menu')) {
-            const isShown = menu.classList.contains('show');
-            // Close all other dropdowns in offcanvas
-            document.querySelectorAll('.offcanvas-body .dropdown-menu.show').forEach(m => m.classList.remove('show'));
-            document.querySelectorAll('.offcanvas-body .dropdown-toggle.show').forEach(t => t.classList.remove('show'));
-            
-            if (!isShown) {
-              menu.classList.add('show');
-              this.classList.add('show');
-            }
-          }
-        } else {
+        if (window.innerWidth >= 992) {
           // On desktop, navigate to the link if it has a valid href
           const href = this.getAttribute('href');
           if (href && href !== '#' && href !== 'javascript:void(0)') {
@@ -220,3 +220,22 @@
     });
   });
 </script>
+
+<style>
+  .main-logo {
+    width: auto;
+    max-height: 80px;
+    transition: all 0.3s ease;
+  }
+  @media (max-width: 991.98px) {
+    .main-logo {
+      max-height: 50px;
+    }
+    .navbar-toggler {
+      padding: 0.25rem 0.5rem;
+    }
+    .navbar-toggler span {
+      font-size: 1.5rem !important;
+    }
+  }
+</style>

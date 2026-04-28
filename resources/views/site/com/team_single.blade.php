@@ -210,7 +210,7 @@
     </section>
 
     <!-- Reviews Section -->
-    <section class="section py-5 bg-gradient-secondary">
+    <section id="reviews-section" class="section py-5 bg-gradient-secondary">
         <div class="b-container">
             <div class="row g-5">
                 <!-- Display Reviews -->
@@ -239,7 +239,7 @@
                                         </div>
                                     </div>
                                     <p class="text-muted-color mb-0 fs-6 lh-base italic">
-                                        "{{ $review->comment }}"
+                                        {{ $review->comment }}
                                     </p>
                                 </div>
                             @endforeach

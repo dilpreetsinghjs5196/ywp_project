@@ -150,9 +150,14 @@
 
                     <!-- Section 2: Therapy Bookings -->
                     <div id="therapy-bookings" class="user-dashboard-section mb-5 pt-4 d-none">
-                        <h4 class="font-1 fw-bold mb-4 d-flex align-items-center gap-3">
-                            <i class="bi bi-calendar-check-fill text-primary"></i> Therapy Bookings
-                        </h4>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="font-1 fw-bold mb-0 d-flex align-items-center gap-3">
+                                <i class="bi bi-calendar-check-fill text-primary"></i> Therapy Bookings
+                            </h4>
+                            <a href="{{ route('com.team') }}" class="btn btn-outline-primary rounded-pill px-4 fw-bold">
+                                Add Bookings
+                            </a>
+                        </div>
                         @if($bookings->count() > 0)
                             <div class="row g-4">
                                 @foreach($bookings as $booking)
@@ -180,6 +185,10 @@
                                                                 </h6>
                                                                 <p class="mb-0 text-muted small fw-semibold">
                                                                     with <a href="{{ $booking->therapist ? route('com.team.single', $booking->therapist->id) : '#' }}" class="text-primary-color text-decoration-none hover-underline">{{ $booking->therapist->name ?? 'Therapist' }}</a>
+                                                                    @if($booking->therapist)
+                                                                        <span class="mx-1 text-muted-subtle">|</span>
+                                                                        <a href="{{ route('com.team.single', $booking->therapist->id) }}#reviews-section" class="text-primary text-decoration-underline" style="font-size: 0.8rem;">Click here to add a review</a>
+                                                                    @endif
                                                                 </p>
                                                             </div>
                                                             <span class="badge rounded-pill {{ $booking->payment_status == 'paid' ? 'bg-success-subtle text-success border border-success' : 'bg-warning-subtle text-warning border border-warning' }} px-3 py-2 fw-bold small uppercase">
@@ -228,9 +237,14 @@
 
                     <!-- Section 3: Store Orders -->
                     <div id="order-history" class="user-dashboard-section pt-4 d-none">
-                        <h4 class="font-1 fw-bold mb-4 d-flex align-items-center gap-3">
-                            <i class="bi bi-bag-check-fill text-primary"></i> Wonder Store Orders
-                        </h4>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="font-1 fw-bold mb-0 d-flex align-items-center gap-3">
+                                <i class="bi bi-bag-check-fill text-primary"></i> Wonder Store Orders
+                            </h4>
+                            <a href="{{ route('com.store') }}" class="btn btn-outline-primary rounded-pill px-4 fw-bold">
+                                Continue Shopping
+                            </a>
+                        </div>
                         @if($orders->count() > 0)
                             <div class="row g-4">
                                 @foreach($orders as $order)
@@ -329,7 +343,7 @@
                                                         {{ strtoupper($review->status) }}
                                                     </span>
                                                 </div>
-                                                <p class="text-muted small mb-3 italic">"{{ $review->comment }}"</p>
+                                                <p class="text-muted small mb-3 italic">{{ $review->comment }}</p>
                                                 <div class="d-flex justify-content-between align-items-center border-top pt-3">
                                                     <span class="text-muted extra-small">
                                                         <i class="bi bi-clock me-1"></i> Submitted on {{ $review->created_at->format('M d, Y') }}

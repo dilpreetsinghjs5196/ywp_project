@@ -201,9 +201,9 @@
                     </form>
 
                     <div class="text-center mt-3">
-                        <p class="small text-white-50 mb-0">No account?
+                        <p class="small text-muted mb-0">No account?
                             <a href="{{ route('com.register') }}"
-                                class="text-white fw-bold text-decoration-none border-bottom border-white border-opacity-25">Register</a>
+                                class="text-primary fw-bold text-decoration-none">Create one</a>
                         </p>
                     </div>
                 </div>

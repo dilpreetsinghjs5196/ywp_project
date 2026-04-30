@@ -446,7 +446,44 @@
                 border: none;
             }
         }
+
+        /* Success Animation */
+        .checkmark__circle { stroke-dasharray: 166; stroke-dashoffset: 166; stroke-width: 2; stroke-miterlimit: 10; stroke: #4bb543; fill: none; animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards; }
+        .checkmark { width: 80px; height: 80px; border-radius: 50%; display: block; stroke-width: 2; stroke: #fff; stroke-miterlimit: 10; margin: 10% auto; box-shadow: inset 0px 0px 0px #4bb543; animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both; }
+        .checkmark__check { transform-origin: 50% 50%; stroke-dasharray: 48; stroke-dashoffset: 48; animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards; }
+        @keyframes stroke { 100% { stroke-dashoffset: 0; } }
+        @keyframes scale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
+        @keyframes fill { 100% { box-shadow: inset 0px 0px 0px 40px #4bb543; } }
+
+        #thankYouOverlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.98); z-index: 10000;
+            flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 20px;
+        }
     </style>
+
+    {{-- Thank You Overlay --}}
+    <div id="thankYouOverlay">
+        <div class="mb-4">
+            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+                <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+            </svg>
+        </div>
+        <h2 class="fw-bold text-dark mb-2 font-1">Thank You!</h2>
+        <h4 class="text-primary-color mb-3">Booking Successfully Confirmed</h4>
+        <p id="thankYouMessage" class="text-muted mb-4 mx-auto" style="max-width: 450px;">
+            Your therapy session has been scheduled. A confirmation email has been sent to your inbox.
+        </p>
+        
+        <div class="mt-4">
+            <p class="small text-muted mb-2">Redirecting to your bookings in <span id="countdown" class="fw-bold text-primary">5</span> seconds...</p>
+            <div class="progress mx-auto" style="height: 6px; width: 250px; border-radius: 10px;">
+                <div id="redirectProgress" class="progress-bar bg-primary" role="progressbar" style="width: 0%; border-radius: 10px;"></div>
+            </div>
+        </div>
+    </div>
 
     <div id="fullScreenLoader"
         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 10000; flex-direction: column; align-items: center; justify-content: center;">
@@ -1199,15 +1236,33 @@
                                             document.getElementById('fullScreenLoader').style.display = 'none';
 
                                             if (verifyResponse.success) {
-                                                let msg = 'Success! Your session has been booked.';
-                                                if (verifyResponse.email_status && verifyResponse.email_status.includes('failed')) {
-                                                    msg += '\n\nNote: We completed your booking but had trouble sending the confirmation email. Please contact support if needed.';
-                                                } else {
-                                                    msg += ' Confirmation emails have been sent.';
-                                                }
+                                                // 1. Show Thank You Overlay
+                                                const overlay = document.getElementById('thankYouOverlay');
+                                                overlay.style.display = 'flex';
 
-                                                alert(msg);
-                                                window.location.href = "{{ route('com.home') }}";
+                                                // 2. Update Message if email failed
+                                                let msg = 'Your therapy session has been scheduled. A confirmation email has been sent to your inbox.';
+                                                if (verifyResponse.email_status && verifyResponse.email_status.includes('failed')) {
+                                                    msg = 'Success! Your session has been booked, but we had trouble sending the confirmation email. Please check your profile for details.';
+                                                }
+                                                document.getElementById('thankYouMessage').innerText = msg;
+
+                                                // 3. Start Countdown and Progress
+                                                let count = 5;
+                                                const countdownEl = document.getElementById('countdown');
+                                                const progressEl = document.getElementById('redirectProgress');
+                                                
+                                                // Trigger progress animation
+                                                setTimeout(() => { progressEl.style.width = '100%'; progressEl.style.transition = 'width 5s linear'; }, 50);
+                                                
+                                                const timer = setInterval(() => {
+                                                    count--;
+                                                    if (countdownEl) countdownEl.innerText = count;
+                                                    if (count <= 0) {
+                                                        clearInterval(timer);
+                                                        window.location.href = "{{ route('com.profile') }}#therapy-bookings";
+                                                    }
+                                                }, 1000);
                                             } else {
                                                 alert('Verification failed: ' + verifyResponse.message);
                                                 submitBtn.disabled = false;

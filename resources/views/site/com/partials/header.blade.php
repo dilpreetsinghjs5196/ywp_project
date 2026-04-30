@@ -45,7 +45,7 @@
         </div>
         
         <!-- Mobile/Tablet Login Button (Center) -->
-        <div class="d-lg-none flex-grow-1 text-center">
+        <div class="d-lg-none flex-grow-1 text-center" id="mobile-login-area">
           @auth
             <a href="{{ route('com.profile') }}" class="btn btn-outline-primary rounded-pill px-3 py-1 small fw-bold">
               Profile
@@ -140,9 +140,11 @@
                 </ul>
               </div>
               @else
-              <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#loginModal" class="btn btn-primary rounded-pill px-4 py-2 fw-bold text-uppercase d-none d-lg-inline-flex me-2">
-                Login
-              </a>
+              <div id="desktop-login-area">
+                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#loginModal" class="btn btn-primary rounded-pill px-4 py-2 fw-bold text-uppercase d-none d-lg-inline-flex me-2">
+                  Login
+                </a>
+              </div>
               @if(request()->routeIs('com.store'))
                 <a href="{{ route('com.cart') }}" class="btn btn-outline-primary position-relative rounded-pill px-3 py-2 border-2 {{ request()->routeIs('com.cart') ? 'active' : '' }}" title="Shopping Cart">
                   <i class="bi bi-cart3 fs-5"></i>

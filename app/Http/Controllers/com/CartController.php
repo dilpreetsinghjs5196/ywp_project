@@ -63,8 +63,17 @@ class CartController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            CartItem::syncSessionCart(Auth::id(), $request->cookie('guest_cart_id')); // Restore cart from DB immediately
-            return response()->json(['success' => true]);
+            $user = Auth::user();
+            CartItem::syncSessionCart($user->id, $request->cookie('guest_cart_id')); // Restore cart from DB immediately
+            return response()->json([
+                'success' => true,
+                'user' => [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'phone' => $user->phone
+                ],
+                'new_token' => csrf_token()
+            ]);
         }
 
         return response()->json([

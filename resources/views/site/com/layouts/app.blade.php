@@ -237,6 +237,9 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        const event = new CustomEvent('ajaxLoginSuccess', { detail: data });
+                        document.dispatchEvent(event);
+                        if (form.hasAttribute('data-no-reload')) return;
                         window.location.reload();
                     } else {
                         alert.querySelector('span').innerText = data.message || 'Login failed. Please check your credentials.';
@@ -251,6 +254,49 @@
                     btn.disabled = false;
                     btn.innerHTML = 'Sign In';
                 });
+        });
+
+        // Global UI updates for AJAX Login
+        document.addEventListener('ajaxLoginSuccess', function (e) {
+            const data = e.detail;
+            if (!data.success) return;
+
+            // 1. Update Desktop Header Login Button to Profile Dropdown
+            const desktopArea = document.getElementById('desktop-login-area');
+            if (desktopArea) {
+                desktopArea.innerHTML = `
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary position-relative rounded-pill px-3 py-2 border-2 dropdown-toggle no-caret" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fs-5 me-1"></i> Profile
+                            <span id="cart-badge-main" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm" style="display: none; padding: 0.35em 0.65em; font-size: 0.7rem; z-index: 10;">0</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2" aria-labelledby="userMenu">
+                            <li><a class="dropdown-item py-2 px-4 rounded-top-4" href="{{ route('com.profile') }}"><i class="bi bi-person me-2"></i> My Profile</a></li>
+                            <li>
+                                <a class="dropdown-item py-2 px-4 d-flex justify-content-between align-items-center" href="{{ route('com.cart') }}">
+                                    <span><i class="bi bi-cart3 me-2"></i> My Cart</span>
+                                    <span id="cart-badge-dropdown" class="badge rounded-pill bg-danger ms-2" style="display: none;">0</span>
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider mx-3"></li>
+                            <li><a class="dropdown-item py-2 px-4 text-danger rounded-bottom-4" href="{{ route('com.logout') }}"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                `;
+            }
+
+            // 2. Update Mobile Header Login Button to Profile Link
+            const mobileArea = document.getElementById('mobile-login-area');
+            if (mobileArea) {
+                mobileArea.innerHTML = `
+                    <a href="{{ route('com.profile') }}" class="btn btn-outline-primary rounded-pill px-3 py-1 small fw-bold">Profile</a>
+                `;
+            }
+
+            // 3. Refresh Cart Count
+            if (typeof updateCartBadge === 'function') {
+                updateCartBadge();
+            }
         });
     </script>
 

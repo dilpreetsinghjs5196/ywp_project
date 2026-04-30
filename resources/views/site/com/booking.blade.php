@@ -409,6 +409,15 @@
             border-color: var(--booking-primary);
         }
 
+        .time-slot.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            background: #f1f5f9;
+            border-color: #e2e8f0;
+            cursor: not-allowed;
+            color: #94a3b8;
+        }
+
         .continue-btn {
             margin-top: auto;
             background: var(--booking-secondary);
@@ -439,18 +448,27 @@
         }
     </style>
 
+    <div id="fullScreenLoader"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 10000; flex-direction: column; align-items: center; justify-content: center;">
+        <div class="spinner-border text-primary mb-3" style="width: 3.5rem; height: 3.5rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <h4 class="fw-bold text-dark mb-1">Verifying Payment</h4>
+        <p class="text-muted">Please do not refresh the page...</p>
+    </div>
+
     <div class="booking-wrapper">
         <div class="container">
             <div class="booking-container shadow-2xl">
                 <!-- Left Sidebar -->
                 <div class="booking-steps-sidebar">
                     <!-- <div class="promo-banner">
-                                                                                                                                                                                <div class="d-flex align-items-center gap-2 mb-1">
-                                                                                                                                                                                    <i class="bi bi-percent text-warning fs-5"></i>
-                                                                                                                                                                                    <span class="fw-bold text-dark">20% OFF</span>
-                                                                                                                                                                                </div>
-                                                                                                                                                                                <p class="small text-muted mb-0">20% Off on Pre-Booking First Session</p>
-                                                                                                                                                                            </div> -->
+                                                                                                                                                                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                                                                                                                                                                            <i class="bi bi-percent text-warning fs-5"></i>
+                                                                                                                                                                                            <span class="fw-bold text-dark">20% OFF</span>
+                                                                                                                                                                                        </div>
+                                                                                                                                                                                        <p class="small text-muted mb-0">20% Off on Pre-Booking First Session</p>
+                                                                                                                                                                                    </div> -->
 
                     <div class="booking-steps">
                         <div class="step-item active" id="sidebar-step1">
@@ -698,30 +716,33 @@
 
                             <div class="mb-3">
                                 <label class="form-label small fw-bold text-muted">EMAIL ADDRESS*</label>
-                                <input type="email" name="email" class="form-control rounded-3 py-2 border-secondary-subtle"
+                                <input type="email" name="email" id="bookingEmail" class="form-control rounded-3 py-2 border-secondary-subtle"
                                     required placeholder="name@example.com" value="{{ auth()->user()->email ?? '' }}">
+                                <div id="emailCheckMessage" class="mt-2 small" style="display: none;"></div>
                             </div>
 
                             @guest
-                                <div class="mb-3">
-                                    <div class="form-check d-flex align-items-center gap-2 mb-3">
-                                        <input class="form-check-input mt-0" type="checkbox" name="create_account" id="createAccount"
-                                            checked required style="width: 20px; height: 20px;">
-                                        <label class="form-check-label fw-bold text-dark" for="createAccount" style="padding-top: 2px;">
-                                            Create an account? <span class="text-danger small">(Mandatory to complete order)</span>
-                                        </label>
-                                    </div>
+                                <div id="accountCreationFields">
                                     <div class="mb-3">
-                                        <label class="form-label extra-small fw-bold text-muted">ACCOUNT PASSWORD*</label>
-                                        <input type="password" name="password"
-                                            class="form-control rounded-3 py-2 border-secondary-subtle" required
-                                            placeholder="Password">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label extra-small fw-bold text-muted">CONFIRM PASSWORD*</label>
-                                        <input type="password" name="password_confirmation"
-                                            class="form-control rounded-3 py-2 border-secondary-subtle" required
-                                            placeholder="Confirm Password">
+                                        <div class="form-check d-flex align-items-center gap-2 mb-3">
+                                            <input class="form-check-input mt-0" type="checkbox" name="create_account" id="createAccount"
+                                                checked required style="width: 20px; height: 20px;">
+                                            <label class="form-check-label fw-bold text-dark" for="createAccount" style="padding-top: 2px;">
+                                                Create an account? <span class="text-danger small">(Mandatory to complete order)</span>
+                                            </label>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label extra-small fw-bold text-muted">ACCOUNT PASSWORD*</label>
+                                            <input type="password" name="password"
+                                                class="form-control rounded-3 py-2 border-secondary-subtle" required
+                                                placeholder="Password">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label extra-small fw-bold text-muted">CONFIRM PASSWORD*</label>
+                                            <input type="password" name="password_confirmation"
+                                                class="form-control rounded-3 py-2 border-secondary-subtle" required
+                                                placeholder="Confirm Password">
+                                        </div>
                                     </div>
                                 </div>
                             @endguest
@@ -826,7 +847,8 @@
                         if (k.match(/^\d{4}-\d{2}-\d{2}$/)) allDates.add(k);
                     });
 
-                    const todayStr = new Date().toLocaleDateString('en-CA');
+                    const now = new Date();
+                    const todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
                     dates = Array.from(allDates).filter(dateStr => {
                         if (dateStr < todayStr) return false;
                         const times = getAvailableSlots(dateStr);
@@ -859,9 +881,9 @@
                     }
 
                     dayDiv.innerHTML = `
-                                                                                            <div class="day-name">${days[dateObj.getDay()]}</div>
-                                                                                            <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
-                                                                                        `;
+                                                                                                    <div class="day-name">${days[dateObj.getDay()]}</div>
+                                                                                                    <div class="day-number">${dateObj.getDate()} ${months[dateObj.getMonth()]}</div>
+                                                                                                `;
 
                     dayDiv.onclick = function () {
                         document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
@@ -934,46 +956,51 @@
                         return;
                     }
 
-                    // Filter out busy slots
-                    const filteredTimes = times.filter(t => {
+                    const now = new Date();
+                    const todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+                    const nowTotalMinutes = now.getHours() * 60 + now.getMinutes();
+
+                    const processedSlots = times.map(t => {
                         const slotStart = convertTo24Hour(t);
                         const [sH, sM] = slotStart.split(':').map(Number);
                         const sTotalMinutes = sH * 60 + sM;
 
+                        const isPast = (dateStr === todayStr && sTotalMinutes <= nowTotalMinutes);
+
                         const durationMins = parseInt(selectedServiceDuration) || 50;
                         const sEndTotalMinutes = sTotalMinutes + durationMins;
 
-                        return !busySlots.some(busy => {
+                        const isBusy = busySlots.some(busy => {
                             const [bSH, bSM] = busy.start.split(':').map(Number);
                             const [bEH, bEM] = busy.end.split(':').map(Number);
-
                             const bStartTotalMinutes = bSH * 60 + bSM;
                             const bEndTotalMinutes = bEH * 60 + bEM;
-
-                            // Overlap condition: (StartA < EndB) && (EndA > StartB)
                             return (sTotalMinutes < bEndTotalMinutes && sEndTotalMinutes > bStartTotalMinutes);
                         });
+
+                        return { time: t, isPast, isBusy };
                     });
 
-                    if (filteredTimes.length === 0) {
-                        slotsContainer.innerHTML = '<div class="alert alert-warning text-center py-4 border">All slots are booked via Google Calendar. Please try another date.</div>';
-                        return;
-                    }
-
-                    const morning = filteredTimes.filter(t => t.toUpperCase().includes('AM') || (t.includes('12:') && t.toUpperCase().includes('AM')));
-                    const afternoon = filteredTimes.filter(t => !morning.includes(t));
+                    const morning = processedSlots.filter(s => s.time.toUpperCase().includes('AM') || (s.time.includes('12:') && s.time.toUpperCase().includes('AM')));
+                    const afternoon = processedSlots.filter(s => !morning.includes(s));
 
                     let html = '';
                     if (morning.length > 0) {
                         html += `<div class="time-section-title"><i class="bi bi-brightness-high"></i> Morning</div>`;
                         html += `<div class="time-slots">`;
-                        morning.forEach(t => { html += `<div class="time-slot" data-time="${t}">${t}</div>`; });
+                        morning.forEach(s => {
+                            const disabledClass = (s.isPast || s.isBusy) ? 'disabled' : '';
+                            html += `<div class="time-slot ${disabledClass}" data-time="${s.time}">${s.time}</div>`;
+                        });
                         html += '</div>';
                     }
                     if (afternoon.length > 0) {
                         html += `<div class="time-section-title"><i class="bi bi-sun"></i> Afternoon</div>`;
                         html += `<div class="time-slots">`;
-                        afternoon.forEach(t => { html += `<div class="time-slot" data-time="${t}">${t}</div>`; });
+                        afternoon.forEach(s => {
+                            const disabledClass = (s.isPast || s.isBusy) ? 'disabled' : '';
+                            html += `<div class="time-slot ${disabledClass}" data-time="${s.time}">${s.time}</div>`;
+                        });
                         html += '</div>';
                     }
 
@@ -1049,8 +1076,44 @@
                 else history.back();
             };
 
-            // 4. Initial Trigger
-            renderCalendarStrip();
+            $(document).ready(function () {
+                // Restore booking state after login reload (MUST BE BEFORE renderCalendarStrip)
+                const restoreStep = sessionStorage.getItem('booking_restore_step');
+                if (restoreStep === '2') {
+                    const rDate = sessionStorage.getItem('booking_restore_date');
+                    const rTime = sessionStorage.getItem('booking_restore_time');
+
+                    if (rDate && rTime) {
+                        selectedDateStr = rDate;
+                        
+                        // We need to wait for the initial render to finish
+                        setTimeout(() => {
+                            renderTimeSlots(rDate);
+                            
+                            const checkSlots = setInterval(() => {
+                                const slots = document.querySelectorAll('.time-slot');
+                                if (slots.length > 0) {
+                                    clearInterval(checkSlots);
+                                    slots.forEach(s => {
+                                        if (s.dataset.time === rTime && !s.classList.contains('disabled')) {
+                                            s.classList.add('selected');
+                                            continueBooking();
+                                            
+                                            sessionStorage.removeItem('booking_restore_date');
+                                            sessionStorage.removeItem('booking_restore_time');
+                                            sessionStorage.removeItem('booking_restore_step');
+                                        }
+                                    });
+                                }
+                            }, 100);
+                            setTimeout(() => clearInterval(checkSlots), 3000);
+                        }, 100);
+                    }
+                }
+
+                // 4. Initial Trigger
+                renderCalendarStrip();
+            });
 
             // 5. Form & Button Handlers
             document.getElementById('continueBooking').onclick = function () {
@@ -1085,7 +1148,7 @@
                 submitBtn.innerText = 'PROCCESSING...';
 
                 const formData = {
-                    _token: "{{ csrf_token() }}",
+                    _token: document.querySelector('meta[name="csrf-token"]').content,
                     team_id: "{{ $team->id }}",
                     service_id: selectedServiceId,
                     name: this.elements['name'].value,
@@ -1119,18 +1182,22 @@
                                 "image": "{{ asset('image/logo-ywp.png') }}",
                                 "order_id": response.razorpay_order_id,
                                 "handler": function (payResponse) {
+                                    document.getElementById('fullScreenLoader').style.display = 'flex';
+
                                     // 3. Verify Payment
                                     $.ajax({
                                         url: "{{ route('com.therapist.booking.verify') }}",
                                         method: 'POST',
                                         data: {
-                                            _token: response.new_token || "{{ csrf_token() }}",
+                                            _token: response.new_token || document.querySelector('meta[name="csrf-token"]').content,
                                             booking_id: response.booking_id,
                                             razorpay_payment_id: payResponse.razorpay_payment_id,
                                             razorpay_order_id: payResponse.razorpay_order_id,
                                             razorpay_signature: payResponse.razorpay_signature
                                         },
                                         success: function (verifyResponse) {
+                                            document.getElementById('fullScreenLoader').style.display = 'none';
+
                                             if (verifyResponse.success) {
                                                 let msg = 'Success! Your session has been booked.';
                                                 if (verifyResponse.email_status && verifyResponse.email_status.includes('failed')) {
@@ -1148,6 +1215,7 @@
                                             }
                                         },
                                         error: function (xhr) {
+                                            document.getElementById('fullScreenLoader').style.display = 'none';
                                             console.error('Verification Error:', xhr);
                                             let errorMsg = xhr.responseJSON?.message || 'Server error during verification.';
                                             alert(errorMsg + '\n\nPayment ID: ' + payResponse.razorpay_payment_id);
@@ -1192,6 +1260,90 @@
                     }
                 });
             };
+
+              @guest
+            // AJAX Email Check
+            $('#bookingEmail').on('blur', function () {
+                const email = $(this).val();
+                if (!email || !email.includes('@')) return;
+
+                $.ajax({
+                    url: "{{ route('cart.check-email') }}",
+                    method: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        email: email
+                    },
+                    success: function (response) {
+                        const messageDiv = $('#emailCheckMessage');
+                        const accountFields = $('#accountCreationFields');
+                        const submitBtn = $('#detailsForm button[type="submit"]');
+
+                        if (response.exists) {
+                            messageDiv.html('<span class="text-danger fw-bold">Account already exists. <a href="javascript:void(0)" onclick="openLoginModal()" class="text-primary text-decoration-underline">Please login first</a> to continue.</span>').show();
+                            accountFields.hide();
+                            submitBtn.prop('disabled', true).addClass('opacity-50');
+                        } else {
+                            messageDiv.hide();
+                            accountFields.show();
+                            submitBtn.prop('disabled', false).removeClass('opacity-50');
+                        }
+                    }
+                });
+            });
+
+            window.openLoginModal = function () {
+                const modalEl = document.getElementById('loginModal');
+                if (!modalEl) return;
+
+                const form = document.getElementById('ajaxLoginForm');
+                if (form) form.setAttribute('data-no-reload', 'true');
+
+                const loginModal = new bootstrap.Modal(modalEl);
+                loginModal.show();
+            };
+
+            // Handle successful AJAX login without page reload
+            document.addEventListener('ajaxLoginSuccess', function (e) {
+                const data = e.detail;
+                if (!data.success) return;
+
+                // 1. Hide the modal
+                const modalEl = document.getElementById('loginModal');
+                if (modalEl) {
+                    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+                    if (modalInstance) modalInstance.hide();
+                }
+
+                // 2. Refresh CSRF Tokens globally on the page
+                if (data.new_token) {
+                    const meta = document.querySelector('meta[name="csrf-token"]');
+                    if (meta) meta.content = data.new_token;
+                    document.querySelectorAll('input[name="_token"]').forEach(input => {
+                        input.value = data.new_token;
+                    });
+                }
+
+                // 3. Update Booking Form UI
+                $('#emailCheckMessage').hide();
+                $('#accountCreationFields').slideUp(300, function () { $(this).remove(); });
+                $('#detailsForm button[type="submit"]').prop('disabled', false).removeClass('opacity-50');
+
+                // 4. Pre-fill User Data (only if current fields are empty or to sync)
+                if (data.user) {
+                    const nameInput = document.querySelector('input[name="name"]');
+                    const emailInput = document.querySelector('input[name="email"]');
+                    const phoneInput = document.querySelector('input[name="phone"]');
+
+                    if (nameInput && !nameInput.value) nameInput.value = data.user.name || '';
+                    if (emailInput) emailInput.value = data.user.email || ''; // Email should sync with login
+                    if (phoneInput && !phoneInput.value) phoneInput.value = data.user.phone || '';
+                }
+            });
+            @endguest
+
+            // Initial Load
+            renderCalendarStrip();
         });
     </script>
 @endsection

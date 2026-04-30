@@ -150,11 +150,12 @@
 
                     <!-- Section 2: Therapy Bookings -->
                     <div id="therapy-bookings" class="user-dashboard-section mb-5 pt-4 d-none">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h4 class="font-1 fw-bold mb-0 d-flex align-items-center gap-3">
-                                <i class="bi bi-calendar-check-fill text-primary"></i> Therapy Bookings
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
+                            <h4 class="font-1 fw-bold mb-0 d-flex align-items-center gap-2 gap-md-3">
+                                <i class="bi bi-calendar-check-fill text-primary"></i> 
+                                <span>Therapy Bookings</span>
                             </h4>
-                            <a href="{{ route('com.team') }}" class="btn btn-outline-primary rounded-pill px-4 fw-bold">
+                            <a href="{{ route('com.team') }}" class="btn btn-outline-primary rounded-pill px-4 fw-bold btn-sm py-2 py-sm-1">
                                 Add Bookings
                             </a>
                         </div>
@@ -237,11 +238,12 @@
 
                     <!-- Section 3: Store Orders -->
                     <div id="order-history" class="user-dashboard-section pt-4 d-none">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h4 class="font-1 fw-bold mb-0 d-flex align-items-center gap-3">
-                                <i class="bi bi-bag-check-fill text-primary"></i> Wonder Store Orders
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
+                            <h4 class="font-1 fw-bold mb-0 d-flex align-items-center gap-2 gap-md-3">
+                                <i class="bi bi-bag-check-fill text-primary"></i> 
+                                <span>Wonder Store Orders</span>
                             </h4>
-                            <a href="{{ route('com.store') }}" class="btn btn-outline-primary rounded-pill px-4 fw-bold">
+                            <a href="{{ route('com.store') }}" class="btn btn-outline-primary rounded-pill px-4 fw-bold btn-sm py-2 py-sm-1">
                                 Continue Shopping
                             </a>
                         </div>
@@ -319,8 +321,9 @@
                     </div>
                     <!-- Section 4: My Reviews -->
                     <div id="my-reviews" class="user-dashboard-section pt-4 d-none">
-                        <h4 class="font-1 fw-bold mb-4 d-flex align-items-center gap-3">
-                            <i class="bi bi-chat-left-text-fill text-primary"></i> My Submitted Reviews
+                        <h4 class="font-1 fw-bold mb-4 d-flex align-items-center gap-2 gap-md-3">
+                            <i class="bi bi-chat-left-text-fill text-primary"></i> 
+                            <span>My Submitted Reviews</span>
                         </h4>
                         @if($reviews->count() > 0)
                             <div class="row g-4">

@@ -19,9 +19,20 @@
                                         $roleLabel = 'Footer logo';
                                     } elseif ($setting->key === 'site_logo_black') {
                                         $roleLabel = 'Header logo';
+                                    } elseif ($setting->key === 'primary_color') {
+                                        $roleLabel = 'Affects buttons, headings, and main UI elements overlays';
+                                    } elseif ($setting->key === 'secondary_color') {
+                                        $roleLabel = 'Affects accents, highlights, and secondary buttons';
+                                    } elseif ($setting->key === 'header_top_bar_bg_color') {
+                                        $roleLabel = 'Top bar background color';
+                                    } elseif ($setting->key === 'header_bg_color') {
+                                        $roleLabel = 'Main navbar background color';
+                                    } elseif ($setting->key === 'footer_bg_color') {
+                                        $roleLabel = 'Footer background overlay color';
                                     }
                                 @endphp
-                                <label class="form-label fw-bold">{{ $displayKey }} @if($roleLabel) <small class="text-muted">({{ $roleLabel }})</small> @endif</label>
+                                <label class="form-label fw-bold">{{ $displayKey }} @if($roleLabel) <small
+                                class="text-muted">({{ $roleLabel }})</small> @endif</label>
 
                                 @if($setting->type === 'color')
                                     <div class="d-flex align-items-center gap-3">

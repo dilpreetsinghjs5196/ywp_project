@@ -229,7 +229,7 @@ img {
 /* Header and Navbar            */
 /* ---------------------------- */
 .top-bar {
-  background-color: var(--primary-dark);
+  background-color: var(--header-top-bar-bg);
   /* padding-block: 1.2rem; */
   min-height: 50px;
   padding-top: 4px;
@@ -859,7 +859,8 @@ img {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(23, 71, 166, 0.9), rgba(59, 103, 191, 0.9));
+  background: var(--footer-bg);
+  opacity: 0.9;
   z-index: 1;
   /* place in-front of content */
 }

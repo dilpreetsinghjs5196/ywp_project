@@ -30,7 +30,7 @@
 </div>
 
 <!-- Header -->
-<header class="bg-white">
+<header style="background-color: var(--header-bg);">
   <div class="b-container">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light" aria-label="Offcanvas navbar large">

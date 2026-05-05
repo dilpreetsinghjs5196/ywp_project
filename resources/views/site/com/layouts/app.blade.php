@@ -26,6 +26,15 @@
             --secondary-color:
                 {{ $settings['secondary_color'] ?? '#ffbf00' }}
             ;
+            --header-top-bar-bg:
+                {{ $settings['header_top_bar_bg_color'] ?? '#03204C' }}
+            ;
+            --header-bg:
+                {{ $settings['header_bg_color'] ?? '#ffffff' }}
+            ;
+            --footer-bg:
+                {{ $settings['footer_bg_color'] ?? '#1747a6' }}
+            ;
         }
 
         .line-clamp-2 {

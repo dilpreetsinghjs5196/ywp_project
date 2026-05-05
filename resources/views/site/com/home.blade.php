@@ -180,7 +180,7 @@
   </section>
   <!-- #about end -->
 
-   <style>
+  <style>
     .therapist-info-box {
       bottom: 4%;
       left: 50%;
@@ -329,7 +329,7 @@
   </section>
   <!-- #teams end -->
 
-    <!-- Services Section -->
+  <!-- Services Section -->
   <section class="section py-5">
     <div class="b-container text-center">
       <h6 class="text-primary-color fw-semibold mb-2">{{ $contents['services']['small_heading'] ?? 'OUR SERVICES' }}</h6>
@@ -388,7 +388,7 @@
   <!-- #services end -->
 
   <!-- Appointment Section -->
-  <section class="section py-5 text-white bg-gradient-secondary my-5">
+  <section class="section py-5 text-white bg-gradient-secondary mt-5">
     <div class="b-container">
       <div class="row align-items-center g-4 pt-5">
         <!-- Left content -->
@@ -467,7 +467,7 @@
 
 
 
- 
+
 
   <!-- Feedback Section -->
   <section class="section py-5 bg-light bg-white">
@@ -642,17 +642,17 @@
                   </div>
 
                   <!-- <div class="d-flex align-items-center gap-3 justify-content-start" data-aos="fade-left"
-                            data-aos-easing="ease-out-cubic" data-aos-delay="250" data-aos-duration="1000">
-                            <div
-                              class="d-flex align-items-center justify-content-center rounded-circle border-white bg-secondary-color flex-shrink-0"
-                              style="width: 65px; height: 65px; border: 2px solid white;">
-                              <i class="bi bi-telephone-fill fs-2 text-white"></i>
-                            </div>
-                            <div class="ms-2 font-1 py-2">
-                              <p class="fw-bold text-primary-color mb-0">Call us anytime</p>
-                              <h5 class="fw-bold">{{ $contents['get_in_touch']['phone'] ?? '(555) 123-4567' }}</h5>
-                            </div>
-                          </div> -->
+                              data-aos-easing="ease-out-cubic" data-aos-delay="250" data-aos-duration="1000">
+                              <div
+                                class="d-flex align-items-center justify-content-center rounded-circle border-white bg-secondary-color flex-shrink-0"
+                                style="width: 65px; height: 65px; border: 2px solid white;">
+                                <i class="bi bi-telephone-fill fs-2 text-white"></i>
+                              </div>
+                              <div class="ms-2 font-1 py-2">
+                                <p class="fw-bold text-primary-color mb-0">Call us anytime</p>
+                                <h5 class="fw-bold">{{ $contents['get_in_touch']['phone'] ?? '(555) 123-4567' }}</h5>
+                              </div>
+                            </div> -->
                   <div class="d-flex align-items-center gap-3 justify-content-start mt-3" data-aos="fade-left"
                     data-aos-easing="ease-out-cubic" data-aos-delay="500" data-aos-duration="1000">
                     <div

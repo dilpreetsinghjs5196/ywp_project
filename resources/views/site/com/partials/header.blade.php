@@ -44,15 +44,27 @@
             <img src="{{ $blackLogoUrl }}" alt="Logo" class="main-logo"></a>
         </div>
         
-        <!-- Mobile/Tablet Login Button (Center) -->
-        <div class="d-lg-none flex-grow-1 text-center" id="mobile-login-area">
+        <!-- Mobile/Tablet Buttons (Center) -->
+        <div class="d-lg-none flex-grow-1 text-center d-flex justify-content-center align-items-center gap-2" id="mobile-login-area">
+          @if(!request()->routeIs('com.store'))
+            <a href="{{ route('com.team') }}" class="btn btn-secondary-solid rounded-pill px-3 py-1 small fw-bold">Book Now</a>
+          @endif
           @auth
             <a href="{{ route('com.profile') }}" class="btn btn-outline-primary rounded-pill px-3 py-1 small fw-bold">
               Profile
             </a>
           @else
             <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#loginModal" class="btn btn-primary rounded-pill px-3 py-1 small fw-bold">Login</a>
-          @endguest
+          @endauth
+
+          @if(request()->routeIs('com.store'))
+            <a href="{{ route('com.cart') }}" class="btn btn-outline-primary position-relative rounded-pill px-2 py-1 border-2" title="Shopping Cart">
+              <i class="bi bi-cart3 fs-6"></i>
+              <span id="cart-badge-mobile" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm" style="display: none; padding: 0.35em 0.65em; font-size: 0.6rem; z-index: 10;">
+                0
+              </span>
+            </a>
+          @endif
         </div>
 
         <button class="navbar-toggler bg-primary-color border-0 ms-auto" type="button" data-bs-toggle="offcanvas"
@@ -109,6 +121,11 @@
               </li>
             </ul>
             <div class="d-flex align-items-center ms-lg-3 mt-3 mt-lg-0 gap-2">
+              @if(!request()->routeIs('com.store'))
+                <a href="{{ route('com.team') }}" class="btn btn-secondary-solid rounded-pill px-4 py-2 fw-bold text-uppercase d-none d-lg-inline-flex">
+                  Book Now
+                </a>
+              @endif
               @auth
               <div class="dropdown">
                 <button class="btn btn-outline-primary position-relative rounded-pill px-3 py-2 border-2 dropdown-toggle no-caret" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
@@ -141,12 +158,12 @@
               </div>
               @else
               <div id="desktop-login-area">
-                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#loginModal" class="btn btn-primary rounded-pill px-4 py-2 fw-bold text-uppercase d-none d-lg-inline-flex me-2">
+                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#loginModal" class="btn btn-primary rounded-pill px-4 py-2 fw-bold text-uppercase d-none d-lg-inline-flex">
                   Login
                 </a>
               </div>
               @if(request()->routeIs('com.store'))
-                <a href="{{ route('com.cart') }}" class="btn btn-outline-primary position-relative rounded-pill px-3 py-2 border-2 {{ request()->routeIs('com.cart') ? 'active' : '' }}" title="Shopping Cart">
+                <a href="{{ route('com.cart') }}" class="btn btn-outline-primary position-relative rounded-pill px-3 py-2 border-2 {{ request()->routeIs('com.cart') ? 'active' : '' }} d-none d-lg-inline-flex" title="Shopping Cart">
                   <i class="bi bi-cart3 fs-5"></i>
                   <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm" style="display: none; padding: 0.35em 0.65em; font-size: 0.7rem; z-index: 10;">
                     0
@@ -188,7 +205,7 @@
                 url: "{{ route('cart.count') }}",
                 type: 'GET',
                 success: function(data) {
-                    const badges = $('#cart-badge, #cart-badge-main');
+                    const badges = $('#cart-badge, #cart-badge-main, #cart-badge-mobile');
                     const dropdownBadge = $('#cart-badge-dropdown');
                     if (data.count > 0) {
                         badges.text(data.count).attr('style', 'display: block !important; padding: 0.35em 0.65em; font-size: 0.7rem; z-index: 10;');

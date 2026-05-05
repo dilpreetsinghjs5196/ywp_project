@@ -53,6 +53,11 @@
                                                 supported.</p>
                                         </div>
                                     </div>
+                                @elseif($item->type === 'toggle')
+                                    <select name="{{ $item->id }}" class="form-select">
+                                        <option value="0" {{ $item->value == '0' ? 'selected' : '' }}>Disabled (Store is Live)</option>
+                                        <option value="1" {{ $item->value == '1' ? 'selected' : '' }}>Enabled (Store Under Maintenance)</option>
+                                    </select>
                                 @endif
                             </div>
                         @endforeach
@@ -61,8 +66,7 @@
             </div>
         @endforeach
 
-        <div class="position-sticky bottom-0 bg-white p-3 p-md-4 border-top text-end"
-            style="z-index: 100; margin: 0 -1.5rem -1.5rem -1.5rem;">
+        <div class="mt-5 text-end">
             <button type="submit" class="btn btn-primary px-4 px-md-5 btn-lg w-100 w-md-auto">
                 <i class="bi bi-save me-2"></i> Save Changes
             </button>

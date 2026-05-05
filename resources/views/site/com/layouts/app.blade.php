@@ -270,6 +270,8 @@
             const data = e.detail;
             if (!data.success) return;
 
+            const isStorePage = {{ request()->routeIs('com.store') ? 'true' : 'false' }};
+
             // 1. Update Desktop Header Login Button to Profile Dropdown
             const desktopArea = document.getElementById('desktop-login-area');
             if (desktopArea) {
@@ -298,7 +300,14 @@
             const mobileArea = document.getElementById('mobile-login-area');
             if (mobileArea) {
                 mobileArea.innerHTML = `
+                    ${!isStorePage ? '<a href="{{ route("com.team") }}" class="btn btn-secondary-solid rounded-pill px-3 py-1 small fw-bold me-2">Book Now</a>' : ''}
                     <a href="{{ route('com.profile') }}" class="btn btn-outline-primary rounded-pill px-3 py-1 small fw-bold">Profile</a>
+                    ${isStorePage ? `
+                        <a href="{{ route('com.cart') }}" class="btn btn-outline-primary position-relative rounded-pill px-2 py-1 border-2 ms-2" title="Shopping Cart">
+                            <i class="bi bi-cart3 fs-6"></i>
+                            <span id="cart-badge-mobile" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm" style="display: none; padding: 0.35em 0.65em; font-size: 0.6rem; z-index: 10;">0</span>
+                        </a>
+                    ` : ''}
                 `;
             }
 

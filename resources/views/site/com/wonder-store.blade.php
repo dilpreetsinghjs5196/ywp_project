@@ -32,9 +32,30 @@
     </section>
 
     <!-- Store Content -->
-    <section class="section py-5 mb-5">
-        <div class="b-container">
-            <div class="row g-4">
+    @if(($contents['banner']['maintenance_mode'] ?? '0') == '1')
+        <section class="section py-5 mb-5 d-flex align-items-center" style="min-height: 40vh;">
+            <div class="b-container text-center py-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-8" data-aos="fade-up">
+                        <div class="maintenance-icon mb-4">
+                            <i class="bi bi-tools text-primary-color display-1 opacity-50"></i>
+                        </div>
+                        <h2 class="font-1 fw-bold mb-3">Store Under Maintenance</h2>
+                        <p class="text-muted fs-5 mb-4">
+                            We're currently updating our Wonder Store to bring you a better experience. 
+                            Please check back shortly.
+                        </p>
+                        <a href="{{ route('com.home') }}" class="btn btn-primary-solid px-5 rounded-pill">
+                            Return Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @else
+        <section class="section py-5 mb-5">
+            <div class="b-container">
+                <div class="row g-4">
                 <!-- Sidebar / Categories -->
                 <div class="col-lg-3">
                     <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top" style="top: 100px;">
@@ -83,6 +104,7 @@
             </div>
         </div>
     </section>
+    @endif
 
     @push('js')
         <script>

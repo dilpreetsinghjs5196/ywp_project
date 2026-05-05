@@ -180,143 +180,7 @@
   </section>
   <!-- #about end -->
 
-  <!-- Appointment Section -->
-  <section class="section py-5 text-white bg-gradient-secondary my-5">
-    <div class="b-container">
-      <div class="row align-items-center g-4 pt-5">
-        <!-- Left content -->
-        <div class="col-12 col-xl-8 text-white mt-5 text-center text-xl-start">
-          <p class="text-uppercase text-primary-color fs-5 fw-semibold mb-2">
-            {{ $contents['appointment']['small_heading'] ?? 'Why Choose Us ?' }}
-          </p>
-          <h2 class="font-1 display-5 mb-4" style="font-weight: 800;">
-            {!! str_replace(['Hope', 'At A Time'], ['<span class="text-primary-color">Hope</span>', '<span class="text-primary-color">At A Time</span>'], $contents['appointment']['title'] ?? 'Restoring Hope, One Day At A Time') !!}
-          </h2>
-          <p class="mb-4" style="font-size: large;">
-            {{ $contents['appointment']['description'] ?? 'Through consistent care and compassionate guidance...' }}
-          </p>
-          <div class="d-flex justify-content-center justify-content-xl-start">
-            <ul class="list-unstyled font-1 text-start d-inline-block text-xl-start mb-4">
-              <li class="d-flex align-items-start mb-3">
-                <div class="d-flex align-items-center" style="height: 1.75rem;">
-                  <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
-                </div>
-                <span class="fw-bolder mb-0" style="font-size: 1.25rem; line-height: 1.4;">
-                  {{ $contents['appointment']['list_item_1'] ?? 'Compassionate & Experienced Professionals' }}
-                </span>
-              </li>
-              <li class="d-flex align-items-start mb-3">
-                <div class="d-flex align-items-center" style="height: 1.75rem;">
-                  <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
-                </div>
-                <span class="fw-bolder mb-0" style="font-size: 1.25rem; line-height: 1.4;">
-                  {{ $contents['appointment']['list_item_2'] ?? 'Holistic Approach To Well-Being' }}
-                </span>
-              </li>
-              <li class="d-flex align-items-start mb-3">
-                <div class="d-flex align-items-center" style="height: 1.75rem;">
-                  <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
-                </div>
-                <span class="fw-bolder mb-0" style="font-size: 1.25rem; line-height: 1.4;">
-                  {{ $contents['appointment']['list_item_3'] ?? 'Safe & Supportive Environment' }}
-                </span>
-              </li>
-            </ul>
-          </div>
-          <a href="{{ route('com.home') }}" class="btn btn-primary-solid mb-5">Make An Appointment</a>
-        </div>
-
-        <!-- Right content -->
-        <div class="col-12 col-xl-4 d-flex flex-column gap-3">
-          <div class="card bg-primary-color rounded-4 border-0 p-2" data-aos="fade-left" data-aos-easing="linear"
-            data-aos-delay="500" data-aos-duration="1000">
-            <div class="card-body text-center text-white p-3 font-1">
-              <div class="display-5"><i class="bi bi-emoji-smile-fill accent-secondary-color"></i></div>
-              <div class="mb-0 fs-2 fw-bold text-white">{{ $contents['appointment']['stat_1_number'] ?? '100%' }}</div>
-              <p class="mb-0">{{ $contents['appointment']['stat_1_text'] ?? 'Satisfaction' }}</p>
-            </div>
-          </div>
-          <div class="card bg-primary-color rounded-4 border-0" data-aos="fade-left" data-aos-easing="linear"
-            data-aos-delay="750" data-aos-duration="1000">
-            <div class="card-body text-center text-white p-3 font-1">
-              <div class="display-5"><i class="bi bi-hand-thumbs-up-fill accent-secondary-color"></i></div>
-              <div class="mb-0 fs-2 fw-bold text-white">{{ $contents['appointment']['stat_2_number'] ?? '257+' }}</div>
-              <p class="mb-0">{{ $contents['appointment']['stat_2_text'] ?? 'Happy Patient' }}</p>
-            </div>
-          </div>
-          <div class="card bg-primary-color rounded-4 border-0" data-aos="fade-left" data-aos-easing="linear"
-            data-aos-delay="1000" data-aos-duration="1000">
-            <div class="card-body text-center text-white p-3 font-1">
-              <div class="display-5"><i class="bi bi-person-plus-fill accent-secondary-color"></i></div>
-              <div class="mb-0 fs-2 fw-bold text-white">{{ $contents['appointment']['stat_3_number'] ?? '10+' }}</div>
-              <p class="mb-0">{{ $contents['appointment']['stat_3_text'] ?? 'Expert Therapist' }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- #appointment end -->
-
-  <!-- Services Section -->
-  <section class="section py-5">
-    <div class="b-container text-center">
-      <h6 class="text-primary-color fw-semibold mb-2">{{ $contents['services']['small_heading'] ?? 'OUR SERVICES' }}</h6>
-      <h2 class="display-5 font-1 mb-5" style="font-weight: 800;">
-        {{ $contents['services']['title'] ?? 'Breaking Stigmas, Building Strength' }}
-      </h2>
-      <div class="position-relative px-md-5">
-        <div class="swiper-container services-slider" style="margin-top: 3rem !important; overflow: hidden;">
-          <div class="swiper-wrapper">
-            @foreach($services as $service)
-              <!-- Dynamic Service Slide -->
-              <div class="swiper-slide mb-5">
-                <div class="card border-0 rounded-5 overflow-hidden h-100 shadow-sm scale-hover mx-2" data-aos="fade-up"
-                  data-aos-easing="linear" data-aos-delay="{{ $loop->iteration * 100 }}" data-aos-duration="1000">
-                  @php
-                    $servImg = $service->image ?? 'image/serv1.jpg';
-                    $servImgUrl = Str::startsWith($servImg, 'image/') ? asset($servImg) : asset('storage/' . $servImg);
-
-                    $iconImg = $service->icon_image;
-                    $iconImgUrl = $iconImg ? (Str::startsWith($iconImg, 'image/') ? asset($iconImg) : asset('storage/' . $iconImg)) : null;
-                  @endphp
-                  <img src="{{ $servImgUrl }}" class="w-100"
-                    style="height: 250px; transform: scale(1.5); object-position: center;" alt="{{ $service->title }}">
-                  <div class="bg-accent-color-2 text-start p-4 position-relative">
-                    <div class="position-absolute top-0 start-0 translate-middle-y"
-                      style="margin-top: 0; margin-left: 20px;">
-                      @if($iconImgUrl)
-                        <img src="{{ $iconImgUrl }}" alt="{{ $service->title }} Icon" width="100">
-                      @else
-                        <div class="bg-primary-color rounded-circle d-flex align-items-center justify-content-center"
-                          style="width: 80px; height: 80px;">
-                          <i class="bi {{ $service->icon }} text-white fs-2"></i>
-                        </div>
-                      @endif
-                    </div>
-                    <a href="#"
-                      class="btn btn-dark btn-lg rounded-pill position-absolute top-0 end-0 me-3 fw-medium scale-hover"
-                      style="margin-top: -25px;">Read More</a>
-                    <h3 class="font-1 mt-5" style="font-weight: 800;">{{ $service->title }}</h3>
-                    <hr class="border-primary border-1 opacity-100 w-100 my-4">
-                    <p class="mb-3 line-clamp-6 service-description">{{ $service->description }}</p>
-                  </div>
-                </div>
-              </div>
-            @endforeach
-          </div>
-          <!-- Pagination -->
-          <div class="swiper-pagination mt-4 position-relative"></div>
-        </div>
-        <!-- Navigation Arrows -->
-        <div class="swiper-button-next services-next text-primary-color"></div>
-        <div class="swiper-button-prev services-prev text-primary-color"></div>
-      </div>
-    </div>
-  </section>
-  <!-- #services end -->
-
-  <style>
+   <style>
     .therapist-info-box {
       bottom: 4%;
       left: 50%;
@@ -464,6 +328,146 @@
     </div>
   </section>
   <!-- #teams end -->
+
+    <!-- Services Section -->
+  <section class="section py-5">
+    <div class="b-container text-center">
+      <h6 class="text-primary-color fw-semibold mb-2">{{ $contents['services']['small_heading'] ?? 'OUR SERVICES' }}</h6>
+      <h2 class="display-5 font-1 mb-5" style="font-weight: 800;">
+        {{ $contents['services']['title'] ?? 'Breaking Stigmas, Building Strength' }}
+      </h2>
+      <div class="position-relative px-md-5">
+        <div class="swiper-container services-slider" style="margin-top: 3rem !important; overflow: hidden;">
+          <div class="swiper-wrapper">
+            @foreach($services as $service)
+              <!-- Dynamic Service Slide -->
+              <div class="swiper-slide mb-5">
+                <div class="card border-0 rounded-5 overflow-hidden h-100 shadow-sm scale-hover mx-2" data-aos="fade-up"
+                  data-aos-easing="linear" data-aos-delay="{{ $loop->iteration * 100 }}" data-aos-duration="1000">
+                  @php
+                    $servImg = $service->image ?? 'image/serv1.jpg';
+                    $servImgUrl = Str::startsWith($servImg, 'image/') ? asset($servImg) : asset('storage/' . $servImg);
+
+                    $iconImg = $service->icon_image;
+                    $iconImgUrl = $iconImg ? (Str::startsWith($iconImg, 'image/') ? asset($iconImg) : asset('storage/' . $iconImg)) : null;
+                  @endphp
+                  <img src="{{ $servImgUrl }}" class="w-100"
+                    style="height: 250px; transform: scale(1.5); object-position: center;" alt="{{ $service->title }}">
+                  <div class="bg-accent-color-2 text-start p-4 position-relative">
+                    <div class="position-absolute top-0 start-0 translate-middle-y"
+                      style="margin-top: 0; margin-left: 20px;">
+                      @if($iconImgUrl)
+                        <img src="{{ $iconImgUrl }}" alt="{{ $service->title }} Icon" width="100">
+                      @else
+                        <div class="bg-primary-color rounded-circle d-flex align-items-center justify-content-center"
+                          style="width: 80px; height: 80px;">
+                          <i class="bi {{ $service->icon }} text-white fs-2"></i>
+                        </div>
+                      @endif
+                    </div>
+                    <a href="#"
+                      class="btn btn-dark btn-lg rounded-pill position-absolute top-0 end-0 me-3 fw-medium scale-hover"
+                      style="margin-top: -25px;">Read More</a>
+                    <h3 class="font-1 mt-5" style="font-weight: 800;">{{ $service->title }}</h3>
+                    <hr class="border-primary border-1 opacity-100 w-100 my-4">
+                    <p class="mb-3 line-clamp-6 service-description">{{ $service->description }}</p>
+                  </div>
+                </div>
+              </div>
+            @endforeach
+          </div>
+          <!-- Pagination -->
+          <div class="swiper-pagination mt-4 position-relative"></div>
+        </div>
+        <!-- Navigation Arrows -->
+        <div class="swiper-button-next services-next text-primary-color"></div>
+        <div class="swiper-button-prev services-prev text-primary-color"></div>
+      </div>
+    </div>
+  </section>
+  <!-- #services end -->
+
+  <!-- Appointment Section -->
+  <section class="section py-5 text-white bg-gradient-secondary my-5">
+    <div class="b-container">
+      <div class="row align-items-center g-4 pt-5">
+        <!-- Left content -->
+        <div class="col-12 col-xl-8 text-white mt-5 text-center text-xl-start">
+          <p class="text-uppercase text-primary-color fs-5 fw-semibold mb-2">
+            {{ $contents['appointment']['small_heading'] ?? 'Why Choose Us ?' }}
+          </p>
+          <h2 class="font-1 display-5 mb-4" style="font-weight: 800;">
+            {!! str_replace(['Hope', 'At A Time'], ['<span class="text-primary-color">Hope</span>', '<span class="text-primary-color">At A Time</span>'], $contents['appointment']['title'] ?? 'Restoring Hope, One Day At A Time') !!}
+          </h2>
+          <p class="mb-4" style="font-size: large;">
+            {{ $contents['appointment']['description'] ?? 'Through consistent care and compassionate guidance...' }}
+          </p>
+          <div class="d-flex justify-content-center justify-content-xl-start">
+            <ul class="list-unstyled font-1 text-start d-inline-block text-xl-start mb-4">
+              <li class="d-flex align-items-start mb-3">
+                <div class="d-flex align-items-center" style="height: 1.75rem;">
+                  <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
+                </div>
+                <span class="fw-bolder mb-0" style="font-size: 1.25rem; line-height: 1.4;">
+                  {{ $contents['appointment']['list_item_1'] ?? 'Compassionate & Experienced Professionals' }}
+                </span>
+              </li>
+              <li class="d-flex align-items-start mb-3">
+                <div class="d-flex align-items-center" style="height: 1.75rem;">
+                  <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
+                </div>
+                <span class="fw-bolder mb-0" style="font-size: 1.25rem; line-height: 1.4;">
+                  {{ $contents['appointment']['list_item_2'] ?? 'Holistic Approach To Well-Being' }}
+                </span>
+              </li>
+              <li class="d-flex align-items-start mb-3">
+                <div class="d-flex align-items-center" style="height: 1.75rem;">
+                  <i class="bi bi-check-circle-fill text-primary-color fs-4 me-2 flex-shrink-0"></i>
+                </div>
+                <span class="fw-bolder mb-0" style="font-size: 1.25rem; line-height: 1.4;">
+                  {{ $contents['appointment']['list_item_3'] ?? 'Safe & Supportive Environment' }}
+                </span>
+              </li>
+            </ul>
+          </div>
+          <a href="{{ route('com.home') }}" class="btn btn-primary-solid mb-5">Make An Appointment</a>
+        </div>
+
+        <!-- Right content -->
+        <div class="col-12 col-xl-4 d-flex flex-column gap-3">
+          <div class="card bg-primary-color rounded-4 border-0 p-2" data-aos="fade-left" data-aos-easing="linear"
+            data-aos-delay="500" data-aos-duration="1000">
+            <div class="card-body text-center text-white p-3 font-1">
+              <div class="display-5"><i class="bi bi-emoji-smile-fill accent-secondary-color"></i></div>
+              <div class="mb-0 fs-2 fw-bold text-white">{{ $contents['appointment']['stat_1_number'] ?? '100%' }}</div>
+              <p class="mb-0">{{ $contents['appointment']['stat_1_text'] ?? 'Satisfaction' }}</p>
+            </div>
+          </div>
+          <div class="card bg-primary-color rounded-4 border-0" data-aos="fade-left" data-aos-easing="linear"
+            data-aos-delay="750" data-aos-duration="1000">
+            <div class="card-body text-center text-white p-3 font-1">
+              <div class="display-5"><i class="bi bi-hand-thumbs-up-fill accent-secondary-color"></i></div>
+              <div class="mb-0 fs-2 fw-bold text-white">{{ $contents['appointment']['stat_2_number'] ?? '257+' }}</div>
+              <p class="mb-0">{{ $contents['appointment']['stat_2_text'] ?? 'Happy Patient' }}</p>
+            </div>
+          </div>
+          <div class="card bg-primary-color rounded-4 border-0" data-aos="fade-left" data-aos-easing="linear"
+            data-aos-delay="1000" data-aos-duration="1000">
+            <div class="card-body text-center text-white p-3 font-1">
+              <div class="display-5"><i class="bi bi-person-plus-fill accent-secondary-color"></i></div>
+              <div class="mb-0 fs-2 fw-bold text-white">{{ $contents['appointment']['stat_3_number'] ?? '10+' }}</div>
+              <p class="mb-0">{{ $contents['appointment']['stat_3_text'] ?? 'Expert Therapist' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- #appointment end -->
+
+
+
+ 
 
   <!-- Feedback Section -->
   <section class="section py-5 bg-light bg-white">

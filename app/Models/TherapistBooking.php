@@ -25,6 +25,7 @@ class TherapistBooking extends Model
         'location',
         'amount',
         'payment_status',
+        'coupon_code',
         'razorpay_payment_id',
         'razorpay_order_id',
         'razorpay_signature'

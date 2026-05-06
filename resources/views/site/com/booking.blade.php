@@ -672,6 +672,35 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Coupon Code Section -->
+                        <div class="card mt-4 border-0 shadow-sm" style="border-radius: 16px;">
+                            <div class="card-body p-4 bg-white" style="border-radius: 16px; border: 1px solid var(--booking-border);">
+                                <h5 class="fw-bold text-dark mb-3"><i class="bi bi-tag-fill text-primary me-2"></i>Apply Coupon Code</h5>
+                                <div class="input-group mb-2">
+                                    <input type="text" id="coupon_code_input" class="form-control rounded-3 border-secondary-subtle py-2 text-uppercase" placeholder="ENTER COUPON CODE">
+                                    <button class="btn btn-primary rounded-3 px-4" type="button" id="apply_coupon_btn" style="background: var(--booking-primary); border: none;">Apply</button>
+                                </div>
+                                <div id="coupon_status_msg" class="small fw-bold animate__animated animate__fadeIn" style="display: none;"></div>
+                                
+                                <!-- Price Breakdown -->
+                                <div class="price-breakdown mt-4 pt-3 border-top" style="display: none;">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="text-muted">Original Fees:</span>
+                                        <span class="text-dark fw-bold" id="breakdown_original_fees">₹0</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between text-success mb-2">
+                                        <span>Coupon Discount:</span>
+                                        <span id="breakdown_discount_amount">-₹0</span>
+                                    </div>
+                                    <hr class="my-2">
+                                    <div class="d-flex justify-content-between fw-bold text-dark fs-5">
+                                        <span>Final Amount to Pay:</span>
+                                        <span id="breakdown_final_amount">₹0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -813,6 +842,9 @@
             let selectedServiceId = @json($team->services->first()->id ?? null);
             let selectedServiceName = @json($team->services->first()->title ?? 'Therapy Session');
             let selectedServiceDuration = @json($team->services->first()->pivot->duration ?? $settings['session_duration'] ?? '50 mins');
+            let selectedServicePrice = @json($firstService->pivot->fees ?? $team->fees ?? 1800);
+            let appliedCoupon = null;
+            let couponDiscount = 0;
 
             const strip = document.getElementById('calendarStrip');
             const slotsContainer = document.querySelector('.time-slots-container');
@@ -1077,12 +1109,98 @@
                 selectedServiceId = id;
                 selectedServiceName = name;
                 selectedServiceDuration = duration;
+                selectedServicePrice = price; // Update the selected price
                 document.querySelectorAll('.service-selection-card').forEach(c => c.classList.remove('active'));
                 element.classList.add('active');
                 document.querySelector('.price-amount').innerText = '₹' + parseInt(price).toLocaleString();
                 document.querySelector('.duration-text').innerText = `${duration}, 1 session`;
                 renderCalendarStrip();
+                updatePriceBreakdown(); // Dynamic update when service changes
             };
+
+            // Coupon validation handler
+            document.getElementById('apply_coupon_btn').onclick = function () {
+                const code = document.getElementById('coupon_code_input').value.trim();
+                const statusMsg = document.getElementById('coupon_status_msg');
+                const emailInput = document.querySelector('input[name="email"]') || document.getElementById('email');
+                const emailVal = emailInput ? emailInput.value.trim() : '';
+
+                if (!code) {
+                    statusMsg.className = 'small fw-bold text-danger mt-1 animate__animated animate__fadeIn';
+                    statusMsg.innerText = 'Please enter a coupon code.';
+                    statusMsg.style.display = 'block';
+                    return;
+                }
+
+                if (!emailVal) {
+                    statusMsg.className = 'small fw-bold text-danger mt-1 animate__animated animate__fadeIn';
+                    statusMsg.innerText = 'Please enter your email address first to verify this coupon.';
+                    statusMsg.style.display = 'block';
+                    if (emailInput) emailInput.focus();
+                    return;
+                }
+
+                statusMsg.className = 'small fw-bold text-muted mt-1';
+                statusMsg.innerText = 'Verifying coupon...';
+                statusMsg.style.display = 'block';
+
+                $.ajax({
+                    url: "{{ route('coupon.check') }}",
+                    method: 'POST',
+                    data: {
+                        _token: document.querySelector('meta[name="csrf-token"]').content,
+                        code: code,
+                        email: emailVal
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            appliedCoupon = code;
+                            couponDiscount = parseFloat(response.discount_amount);
+
+                            statusMsg.className = 'small fw-bold text-success mt-1 animate__animated animate__fadeIn';
+                            statusMsg.innerText = response.message;
+                            statusMsg.style.display = 'block';
+
+                            updatePriceBreakdown();
+                        } else {
+                            appliedCoupon = null;
+                            couponDiscount = 0;
+
+                            statusMsg.className = 'small fw-bold text-danger mt-1 animate__animated animate__fadeIn';
+                            statusMsg.innerText = response.message;
+                            statusMsg.style.display = 'block';
+
+                            updatePriceBreakdown();
+                        }
+                    },
+                    error: function () {
+                        appliedCoupon = null;
+                        couponDiscount = 0;
+
+                        statusMsg.className = 'small fw-bold text-danger mt-1 animate__animated animate__fadeIn';
+                        statusMsg.innerText = 'Error validating coupon code. Please try again.';
+                        statusMsg.style.display = 'block';
+
+                        updatePriceBreakdown();
+                    }
+                });
+            };
+
+            function updatePriceBreakdown() {
+                const breakdown = document.querySelector('.price-breakdown');
+                if (appliedCoupon && couponDiscount > 0) {
+                    const original = parseFloat(selectedServicePrice);
+                    const finalAmount = Math.max(0, original - couponDiscount);
+
+                    document.getElementById('breakdown_original_fees').innerText = '₹' + original.toLocaleString();
+                    document.getElementById('breakdown_discount_amount').innerText = '-₹' + couponDiscount.toLocaleString();
+                    document.getElementById('breakdown_final_amount').innerText = '₹' + finalAmount.toLocaleString();
+                    
+                    $(breakdown).slideDown(300);
+                } else {
+                    $(breakdown).slideUp(300);
+                }
+            }
 
             window.selectMode = function (element, mode) {
                 selectedModeName = mode;
@@ -1199,7 +1317,8 @@
                     mode: selectedModeName,
                     create_account: this.elements['create_account'] ? (this.elements['create_account'].checked ? 1 : 0) : 0,
                     password: this.elements['password'] ? this.elements['password'].value : null,
-                    password_confirmation: this.elements['password_confirmation'] ? this.elements['password_confirmation'].value : null
+                    password_confirmation: this.elements['password_confirmation'] ? this.elements['password_confirmation'].value : null,
+                    coupon_code: appliedCoupon
                 };
 
                 // 1. Initialize Booking
@@ -1209,6 +1328,39 @@
                     data: formData,
                     success: function (response) {
                         if (response.success) {
+                            // If booking is free, bypass Razorpay completely!
+                            if (response.is_free) {
+                                const overlay = document.getElementById('thankYouOverlay');
+                                overlay.style.display = 'flex';
+
+                                let msg = 'Your therapy session has been scheduled. A confirmation email has been sent to your inbox.';
+                                if (response.email_status && response.email_status.includes('failed')) {
+                                    msg = 'Success! Your session has been booked, but we had trouble sending the confirmation email. Please check your profile for details.';
+                                }
+                                document.getElementById('thankYouMessage').innerText = msg;
+
+                                const countdownEl = document.getElementById('countdown');
+                                const progressEl = document.getElementById('redirectProgress');
+                                
+                                setTimeout(() => { 
+                                    if(progressEl) {
+                                        progressEl.style.width = '100%'; 
+                                        progressEl.style.transition = 'width 5s linear'; 
+                                    }
+                                }, 50);
+                                
+                                let count = 5;
+                                const timer = setInterval(() => {
+                                    count--;
+                                    if (countdownEl) countdownEl.innerText = count;
+                                    if (count <= 0) {
+                                        clearInterval(timer);
+                                        window.location.href = "{{ route('com.profile') }}#therapy-bookings";
+                                    }
+                                }, 1000);
+                                return;
+                            }
+
                             // 2. Open Razorpay
                             const options = {
                                 "key": response.razorpay_key,

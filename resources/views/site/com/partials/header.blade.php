@@ -111,7 +111,8 @@
                 </a>
                 <ul class="dropdown-menu shadow-sm" aria-labelledby="wellnessDropdown">
                   <!-- <li><a class="dropdown-item" href="service-detail.html">Free Mental Health Tests</a></li> -->
-                  <li><a class="dropdown-item" href="{{ route('com.blogs.index') }}">Blog</a></li>
+                  <li><a class="dropdown-item" href="{{ route('com.blogs.index') }}"><i class="bi bi-journal-text me-2"></i>Blog</a></li>
+                  <li><a class="dropdown-item" href="{{ route('coupon.request') }}"><i class="bi bi-tag-fill me-2"></i>Request Coupon</a></li>
                 </ul>
               </li>
               <li class="nav-item">

@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TherapistBookingConfirmation;
+use App\Models\Coupon;
+
 
 class TherapistBookingController extends Controller
 {
@@ -30,6 +32,8 @@ class TherapistBookingController extends Controller
             'gender' => 'required|string',
             'location' => 'required|string',
             'message' => 'nullable|string',
+            'coupon_code' => 'nullable|string|exists:coupons,code',
+
         ];
 
         if (!Auth::check()) {
@@ -84,8 +88,28 @@ class TherapistBookingController extends Controller
 
             $amount = ($servicePivot && $servicePivot->fees) ? $servicePivot->fees : ($therapist->fees ?? 1000);
 
+            // 2.5 Apply Coupon Discount
+            $appliedCouponCode = null;
+            if ($request->filled('coupon_code')) {
+                $coupon = Coupon::where('code', $request->coupon_code)
+                    ->where('status', 'approved')
+                    ->first();
+
+                if ($coupon) {
+                    // Secure backend check: Make sure booking email matches the registered coupon email (case-insensitive)
+                    if ($coupon->user_email && strtolower($coupon->user_email) !== strtolower($request->email)) {
+                        throw new \Exception("This coupon code does not belong to your email address.");
+                    }
+
+                    $amount = max(0, $amount - $coupon->discount_amount);
+                    $appliedCouponCode = $coupon->code;
+                }
+            }
+
+
             // 3. Create Booking
             try {
+                $paymentStatus = ($amount <= 0) ? 'paid' : 'pending';
                 $booking = TherapistBooking::create([
                     'user_id' => $user_id,
                     'team_id' => $request->team_id,
@@ -101,10 +125,75 @@ class TherapistBookingController extends Controller
                     'location' => $request->location,
                     'message' => $request->message,
                     'amount' => $amount,
-                    'payment_status' => 'pending',
+                    'payment_status' => $paymentStatus,
+                    'coupon_code' => $appliedCouponCode,
                 ]);
             } catch (\Exception $e) {
                 throw new \Exception("Booking registration failed: " . $e->getMessage());
+            }
+
+            // If the booking is completely free, we can skip Razorpay and complete the transaction immediately!
+            if ($amount <= 0) {
+                // Mark coupon as used immediately
+                if ($appliedCouponCode) {
+                    Coupon::where('code', $appliedCouponCode)->update(['status' => 'used']);
+                }
+
+                // Send Emails & Calendar Sync
+                $emailStatus = 'sent';
+                try {
+                    $this->configureMailSettings();
+
+                    // Mail to Therapist
+                    if ($booking->therapist && $booking->therapist->email) {
+                        Mail::to($booking->therapist->email)->send(new TherapistBookingConfirmation($booking, 'therapist'));
+                    }
+
+                    // Mail to User
+                    Mail::to($booking->email)->send(new TherapistBookingConfirmation($booking, 'user'));
+
+                    // Auto-create Google Calendar Event for Therapist
+                    if ($booking->therapist && $booking->therapist->google_access_token) {
+                        try {
+                            $calendarService = new \App\Services\GoogleCalendarService();
+                            $startTime = \Carbon\Carbon::parse($booking->booking_date . ' ' . $booking->booking_time, 'Asia/Kolkata');
+
+                            $durationStr = DB::table('service_team')
+                                ->where('team_id', $booking->team_id)
+                                ->where('service_id', $booking->service_id)
+                                ->value('duration') ?? '60';
+
+                            $duration = (int) filter_var($durationStr, FILTER_SANITIZE_NUMBER_INT);
+                            if ($duration <= 0) $duration = 60;
+
+                            $endTime = (clone $startTime)->addMinutes($duration);
+
+                            $calendarService->createEvent($booking->therapist, [
+                                'client_name' => $booking->name,
+                                'client_email' => $booking->email,
+                                'client_phone' => $booking->phone,
+                                'start_time' => $startTime->toIso8601String(),
+                                'end_time' => $endTime->toIso8601String(),
+                                'location' => $booking->location ?? 'Online (Link will be shared)',
+                            ]);
+                        } catch (\Exception $e) {
+                            \Illuminate\Support\Facades\Log::error('Google Calendar Sync Error: ' . $e->getMessage());
+                        }
+                    }
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::error('Booking Email Error: ' . $e->getMessage());
+                    $emailStatus = 'failed: ' . $e->getMessage();
+                }
+
+                DB::commit();
+
+                return response()->json([
+                    'success' => true,
+                    'is_free' => true,
+                    'booking_id' => $booking->id,
+                    'email_status' => $emailStatus,
+                    'message' => 'Booking confirmed successfully!'
+                ]);
             }
 
             // 4. Initialize Razorpay Order
@@ -196,6 +285,11 @@ class TherapistBookingController extends Controller
                 'razorpay_signature' => $request->razorpay_signature,
                 'payment_status' => 'paid'
             ]);
+
+            // Mark coupon as used if applied
+            if ($booking->coupon_code) {
+                Coupon::where('code', $booking->coupon_code)->update(['status' => 'used']);
+            }
 
             // 3. Send Emails & Calendar Sync
             $emailStatus = 'sent';

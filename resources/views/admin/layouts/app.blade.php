@@ -354,6 +354,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.coupons.*') ? 'active' : '' }}"
+                            href="{{ route('admin.coupons.index') }}">
+                            <i class="bi bi-tag-fill"></i> Coupon Requests
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <div class="nav-link text-uppercase small fw-bold mt-3 opacity-50 px-4">Settings</div>
                     </li>
                     <li class="nav-item">

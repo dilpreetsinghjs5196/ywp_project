@@ -25,6 +25,12 @@ Route::get('/services', [\App\Http\Controllers\com\HomeController::class, 'servi
 Route::get('/services/{slug}/therapists', [\App\Http\Controllers\com\HomeController::class, 'serviceTherapists'])->name('com.services.therapists');
 Route::get('/wonder-store', [\App\Http\Controllers\com\WonderStoreController::class, 'index'])->name('com.store');
 
+// Coupon Routes
+Route::get('/coupon/request', [\App\Http\Controllers\com\CouponController::class, 'requestForm'])->name('coupon.request');
+Route::post('/coupon/request', [\App\Http\Controllers\com\CouponController::class, 'submitRequest'])->name('coupon.submit');
+Route::post('/coupon/check', [\App\Http\Controllers\com\CouponController::class, 'checkCoupon'])->name('coupon.check');
+
+
 // Blog Routes
 Route::get('/wellness-awareness-hub', [\App\Http\Controllers\com\PublicBlogController::class, 'index'])->name('com.blogs.index');
 Route::get('/wellness-awareness-hub/{slug}', [\App\Http\Controllers\com\PublicBlogController::class, 'show'])->name('com.blogs.show');
@@ -131,6 +137,13 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     // Therapist Session Bookings
     Route::get('therapist-bookings/export-csv', [\App\Http\Controllers\Admin\AdminTherapistBookingController::class, 'exportCsv'])->name('admin.therapist-bookings.export');
     Route::resource('therapist-bookings', \App\Http\Controllers\Admin\AdminTherapistBookingController::class, ['as' => 'admin'])->only(['index', 'show', 'destroy']);
+
+    // Admin Coupon Management
+    Route::get('coupons', [\App\Http\Controllers\com\CouponController::class, 'adminIndex'])->name('admin.coupons.index');
+    Route::post('coupons/{id}/approve', [\App\Http\Controllers\com\CouponController::class, 'approve'])->name('admin.coupons.approve');
+    Route::post('coupons/{id}/reject', [\App\Http\Controllers\com\CouponController::class, 'reject'])->name('admin.coupons.reject');
+    Route::post('coupons/{id}/update', [\App\Http\Controllers\com\CouponController::class, 'update'])->name('admin.coupons.update');
+
 });
 
 // Therapist Panel Routes

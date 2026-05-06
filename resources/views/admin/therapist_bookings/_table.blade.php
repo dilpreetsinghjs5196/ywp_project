@@ -32,6 +32,11 @@
                     </td>
                     <td>
                         <div class="fw-bold text-dark">₹{{ number_format($booking->amount, 2) }}</div>
+                        @if($booking->coupon_code)
+                            <div class="small mt-1 text-success" style="font-size: 0.75rem;">
+                                <i class="bi bi-tag-fill me-1"></i><span class="fw-bold text-uppercase">{{ $booking->coupon_code }}</span>
+                            </div>
+                        @endif
                     </td>
                     <td>
                         @if($booking->payment_status == 'paid')

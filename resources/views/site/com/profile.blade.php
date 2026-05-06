@@ -209,8 +209,15 @@
                                                                 <i class="bi bi-camera-video text-primary"></i>
                                                                 <span>{{ $booking->mode }}</span>
                                                             </div>
-                                                            <div class="ms-auto fw-bold text-primary-color">
-                                                                ₹{{ number_format($booking->amount) }}
+                                                            <div class="ms-auto text-end">
+                                                                <div class="fw-bold text-primary-color fs-5">
+                                                                    ₹{{ number_format($booking->amount) }}
+                                                                </div>
+                                                                @if($booking->coupon_code)
+                                                                    <div class="text-success small mt-1" style="font-size: 0.75rem; white-space: nowrap;">
+                                                                        <i class="bi bi-tag-fill me-1"></i> Coupon: <span class="fw-bold text-uppercase">{{ $booking->coupon_code }}</span>
+                                                                    </div>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>

@@ -20,6 +20,11 @@
                         <div class="col-sm-6 text-sm-end">
                             <label class="text-muted small text-uppercase fw-bold mb-1">Amount Paid</label>
                             <h4 class="fw-bold">₹{{ number_format($booking->amount, 2) }}</h4>
+                            @if($booking->coupon_code)
+                                <span class="badge bg-success text-white px-2 py-1 mt-1 text-uppercase" style="font-size: 0.75rem;">
+                                    <i class="bi bi-tag-fill me-1"></i>{{ $booking->coupon_code }}
+                                </span>
+                            @endif
                         </div>
                     </div>
 
@@ -88,6 +93,14 @@
                         <span
                             class="badge bg-success-subtle text-success px-4 py-2 text-capitalize fs-6">{{ $booking->payment_status }}</span>
                     </div>
+                    @if($booking->coupon_code)
+                        <div class="mb-3">
+                            <label class="text-muted small text-uppercase fw-bold d-block mb-1">Coupon Applied</label>
+                            <span class="badge bg-light text-dark border px-3 py-2 fs-6 text-uppercase">
+                                <i class="bi bi-tag-fill text-success me-1"></i>{{ $booking->coupon_code }}
+                            </span>
+                        </div>
+                    @endif
                     <div class="mb-3">
                         <label class="text-muted small text-uppercase fw-bold d-block mb-1">Razorpay Order ID</label>
                         <code class="text-dark">{{ $booking->razorpay_order_id }}</code>

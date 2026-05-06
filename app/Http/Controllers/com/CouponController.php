@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Coupon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CouponApprovedMail;
+use App\Mail\CouponRejectedMail;
 use Illuminate\Support\Str;
 
 class CouponController extends Controller
@@ -81,7 +82,14 @@ class CouponController extends Controller
         $coupon = Coupon::findOrFail($id);
         $coupon->update(['status' => 'rejected']);
 
-        return redirect()->back()->with('success', 'Coupon rejected.');
+        // Send Rejection Email
+        try {
+            Mail::to($coupon->user_email)->send(new CouponRejectedMail($coupon));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Coupon Rejection Email Error: ' . $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Coupon rejected and notification email sent to ' . $coupon->user_email);
     }
 
     /**
@@ -116,6 +124,15 @@ class CouponController extends Controller
                 Mail::to($coupon->user_email)->send(new CouponApprovedMail($coupon));
             } catch (\Exception $e) {
                 \Illuminate\Support\Facades\Log::error('Coupon Approval Email Error on Update: ' . $e->getMessage());
+            }
+        }
+
+        // If status was changed to rejected, send the email automatically
+        if ($oldStatus !== 'rejected' && $newStatus === 'rejected') {
+            try {
+                Mail::to($coupon->user_email)->send(new CouponRejectedMail($coupon));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Coupon Rejection Email Error on Update: ' . $e->getMessage());
             }
         }
 

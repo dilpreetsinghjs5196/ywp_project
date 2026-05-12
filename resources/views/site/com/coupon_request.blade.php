@@ -43,9 +43,12 @@
                             </div>
 
                             <div class="d-grid gap-2 mt-5">
-                                <button type="submit" class="btn btn-primary btn-lg shadow-sm" style="border-radius: 10px; background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%); border: none;">
+                                <button type="submit" class="btn btn-primary btn-lg shadow-sm mb-2" style="border-radius: 10px; background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%); border: none;">
                                     Generate My Coupon <i class="fas fa-magic ms-2"></i>
                                 </button>
+                                <a href="{{ route('com.team') }}" class="btn btn-outline-primary btn-lg shadow-sm" style="border-radius: 10px; border: 2px solid #4facfe; color: #4facfe; background: transparent; font-weight: 600;">
+                                    Go to Booking Page <i class="fas fa-calendar-alt ms-2"></i>
+                                </a>
                             </div>
                         </form>
                     </div>

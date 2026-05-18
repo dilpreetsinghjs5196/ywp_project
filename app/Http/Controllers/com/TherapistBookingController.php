@@ -218,7 +218,7 @@ class TherapistBookingController extends Controller
                             [
                                 'account' => $therapist->razorpay_account_id,
                                 'amount' => $therapistSharePaise,
-                                'currency' => $razorpay['currency'],
+                                'currency' => $razorpay['currency']
                             ]
                         ];
                     }
